@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angular Interview Preparation Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .document-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #dd2476 0%, #ff512f 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(-50px) translateY(-50px); }
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .question-section {
+            margin-bottom: 40px;
+            border-left: 4px solid #dd2476;
+            padding-left: 20px;
+            background: linear-gradient(90deg, rgba(221,36,118,0.03) 0%, rgba(255,255,255,0) 100%);
+            border-radius: 0 10px 10px 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .question-section:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(221,36,118,0.1);
+        }
+
+        .question-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #dd2476;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-title i {
+            font-size: 1.1rem;
+        }
+
+        .answer {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9ff;
+        }
+
+        .comparison-table tr:hover {
+            background: #e8f0fe;
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+
+        .code-block {
+            background: #1a1a1a;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow-x: auto;
+            border-left: 4px solid #dd2476;
+        }
+
+        .code-block::before {
+            content: 'JavaScript';
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            background: #dd2476;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border: 1px solid #f0a500;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .highlight-box::before {
+            content: '💡';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: white;
+            padding: 5px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+        }
+
+        .data-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .data-type-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .data-type-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .data-type-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .optimization-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .optimization-list li {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid #4CAF50;
+            transition: all 0.3s ease;
+        }
+
+        .optimization-list li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(76,175,80,0.2);
+        }
+
+        .optimization-list li strong {
+            color: #4CAF50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+
+        .execution-order {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .execution-order ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .execution-order li {
+            margin: 8px 0;
+            font-weight: 500;
+        }
+
+        .rxjs-operators {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .operator-card {
+            background: white;
+            border: 2px solid #e3f2fd;
+            border-radius: 10px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .operator-card:hover {
+            border-color: #2196f3;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(33,150,243,0.2);
+        }
+
+        .operator-card h4 {
+            color: #2196f3;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer {
+            background: #333;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .footer p {
+            margin-bottom: 10px;
+        }
+
+        .angular-icon {
+            color: #dd1b16;
+        }
+
+        .js-icon {
+            color: #f7df1e;
+        }
+
+        .performance-icon {
+            color: #4caf50;
+        }
+
+        .security-icon {
+            color: #ff9800;
+        }
+
+        .data-icon {
+            color: #2196f3;
+        }
+
+        .feature-flag-badge {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="document-container">
+        <div class="header">
+            <h1><i class="fab fa-angular angular-icon"></i> Angular Interview Preparation Guide</h1>
+            <p class="subtitle">Complete Reference for Angular Development Interviews</p>
+        </div>
+
+        <div class="content">
+            <!-- Question 1 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fas fa-code angular-icon"></i>
+                    What's the difference between Interfaces and Abstract Classes?
+                </h2>
+                <div class="answer">
+                    <p>An abstract class is not an interface, although they share similarities. Both define a "contract" that forces child classes to implement certain methods, and neither can be instantiated directly.</p>
+                    
+                    <p>The key difference lies in that an abstract class can contain implemented logic and state (properties with values), and a class can only inherit from a single abstract class. In contrast, an interface only defines the "signature" of methods and properties (the what, not the how), and a class can implement multiple interfaces.</p>
+
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Abstract Class (Half-built Robot)</th>
+                                <th>Interface (Empty Instruction Manual)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Implementation</strong></td>
+                                <td>Can have defined logic and state</td>
+                                <td>Only declares what should exist (signatures)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Multiple Inheritance</strong></td>
+                                <td>No, can only inherit from one</td>
+                                <td>Yes, can implement several</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Typical Use</strong></td>
+                                <td>Share common logic and enforce structure</td>
+                                <td>Enforce structure (pure contract)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fab fa-js-square js-icon"></i>
+                    Built-in Methods and Autoboxing in JavaScript
+                </h2>
+                <div class="answer">
+                    <p>This works thanks to a process in JavaScript called <strong>autoboxing</strong>.</p>
+                    
+                    <p>Although a value like "hello world" is a primitive data type (and not an object), when you try to use a method on it (like .toUpperCase()), JavaScript temporarily wraps it in an object of its corresponding type (in this case, new String("hello world")).</p>
+
+                    <div class="highlight-box">
+                        <h3>The Process:</h3>
+                        <ol>
+                            <li>JavaScript converts the primitive to a temporary object</li>
+                            <li>Executes the requested method on that object</li>
+                            <li>Returns the result (the new uppercase string)</li>
+                            <li>Immediately discards the temporary object</li>
+                        </ol>
+                    </div>
+
+                    <p>For this reason, you cannot add properties to a primitive; the temporary object that would contain them is destroyed instantly.</p>
+
+                    <div class="code-block">
+let greeting = "hello";
+greeting.property = "something";
+console.log(greeting.property); // undefined
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fas fa-database data-icon"></i>
+                    JavaScript Data Types
+                </h2>
+                <div class="answer">
+                    <p>JavaScript has primitive and non-primitive (object) data types.</p>
+                    
+                    <div class="data-types-grid">
+                        <div class="data-type-card">
+                            <h3><i class="fas fa-cube"></i> Primitive Types</h3>
+                            <p><strong>Immutable and not objects:</strong></p>
+                            <ul>
+                                <li><strong>string:</strong> Text strings. Example: "Hello world"</li>
+                                <li><strong>number:</strong> Numeric values. Example: 42, 3.14</li>
+                                <li><strong>boolean:</strong> True or false. Example: true, false</li>
+                                <li><strong>undefined:</strong> Declared variable but no assigned value</li>
+                                <li><strong>null:</strong> Intentional absence of value</li>
+                                <li><strong>symbol:</strong> Unique and immutable identifier</li>
+                                <li><strong>bigint:</strong> Extremely large integers. Example: 9007199254740991n</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="data-type-card">
+                            <h3><i class="fas fa-cubes"></i> Object Types (Non-primitive)</h3>
+                            <p><strong>Collections of values and mutable:</strong></p>
+                            <ul>
+                                <li><strong>object:</strong> Collection of key-value pairs</li>
+                                <li><strong>array:</strong> Ordered list of elements</li>
+                                <li><strong>function:</strong> Executable code block</li>
+                                <li><strong>date:</strong> For handling dates and times</li>
+                                <li><strong>Others:</strong> Map, Set, RegExp</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fas fa-tachometer-alt performance-icon"></i>
+                    Angular Performance Optimization
+                </h2>
+                <div class="answer">
+                    <p>To optimize an Angular application:</p>
+                    
+                    <div class="highlight-box">
+                        <h3>1. Identify the Bottleneck</h3>
+                        <p>Before changing anything, it's crucial to measure and find which parts are slow. I would use tools like Chrome DevTools and Angular DevTools to analyze performance, change detection cycles, and rendering.</p>
+                    </div>
+
+                    <h3>2. Key Optimization Strategies:</h3>
+                    <ul class="optimization-list">
+                        <li>
+                            <strong><i class="fas fa-sync-alt"></i> Change Detection Strategy:</strong>
+                            Change to ChangeDetectionStrategy.OnPush in components that don't need constant checking. This avoids unnecessary rendering cycles.
+                        </li>
+                        <li>
+                            <strong><i class="fas fa-lazy-loading"></i> Lazy Loading:</strong>
+                            Ensure modules load lazily by routes. This dramatically reduces initial application size.
+                        </li>
+                        <li>
+                            <strong><i class="fas fa-list"></i> Optimize *ngFor with trackBy:</strong>
+                            For large lists, trackBy is fundamental. Prevents Angular from destroying and recreating all DOM elements when the list changes.
+                        </li>
+                        <li>
+                            <strong><i class="fas fa-database"></i> API Request Caching:</strong>
+                            Use RxJS operators like shareReplay to cache HTTP responses and avoid duplicate API calls.
+                        </li>
+                        <li>
+                            <strong><i class="fas fa-unlink"></i> Subscription Management:</strong>
+                            Ensure all Observable subscriptions are destroyed (unsubscribe) when components are destroyed to prevent memory leaks.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fas fa-cog angular-icon"></i>
+                    Constructor vs ngOnInit
+                </h2>
+                <div class="answer">
+                    <p>The constructor executes first, followed by ngOnInit. They have different purposes:</p>
+
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Moment</th>
+                                <th>constructor()</th>
+                                <th>ngOnInit()</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Order</strong></td>
+                                <td>1st</td>
+                                <td>2nd</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Main Use</strong></td>
+                                <td>Dependency injection</td>
+                                <td>Initialization logic (API calls, etc.)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>@Input() Access</strong></td>
+                                <td>❌ No</td>
+                                <td>✅ Yes</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="highlight-box">
+                        <h3>Key Points:</h3>
+                        <ul>
+                            <li><strong>constructor():</strong> Used primarily for dependency injection. Don't include complex logic or access @Input() properties.</li>
+                            <li><strong>ngOnInit():</strong> Ideal place for complex initializations, API calls, or setting up properties that depend on inputs.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fas fa-sync angular-icon"></i>
+                    Change Detection in Angular
+                </h2>
+                <div class="answer">
+                    <p>Change Detection is the mechanism Angular uses to synchronize the application state with the view (DOM). Its job is to detect when data has changed and update the screen to reflect those changes.</p>
+
+                    <p>Angular knows that "something changed" thanks to a library called <strong>Zone.js</strong>. This library "patches" all asynchronous browser events (like clicks, setTimeout, promises, HTTP requests). When one of these events completes, Zone.js notifies Angular, which in turn starts a change detection cycle, checking the component tree from top to bottom to see if any values have changed and need to be updated in the DOM.</p>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fas fa-check-circle angular-icon"></i>
+                    markForCheck() vs detectChanges()
+                </h2>
+                <div class="answer">
+                    <p>Both are ChangeDetectorRef methods used to manually control change detection, especially with OnPush.</p>
+
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>markForCheck()</th>
+                                <th>detectChanges()</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Action</strong></td>
+                                <td>Marks component for future review</td>
+                                <td>Executes review immediately</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Scope</strong></td>
+                                <td>Component and parents (for next cycle)</td>
+                                <td>Component and children (right now)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="highlight-box">
+                        <ul>
+                            <li><strong>markForCheck():</strong> Preferred and safer option when working with OnPush, as it integrates with Angular's normal mechanism.</li>
+                            <li><strong>detectChanges():</strong> More "aggressive". Useful in specific situations where you need instant visual update.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fas fa-broadcast-tower data-icon"></i>
+                    Observable vs Subject
+                </h2>
+                <div class="answer">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Concept</th>
+                                <th>Observable</th>
+                                <th>Subject</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Emission Type</strong></td>
+                                <td>Unicast (each subscriber has its own execution)</td>
+                                <td>Multicast (all subscribers share the same emission)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Control</strong></td>
+                                <td>Data producer is inside the Observable</td>
+                                <td>You can emit data from outside with .next()</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Use Case</strong></td>
+                                <td>Encapsulate async operations (HTTP, events)</td>
+                                <td>Share state or events between multiple app parts</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="highlight-box">
+                        <ul>
+                            <li><strong>Observable (Unicast):</strong> Like watching Netflix - each user has their own playback.</li>
+                            <li><strong>Subject (Multicast):</strong> Like live TV broadcast - everyone sees the same thing at the same time.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fab fa-js-square js-icon"></i>
+                    Micro and Macro Tasks in JavaScript
+                </h2>
+                <div class="answer">
+                    <p>Yes, they are two types of task queues that JavaScript's Event Loop manages to handle asynchronous operations.</p>
+
+                    <div class="data-types-grid">
+                        <div class="data-type-card">
+                            <h3><i class="fas fa-tasks"></i> Macrotasks (Tasks)</h3>
+                            <p>Larger and lower priority tasks. Include setTimeout, setInterval, DOM events (clicks), and network requests. Event Loop processes one macrotask per cycle.</p>
+                        </div>
+                        
+                        <div class="data-type-card">
+                            <h3><i class="fas fa-bolt"></i> Microtasks</h3>
+                            <p>Smaller and high priority tasks. Include Promise.then(), .catch(), .finally(), and async/await. After initial synchronous code executes, and after each macrotask, Event Loop empties entire microtask queue.</p>
+                        </div>
+                    </div>
+
+                    <div class="execution-order">
+                        <h3><i class="fas fa-list-ol"></i> Event Loop Execution Order:</h3>
+                        <ol>
+                            <li>Execute all synchronous code from current script</li>
+                            <li>Execute all microtasks in queue until empty</li>
+                            <li>Take one macrotask from queue and execute it</li>
+                            <li>Return to step 2</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fas fa-engine angular-icon"></i>
+                    What is Ivy in Angular?
+                </h2>
+                <div class="answer">
+                    <p>Ivy is Angular's next-generation rendering engine, introduced as default from version 9. It's the internal system that takes your components and templates and converts them into JavaScript instructions that the browser can understand to create and update the DOM.</p>
+
+                    <h3>Key Benefits of Ivy:</h3>
+                    <ul class="optimization-list">
+                        <li>
+                            <strong><i class="fas fa-tree"></i> Improved Tree-Shaking:</strong>
+                            Ivy is much more efficient at eliminating unused Angular code from your application, resulting in smaller bundle sizes.
+                        </li>
+                        <li>
+                            <strong><i class="fas fa-rocket"></i> Faster Compilation:</strong>
+                            Recompiles only components that have changed, speeding up development.
+                        </li>
+                        <li>
+                            <strong><i class="fas fa-bug"></i> Better Debugging:</strong>
+                            Easier to debug templates in the browser, as you can access your components and call methods directly from Chrome console.
+                        </li>
+                        <li>
+                            <strong><i class="fas fa-plus-circle"></i> Incremental DOM:</strong>
+                            Instead of recreating large DOM parts, Ivy only updates parts that actually changed, improving rendering performance.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fas fa-flag security-icon"></i>
+                    Feature Flags
+                </h2>
+                <div class="answer">
+                    <p>A Feature Flag (or feature flag) is a switch in code that allows activating or deactivating functionality without needing to deploy new code.</p>
+
+                    <div class="highlight-box">
+                        <h3>Why do we need them?</h3>
+                        <ul>
+                            <li><strong>Continuous Development:</strong> Allows integrating code for new features into main branch even if not finished, keeping them deactivated in production.</li>
+                            <li><strong>Gradual Releases (Canary Releases):</strong> You can activate new functionality for only a small percentage of users and monitor behavior before launching for everyone.</li>
+                            <li><strong>A/B Testing:</strong> Show different versions of a feature to different user groups to see which works better.</li>
+                            <li><strong>Instant Rollback:</strong> If new functionality causes problems in production, you can deactivate it immediately with the feature flag without reverting deployment.</li>
+                        </ul>
+                    </div>
+
+                    <p>In Angular, this would typically be implemented with a service that queries flag states and structural directives like *ngIf to show or hide components or elements.</p>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fas fa-stream data-icon"></i>
+                    Subject Types Comparison
+                </h2>
+                <div class="answer">
+                    <p>All are Subject types, but they differ in how they handle values for new subscribers.</p>
+
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Stores Values?</th>
+                                <th>What do new subscribers receive?</th>
+                                <th>When does it emit?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Subject</strong></td>
+                                <td>No</td>
+                                <td>Only values emitted after subscription</td>
+                                <td>Immediately with .next()</td>
+                            </tr>
+                            <tr>
+                                <td><strong>BehaviorSubject</strong></td>
+                                <td>Yes, last value</td>
+                                <td>Last emitted value (or initial) immediately upon subscription</td>
+                                <td>Immediately with .next()</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ReplaySubject</strong></td>
+                                <td>Yes, buffer of N values</td>
+                                <td>Last N emitted values immediately upon subscription</td>
+                                <td>Immediately with .next()</td>
+                            </tr>
+                            <tr>
+                                <td><strong>AsyncSubject</strong></td>
+                                <td>Yes, last value</td>
+                                <td>Only last value, and only when Subject completes (.complete())</td>
+                                <td>Only when completed</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="highlight-box">
+                        <h3>Use Cases:</h3>
+                        <ul>
+                            <li><strong>Subject:</strong> Real-time events where past values don't matter (e.g., a click)</li>
+                            <li><strong>BehaviorSubject:</strong> State management. Ideal for knowing current value of something (e.g., user authentication state). Always has a value.</li>
+                            <li><strong>ReplaySubject:</strong> Cache a sequence of values and ensure new subscribers don't miss latest data (e.g., chat message history).</li>
+                            <li><strong>AsyncSubject:</strong> When you only care about the final result of a time-consuming operation (e.g., an HTTP call).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fas fa-map data-icon"></i>
+                    RxJS Map Operators
+                </h2>
+                <div class="answer">
+                    <p>All are RxJS operators that transform values emitted by an Observable, but they behave differently when the transformed value is another Observable (commonly called "inner observable").</p>
+
+                    <div class="rxjs-operators">
+                        <div class="operator-card">
+                            <h4><i class="fas fa-exchange-alt"></i> map</h4>
+                            <p>Transforms a value into another. A → B. Doesn't handle inner Observables; if you return an Observable, the result will be an Observable of Observables.</p>
+                            <p><strong>Use:</strong> Transform simple data (e.g., user → user.name).</p>
+                        </div>
+
+                        <div class="operator-card">
+                            <h4><i class="fas fa-toggle-on"></i> switchMap</h4>
+                            <p>Subscribes to an inner Observable, but if a new value arrives from the original Observable, cancels the previous subscription and subscribes to the new one.</p>
+                            <p><strong>Use:</strong> Ideal for scenarios where only the latest event matters, like a search with autocomplete (to cancel previous HTTP requests).</p>
+                        </div>
+
+                        <div class="operator-card">
+                            <h4><i class="fas fa-code-branch"></i> mergeMap</h4>
+                            <p>Subscribes to each inner Observable and emits their values in parallel, as they arrive. Doesn't guarantee order.</p>
+                            <p><strong>Use:</strong> When you need to execute multiple async operations at once and order of results doesn't matter.</p>
+                        </div>
+
+                        <div class="operator-card">
+                            <h4><i class="fas fa-sort-numeric-down"></i> concatMap</h4>
+                            <p>Subscribes to each inner Observable in sequence. Doesn't subscribe to the next until the previous has completed. Guarantees order.</p>
+                            <p><strong>Use:</strong> When operation order is critical (e.g., an update request that must occur after a creation request).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fas fa-project-diagram angular-icon"></i>
+                    Content Projection in Angular
+                </h2>
+                <div class="answer">
+                    <p>Content Projection, implemented with &lt;ng-content&gt;, is a mechanism that allows us to create highly reusable components.</p>
+
+                    <p>Its purpose is to allow a parent component to project or insert custom HTML content inside a child component's template. This decouples a component's structure and behavior from its content.</p>
+
+                    <div class="highlight-box">
+                        <h3>Why is it necessary?</h3>
+                        <p>To create generic components like cards, modals, panels, or layouts. For example, you can create an &lt;app-card&gt; component with fixed style and structure (border, shadow, etc.), but allow the card's content (&lt;h2&gt;, &lt;p&gt;, images) to be defined by the component that uses it.</p>
+                    </div>
+
+                    <div class="code-block">
+<!-- Card Component Template -->
+&lt;div class="card"&gt;
+  &lt;div class="card-header"&gt;
+    &lt;ng-content select="[card-title]"&gt;&lt;/ng-content&gt;
+  &lt;/div&gt;
+  &lt;div class="card-body"&gt;
+    &lt;ng-content&gt;&lt;/ng-content&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+<!-- Usage -->
+&lt;app-card&gt;
+  &lt;h2 card-title&gt;Custom Title&lt;/h2&gt;
+  &lt;p&gt;This is the card body, which can be anything.&lt;/p&gt;
+&lt;/app-card&gt;
+                    </div>
+
+                    <p>With &lt;ng-content&gt;, the app-card component becomes a reusable template instead of a component with fixed content.</p>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fas fa-shield-alt security-icon"></i>
+                    Angular Guards
+                </h2>
+                <div class="answer">
+                    <p>Guards are services that implement a specific interface to control access to application routes. They act as a "doorkeeper," deciding whether a user can or cannot navigate to a specific route.</p>
+
+                    <div class="highlight-box">
+                        <h3>Why do we need them?</h3>
+                        <p>To protect application sections. Most common use cases are:</p>
+                        <ul>
+                            <li>Verify if a user is authenticated before accessing a private route</li>
+                            <li>Check if a user has necessary permissions (e.g., 'admin' role)</li>
+                            <li>Prevent a user from leaving a page with unsaved changes (asking first)</li>
+                            <li>Load necessary data for a route before it activates</li>
+                        </ul>
+                    </div>
+
+                    <h3>Types of Guards:</h3>
+                    <ul class="optimization-list">
+                        <li>
+                            <strong><i class="fas fa-key"></i> CanActivate:</strong>
+                            Decides if a route can be activated. Most common.
+                        </li>
+                        <li>
+                            <strong><i class="fas fa-users"></i> CanActivateChild:</strong>
+                            Decides if child routes of a route can be activated.
+                        </li>
+                        <li>
+                            <strong><i class="fas fa-sign-out-alt"></i> CanDeactivate:</strong>
+                            Decides if you can leave a route (useful for unsaved forms).
+                        </li>
+                        <li>
+                            <strong><i class="fas fa-download"></i> CanLoad:</strong>
+                            Decides if a lazy loading module can be loaded. Prevents code download if user lacks permissions.
+                        </li>
+                        <li>
+                            <strong><i class="fas fa-database"></i> Resolve:</strong>
+                            Doesn't protect, but gets data before route activates, so data is ready when component renders.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fas fa-search angular-icon"></i>
+                    ContentChild vs ViewChild
+                </h2>
+                <div class="answer">
+                    <p>Both are decorators that allow getting a reference to an element or component in the template, but they differ in where they look for that element.</p>
+
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Decorator</th>
+                                <th>Searches in...</th>
+                                <th>Main Use</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>@ViewChild</strong></td>
+                                <td>Component's internal view (template)</td>
+                                <td>Interact with direct child elements</td>
+                            </tr>
+                            <tr>
+                                <td><strong>@ContentChild</strong></td>
+                                <td>Content projected from outside (&lt;ng-content&gt;)</td>
+                                <td>Create generic components that interact with passed content</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="highlight-box">
+                        <h3>Analogies:</h3>
+                        <ul>
+                            <li><strong>@ViewChild:</strong> Like looking for something inside your own house</li>
+                            <li><strong>@ContentChild:</strong> Like someone leaves a package at your house, and you search inside that package</li>
+                        </ul>
+                    </div>
+
+                    <p><strong>Key Example:</strong> If you have an &lt;app-tabs&gt; component containing several &lt;app-tab&gt;, the &lt;app-tabs&gt; component would use @ContentChildren to get a reference to the &lt;app-tab&gt; components that were placed inside it, as they are projected content.</p>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fas fa-wpforms angular-icon"></i>
+                    FormGroup vs FormArray
+                </h2>
+                <div class="answer">
+                    <p>Both are fundamental classes in Angular's Reactive Forms for handling form data, but they serve different structures.</p>
+
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>FormGroup</th>
+                                <th>FormArray</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Purpose</strong></td>
+                                <td>Group a fixed set of controls</td>
+                                <td>Manage a dynamic list of controls</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Access</strong></td>
+                                <td>By name: form.get('name')</td>
+                                <td>By index: form.get('skills').at(0)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Use Case</strong></td>
+                                <td>User profile form</td>
+                                <td>Adding multiple "hobbies" to a profile</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="data-types-grid">
+                        <div class="data-type-card">
+                            <h3><i class="fas fa-object-group"></i> FormGroup</h3>
+                            <p><strong>What it is:</strong> A collection of controls with fixed names. Groups a set of FormControl under a single unit.</p>
+                            <p><strong>Structure:</strong> An object where each key is a control name.</p>
+                            <p><strong>When to use:</strong> For forms with defined and predictable structure, like login or user registration forms.</p>
+                        </div>
+                        
+                        <div class="data-type-card">
+                            <h3><i class="fas fa-list"></i> FormArray</h3>
+                            <p><strong>What it is:</strong> A collection of unnamed (indexed) controls. Manages a list of FormControl, FormGroup, or even other FormArray.</p>
+                            <p><strong>Structure:</strong> An array of controls.</p>
+                            <p><strong>When to use:</strong> For dynamic forms where users can add or remove fields, like a list of skills, phone numbers, or addresses.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question-section">
+                <h2 class="question-title">
+                    <i class="fas fa-desktop"></i>
+                    IPC in Electron
+                </h2>
+                <div class="answer">
+                    <p>In Electron, IPC stands for Inter-Process Communication.</p>
+
+                    <p>Electron has a multi-process architecture:</p>
+
+                    <div class="data-types-grid">
+                        <div class="data-type-card">
+                            <h3><i class="fas fa-server"></i> Main Process</h3>
+                            <p>One per application. Has access to native OS APIs (like file system, menus, etc.) and manages windows. No direct DOM access. It's the application's "backend".</p>
+                        </div>
+                        
+                        <div class="data-type-card">
+                            <h3><i class="fas fa-window-maximize"></i> Renderer Processes</h3>
+                            <p>One per browser window (BrowserWindow). Execute the user interface (HTML, CSS, JS) and don't have direct access to native APIs for security reasons. They're the "frontend".</p>
+                        </div>
+                    </div>
+
+                    <p>Since these processes run in isolation and don't share memory, IPC is the mechanism that allows them to communicate.</p>
+
+                    <div class="highlight-box">
+                        <h3>How does it work?</h3>
+                        <ul>
+                            <li>The renderer process uses the <strong>ipcRenderer</strong> module to send messages to the main process</li>
+                            <li>The main process uses the <strong>ipcMain</strong> module to listen and respond to those messages</li>
+                        </ul>
+                    </div>
+
+                    <div class="execution-order">
+                        <h3><i class="fas fa-flow-chart"></i> Example Flow:</h3>
+                        <ol>
+                            <li>User clicks "Save file" button in interface (renderer process)</li>
+                            <li>Renderer process sends IPC message to main process: ipcRenderer.send('save-file', data)</li>
+                            <li>Main process, listening with ipcMain.on('save-file', ...), receives the message</li>
+                            <li>Main process uses Node.js API (fs) to write file to disk</li>
+                            <li>Optionally, main process can send message back to renderer to confirm file was saved</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><i class="fab fa-angular angular-icon"></i> Angular Interview Preparation Guide</p>
+            <p>Complete reference for Angular development interviews covering core concepts, performance optimization, and advanced topics.</p>
+            <p><strong>Topics Covered:</strong> Angular Components, RxJS Observables, JavaScript Fundamentals, Performance Optimization, Guards, Forms, and Electron IPC</p>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactive functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add smooth scrolling for any internal links
+            const sections = document.querySelectorAll('.question-section');
+            
+            // Add fade-in animation on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateX(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateX(-20px)';
+                section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(section);
+            });
+
+            // Add hover effects to tables
+            const tables = document.querySelectorAll('.comparison-table');
+            tables.forEach(table => {
+                const rows = table.querySelectorAll('tbody tr');
+                rows.forEach(row => {
+                    row.addEventListener('mouseenter', function() {
+                        this.style.backgroundColor = '#e3f2fd';
+                    });
+                    row.addEventListener('mouseleave', function() {
+                        this.style.backgroundColor = '';
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

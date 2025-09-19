@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de C# y .NET</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #512da8 0%, #673ab7 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.1;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .content {
+            padding: 50px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeInUp 0.6s forwards;
+        }
+        
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+        .section:nth-child(5) { animation-delay: 0.5s; }
+        .section:nth-child(6) { animation-delay: 0.6s; }
+        .section:nth-child(7) { animation-delay: 0.7s; }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            border-left: 6px solid #673ab7;
+        }
+        
+        .section-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+            color: #673ab7;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0;
+        }
+        
+        .question-block {
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 4px solid #17a2b8;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .question-block:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .question {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .question::before {
+            content: "❓";
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .answer {
+            color: #495057;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        
+        .answer ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .answer li {
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .answer li::before {
+            content: "▸";
+            color: #673ab7;
+            font-weight: bold;
+            position: absolute;
+            left: -15px;
+        }
+        
+        .code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+            border-left: 4px solid #4299e1;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: 500;
+            color: #2d3436;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .footer p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            
+            .section {
+                page-break-inside: avoid;
+            }
+            
+            .question-block {
+                page-break-inside: avoid;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>🚀 Guía de Preguntas y Respuestas para Entrevista Técnica C# y .NET</h1>
+                <p>Conceptos fundamentales</p>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- Fundamentos de C# y .NET -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔹</div>
+                    <h2 class="section-title">Fundamentos de C# y .NET</h2>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Cuál es la diferencia entre struct y class en C#?</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">struct</span> es un value type (se almacena en el stack), mientras que <span class="highlight">class</span> es un reference type (se almacena en el heap)</li>
+                            <li>Los struct no soportan herencia, pero sí interfaces</li>
+                            <li>Los class permiten herencia completa y polimorfismo</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">Explica qué es el Garbage Collector en .NET y cómo funciona</div>
+                    <div class="answer">
+                        <ul>
+                            <li>Es el <span class="highlight">recolector de basura</span> que libera memoria automáticamente en el heap para objetos que ya no se usan</li>
+                            <li>Funciona en generaciones (Gen0, Gen1, Gen2) para optimizar la recolección</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué diferencia hay entre ref y out en parámetros de métodos?</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">ref</span>: la variable debe estar inicializada antes de pasarla</li>
+                            <li><span class="highlight">out</span>: la variable debe ser asignada dentro del método antes de usarse</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué son los Value Types y Reference Types?</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">Value Types</span>: almacenan directamente el valor (ej: int, struct, bool)</li>
+                            <li><span class="highlight">Reference Types</span>: almacenan una referencia al objeto en memoria (ej: class, string, array)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué es el boxing y unboxing en C#?</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">Boxing</span>: convertir un value type en object</li>
+                        </ul>
+                        <div class="code">int x = 5; object o = x;</div>
+                        <ul>
+                            <li><span class="highlight">Unboxing</span>: convertir de object a value type</li>
+                        </ul>
+                        <div class="code">int y = (int)o;</div>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">Explica la diferencia entre interface y abstract class</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">interface</span>: solo define la firma de los métodos, sin implementación</li>
+                            <li><span class="highlight">abstract class</span>: puede contener métodos abstractos y métodos implementados</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué es un delegate y para qué se usa?</div>
+                    <div class="answer">
+                        <ul>
+                            <li>Es un tipo que representa una <span class="highlight">referencia a un método</span></li>
+                            <li>Se usa en eventos, callbacks y programación funcional (ej: Func&lt;&gt;, Action&lt;&gt;)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué diferencia hay entre Task, async/await y Thread?</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">Thread</span>: hilo del sistema operativo, pesado</li>
+                            <li><span class="highlight">Task</span>: abstracción de una operación asincrónica, más ligero</li>
+                            <li><span class="highlight">async/await</span>: simplifica la escritura de código asincrónico usando Task</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué son los records en C# y en qué se diferencian de las clases normales?</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">record</span>: tipo inmutable por defecto, ideal para DTOs</li>
+                            <li>Soporta igualdad por valor (no por referencia)</li>
+                        </ul>
+                        <div class="code">record Persona(string Nombre, int Edad);</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- OOP y SOLID -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔹</div>
+                    <h2 class="section-title">OOP y SOLID</h2>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">Explica cada principio SOLID con ejemplos</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">S (Single Responsibility)</span>: una clase debe tener solo una responsabilidad</li>
+                            <li><span class="highlight">O (Open/Closed)</span>: abierto a extensión, cerrado a modificación (usar interfaces)</li>
+                            <li><span class="highlight">L (Liskov Substitution)</span>: una subclase debe poder reemplazar a su superclase sin problemas</li>
+                            <li><span class="highlight">I (Interface Segregation)</span>: interfaces específicas en lugar de una interfaz gigante</li>
+                            <li><span class="highlight">D (Dependency Inversion)</span>: depender de abstracciones, no implementaciones</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">Diferencia entre polimorfismo de sobrecarga y sobrescritura</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">Sobrecarga</span>: mismo nombre de método con diferentes parámetros</li>
+                            <li><span class="highlight">Sobrescritura</span>: redefinir un método de la clase padre en la clase hija (override)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué es el encapsulamiento y cómo se aplica en C#?</div>
+                    <div class="answer">
+                        <ul>
+                            <li>Es <span class="highlight">ocultar la implementación interna</span> y exponer solo lo necesario</li>
+                            <li>Se logra con modificadores de acceso (private, public, protected)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Cómo aplicarías el Dependency Inversion Principle en un proyecto real con .NET?</div>
+                    <div class="answer">
+                        Inyectando dependencias a través de <span class="highlight">interfaces</span> usando Dependency Injection en Program.cs o Startup.cs.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ASP.NET / Web API -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔹</div>
+                    <h2 class="section-title">ASP.NET / Web API</h2>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">Explica la diferencia entre ASP.NET MVC y ASP.NET Web API</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">MVC</span>: enfocado en aplicaciones web con vistas (Razor, HTML)</li>
+                            <li><span class="highlight">Web API</span>: enfocado en servicios RESTful para exponer datos</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué es Middleware en .NET Core?</div>
+                    <div class="answer">
+                        <ul>
+                            <li>Componente en el <span class="highlight">pipeline</span> que procesa requests y responses</li>
+                            <li>Ej: autenticación, logging, manejo de excepciones</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Cómo implementas autenticación y autorización en ASP.NET Core?</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">Autenticación</span>: con JWT, cookies o Identity</li>
+                            <li><span class="highlight">Autorización</span>: con [Authorize] y roles/policies</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">Diferencia entre IActionResult y ActionResult&lt;T&gt;</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">IActionResult</span>: devuelve diferentes tipos de respuestas (View, Json, StatusCode)</li>
+                            <li><span class="highlight">ActionResult&lt;T&gt;</span>: se usa en Web API para devolver un tipo concreto más códigos de estado</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué es Dependency Injection y cómo se implementa en .NET Core?</div>
+                    <div class="answer">
+                        <ul>
+                            <li>Técnica para <span class="highlight">inyectar dependencias</span> en lugar de crearlas dentro de la clase</li>
+                            <li>En .NET Core se configura en Program.cs con AddScoped, AddTransient, AddSingleton</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Cómo manejarías versionamiento de APIs en ASP.NET Core?</div>
+                    <div class="answer">
+                        <ul>
+                            <li>Usando librerías como <span class="highlight">Microsoft.AspNetCore.Mvc.Versioning</span></li>
+                            <li>Estrategias: versionado en URL (/v1/), en header o en query string</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Entity Framework / Bases de Datos -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔹</div>
+                    <h2 class="section-title">Entity Framework (EF) / Bases de Datos</h2>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué diferencia hay entre Database First y Code First en EF?</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">Database First</span>: el modelo se genera desde una BD existente</li>
+                            <li><span class="highlight">Code First</span>: el modelo (clases) define la BD y genera migraciones</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué es una Migration en EF Core y cómo se aplica?</div>
+                    <div class="answer">
+                        <ul>
+                            <li>Es una forma de <span class="highlight">versionar cambios</span> en la BD</li>
+                            <li>Se crea con Add-Migration y se aplica con Update-Database</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">Explica la diferencia entre Lazy Loading, Eager Loading y Explicit Loading</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">Lazy Loading</span>: carga las relaciones solo cuando se accede a ellas</li>
+                            <li><span class="highlight">Eager Loading</span>: carga todo de una vez con .Include()</li>
+                            <li><span class="highlight">Explicit Loading</span>: se carga manualmente con .Load()</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué son los DbContext y los DbSet en EF Core?</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">DbContext</span>: unidad de trabajo, maneja la conexión y el mapeo a la BD</li>
+                            <li><span class="highlight">DbSet</span>: representa una tabla en la BD</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Cómo manejarías problemas de N+1 queries en EF?</div>
+                    <div class="answer">
+                        <ul>
+                            <li>Usando <span class="highlight">Eager Loading</span> con .Include()</li>
+                            <li>O consultando con Select proyectado en DTOs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seguridad y Buenas Prácticas -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔹</div>
+                    <h2 class="section-title">Seguridad y Buenas Prácticas</h2>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Cómo protegerías una API en .NET Core con JWT?</div>
+                    <div class="answer">
+                        <ul>
+                            <li>Configurar autenticación con <span class="highlight">AddAuthentication(JwtBearerDefaults.AuthenticationScheme)</span></li>
+                            <li>Validar el token con claves secretas o certificados</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué es OWASP y qué vulnerabilidades comunes evitarías?</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">OWASP</span>: comunidad que define los riesgos más críticos en seguridad web</li>
+                            <li>Ej: SQL Injection, XSS, CSRF, Broken Authentication</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Cómo implementarías un sistema de logging en .NET Core?</div>
+                    <div class="answer">
+                        <ul>
+                            <li>Usando <span class="highlight">ILogger</span> integrado en .NET Core</li>
+                            <li>Con proveedores: Console, Serilog, NLog, Application Insights</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué diferencia hay entre Configuration y Options Pattern en .NET Core?</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">Configuration</span>: acceso directo a claves de configuración (Configuration["Key"])</li>
+                            <li><span class="highlight">Options Pattern</span>: acceso tipado con clases POCO y IOptions&lt;T&gt;</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Arquitectura y Diseño -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔹</div>
+                    <h2 class="section-title">Arquitectura y Diseño</h2>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">Explica la diferencia entre Monolito, Microservicios y Serverless en .NET</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">Monolito</span>: todo en una sola app</li>
+                            <li><span class="highlight">Microservicios</span>: servicios pequeños independientes</li>
+                            <li><span class="highlight">Serverless</span>: funciones que se ejecutan bajo demanda (ej: Azure Functions)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué es CQRS y en qué casos lo implementarías?</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">Separación de operaciones</span> de lectura y escritura</li>
+                            <li>Útil cuando la lectura y la escritura tienen diferentes requisitos de performance/escalabilidad</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">Explica el patrón Repository y el patrón Unit of Work</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">Repository</span>: capa intermedia entre la app y EF para manejar consultas</li>
+                            <li><span class="highlight">Unit of Work</span>: coordina múltiples repositorios bajo una misma transacción</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">Diferencia entre Clean Architecture y Onion Architecture</div>
+                    <div class="answer">
+                        <ul>
+                            <li>Ambas separan capas en dominios</li>
+                            <li><span class="highlight">Clean</span>: énfasis en la independencia del framework</li>
+                            <li><span class="highlight">Onion</span>: énfasis en capas concéntricas donde el dominio está al centro</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué patrón usarías para manejar estrategias de logging o sorting en una app .NET?</div>
+                    <div class="answer">
+                        <span class="highlight">Patrón Strategy</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testing y DevOps -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔹</div>
+                    <h2 class="section-title">Testing y DevOps</h2>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Cómo implementarías Unit Testing en un proyecto .NET?</div>
+                    <div class="answer">
+                        <ul>
+                            <li>Usando frameworks como <span class="highlight">xUnit, NUnit o MSTest</span></li>
+                            <li>Separando dependencias con mocks (Moq)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué diferencia hay entre Moq y FakeItEasy?</div>
+                    <div class="answer">
+                        <ul>
+                            <li>Ambos son frameworks de mocking</li>
+                            <li><span class="highlight">Moq</span>: más usado, sintaxis fluida</li>
+                            <li><span class="highlight">FakeItEasy</span>: más simple y legible</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Cómo implementarías Integration Tests en ASP.NET Core?</div>
+                    <div class="answer">
+                        <ul>
+                            <li>Usando <span class="highlight">WebApplicationFactory</span> para levantar la API en memoria</li>
+                            <li>Validando endpoints reales con HttpClient</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question">¿Qué pipeline de CI/CD recomendarías para un proyecto .NET?</div>
+                    <div class="answer">
+                        <ul>
+                            <li><span class="highlight">GitHub Actions o Azure DevOps</span></li>
+                            <li>Pasos: build → tests → análisis de calidad (SonarQube) → deploy automático a Azure o Docker</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>📚 Guía Completa de C# y .NET Framework | Desarrollado para profesionales</p>
+        </div>
+    </div>
+    
+    <script>
+        // Añadir interactividad suave
+        document.addEventListener('DOMContentLoaded', function() {
+            // Efecto de hover en los bloques de preguntas
+            const questionBlocks = document.querySelectorAll('.question-block');
+            questionBlocks.forEach(block => {
+                block.addEventListener('mouseenter', function() {
+                    this.style.borderLeftColor = '#673ab7';
+                });
+                
+                block.addEventListener('mouseleave', function() {
+                    this.style.borderLeftColor = '#17a2b8';
+                });
+            });
+            
+            // Añadir efecto de click para expandir/contraer (opcional)
+            questionBlocks.forEach(block => {
+                const question = block.querySelector('.question');
+                const answer = block.querySelector('.answer');
+                
+                question.addEventListener('click', function() {
+                    answer.style.display = answer.style.display === 'none' ? 'block' : 'none';
+                    this.style.cursor = 'pointer';
+                });
+            });
+        });
+        
+        // Función para imprimir el documento
+        function printDocument() {
+            window.print();
+        }
+        
+        // Agregar botón de impresión
+        const printButton = document.createElement('button');
+        printButton.innerHTML = '🖨️ Imprimir Documento';
+        printButton.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #673ab7 0%, #512da8 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(103,58,183,0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        `;
+        
+        printButton.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+            this.style.boxShadow = '0 15px 35px rgba(103,58,183,0.4)';
+        });
+        
+        printButton.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '0 10px 25px rgba(103,58,183,0.3)';
+        });
+        
+        printButton.addEventListener('click', printDocument);
+        document.body.appendChild(printButton);
+    </script>
+</body>
+</html>

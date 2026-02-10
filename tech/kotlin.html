@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kotlin – Interview Preparation</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1e2533;
+    --border: #30363d;
+    --kotlin: #7f52ff;
+    --kotlin2: #c811e1;
+    --green: #3fb950;
+    --red: #f85149;
+    --yellow: #d29922;
+    --blue: #58a6ff;
+    --orange: #fa7343;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --code-bg: #0d1117;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+
+  /* SIDEBAR */
+  .layout { display:flex; min-height:100vh; }
+  .sidebar {
+    width:260px; background:var(--surface); border-right:1px solid var(--border);
+    position:fixed; top:0; left:0; height:100vh; overflow-y:auto;
+    display:flex; flex-direction:column; z-index:100;
+  }
+  .sidebar-logo {
+    padding:24px 20px 16px;
+    background:linear-gradient(135deg,var(--kotlin),var(--kotlin2));
+    font-size:1.3rem; font-weight:800; color:#fff; letter-spacing:-0.5px;
+  }
+  .sidebar-logo span { font-weight:300; opacity:.8; font-size:.9rem; display:block; }
+  .nav-section { padding:12px 20px 4px; font-size:.7rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); font-weight:600; }
+  .nav-link {
+    display:flex; align-items:center; gap:10px;
+    padding:9px 20px; color:var(--muted); text-decoration:none;
+    font-size:.88rem; transition:all .2s; border-left:3px solid transparent;
+    cursor:pointer;
+  }
+  .nav-link:hover, .nav-link.active { color:var(--text); background:rgba(127,82,255,.1); border-left-color:var(--kotlin); }
+  .nav-link .dot { width:7px; height:7px; border-radius:50%; background:var(--muted); flex-shrink:0; }
+  .nav-link.active .dot, .nav-link:hover .dot { background:var(--kotlin); }
+
+  /* MAIN */
+  .main { margin-left:260px; flex:1; padding:0 40px 60px; max-width:1100px; }
+  
+  /* HERO */
+  .hero {
+    padding:50px 0 30px;
+    border-bottom:1px solid var(--border); margin-bottom:40px;
+  }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(127,82,255,.15); border:1px solid rgba(127,82,255,.3);
+    color:var(--kotlin); padding:4px 14px; border-radius:20px;
+    font-size:.8rem; font-weight:600; margin-bottom:18px;
+  }
+  .hero h1 { font-size:2.6rem; font-weight:800; letter-spacing:-1px; margin-bottom:12px; }
+  .hero h1 span { background:linear-gradient(90deg,var(--kotlin),var(--kotlin2)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .hero p { color:var(--muted); font-size:1.05rem; max-width:620px; }
+  .tags { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
+  .tag { background:var(--surface2); border:1px solid var(--border); color:var(--muted); padding:3px 12px; border-radius:20px; font-size:.78rem; }
+
+  /* SECTIONS */
+  .section { margin-bottom:56px; scroll-margin-top:20px; }
+  .section-title {
+    font-size:1.4rem; font-weight:700; margin-bottom:20px;
+    display:flex; align-items:center; gap:10px;
+    padding-bottom:12px; border-bottom:1px solid var(--border);
+  }
+  .section-title .icon { font-size:1.3rem; }
+
+  /* CARDS */
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:16px; }
+  .card-title { font-weight:700; font-size:1rem; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .card p { color:var(--muted); font-size:.92rem; }
+
+  /* ALERT */
+  .alert { border-radius:10px; padding:16px 20px; margin-bottom:20px; display:flex; gap:12px; font-size:.9rem; }
+  .alert-warn { background:rgba(210,153,34,.1); border:1px solid rgba(210,153,34,.3); color:#e3b341; }
+  .alert-info { background:rgba(88,166,255,.1); border:1px solid rgba(88,166,255,.3); color:var(--blue); }
+  .alert-success { background:rgba(63,185,80,.1); border:1px solid rgba(63,185,80,.3); color:var(--green); }
+  .alert-icon { font-size:1.1rem; flex-shrink:0; margin-top:1px; }
+
+  /* CODE */
+  .code-wrap { position:relative; margin:12px 0; }
+  .code-label { position:absolute; top:10px; right:14px; font-size:.7rem; color:var(--muted); background:var(--surface2); padding:2px 8px; border-radius:4px; z-index:2; }
+  pre {
+    background:var(--code-bg); border:1px solid var(--border); border-radius:10px;
+    padding:20px; overflow-x:auto; font-size:.83rem; line-height:1.6;
+    font-family:'Cascadia Code','Fira Code','Consolas',monospace;
+  }
+  .kw { color:#ff7b72; }
+  .fn { color:#d2a8ff; }
+  .str { color:#a5d6ff; }
+  .num { color:#79c0ff; }
+  .cm { color:#6e7681; font-style:italic; }
+  .cls { color:#ffa657; }
+  .ann { color:#7ee787; }
+
+  /* TASK BOX */
+  .task-box {
+    background:var(--surface2); border:1px solid var(--border); border-radius:12px;
+    overflow:hidden; margin-bottom:20px;
+  }
+  .task-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 20px; background:rgba(127,82,255,.08);
+    border-bottom:1px solid var(--border);
+  }
+  .task-title { font-weight:700; font-size:.95rem; display:flex; align-items:center; gap:8px; }
+  .badge { padding:3px 10px; border-radius:20px; font-size:.72rem; font-weight:700; }
+  .badge-purple { background:rgba(127,82,255,.2); color:#b794f4; }
+  .badge-green { background:rgba(63,185,80,.15); color:var(--green); }
+  .badge-yellow { background:rgba(210,153,34,.15); color:var(--yellow); }
+  .badge-red { background:rgba(248,81,73,.15); color:var(--red); }
+  .task-body { padding:20px; }
+  .task-body p { color:var(--muted); font-size:.9rem; margin-bottom:12px; }
+
+  /* FORMULA BOX */
+  .formula { background:rgba(127,82,255,.08); border:1px solid rgba(127,82,255,.2); border-radius:8px; padding:14px 18px; margin:10px 0; font-size:.9rem; }
+  .formula strong { color:var(--kotlin); }
+
+  /* STEPS */
+  .steps { counter-reset:step; display:flex; flex-direction:column; gap:12px; }
+  .step { display:flex; gap:14px; align-items:flex-start; }
+  .step-num {
+    counter-increment:step; content:counter(step);
+    width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,var(--kotlin),var(--kotlin2));
+    display:flex; align-items:center; justify-content:center;
+    font-size:.75rem; font-weight:700; flex-shrink:0; margin-top:2px;
+  }
+  .step-num::before { content:counter(step); }
+  .step-body { font-size:.9rem; }
+  .step-body strong { color:var(--text); }
+  .step-body span { color:var(--muted); }
+
+  /* TABLE */
+  table { width:100%; border-collapse:collapse; font-size:.88rem; margin:12px 0; }
+  th { background:var(--surface2); color:var(--muted); font-weight:600; padding:10px 16px; text-align:left; border-bottom:2px solid var(--border); }
+  td { padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text); }
+  td code { background:var(--surface2); padding:2px 7px; border-radius:4px; font-size:.82rem; color:var(--blue); }
+  tr:hover td { background:rgba(127,82,255,.04); }
+
+  /* GRID 2 */
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+
+  /* CHECKLIST */
+  .checklist { list-style:none; display:flex; flex-direction:column; gap:8px; }
+  .checklist li { display:flex; align-items:flex-start; gap:10px; font-size:.9rem; color:var(--muted); }
+  .checklist li::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; margin-top:1px; }
+
+  /* WRONG / RIGHT */
+  .compare { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0; }
+  .compare-box { border-radius:8px; overflow:hidden; }
+  .compare-header { padding:8px 14px; font-size:.78rem; font-weight:700; letter-spacing:.5px; }
+  .compare-header.wrong { background:rgba(248,81,73,.15); color:var(--red); }
+  .compare-header.right { background:rgba(63,185,80,.15); color:var(--green); }
+  .compare-box pre { border-radius:0; border:none; border-top:1px solid var(--border); font-size:.78rem; }
+
+  /* 7-DAY PLAN */
+  .plan-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; }
+  .plan-day { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:16px; }
+  .plan-day .day-num { font-size:.75rem; color:var(--kotlin); font-weight:700; text-transform:uppercase; margin-bottom:6px; }
+  .plan-day .day-title { font-weight:600; font-size:.9rem; margin-bottom:6px; }
+  .plan-day .day-time { font-size:.78rem; color:var(--muted); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width:6px; height:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+  /* RESPONSIVE */
+  @media(max-width:900px) {
+    .sidebar { width:200px; }
+    .main { margin-left:200px; padding:0 20px 60px; }
+    .grid2,.compare { grid-template-columns:1fr; }
+    .grid3 { grid-template-columns:1fr 1fr; }
+  }
+  @media(max-width:650px) {
+    .sidebar { display:none; }
+    .main { margin-left:0; }
+    .hero h1 { font-size:1.8rem; }
+    .grid3 { grid-template-columns:1fr; }
+    .plan-grid { grid-template-columns:1fr 1fr; }
+  }
+
+  /* SMOOTH SCROLL */
+  html { scroll-behavior:smooth; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      🎯 Entrevista
+      <span>Kotlin Track</span>
+    </div>
+    <div class="nav-section">Overview</div>
+    <a class="nav-link active" onclick="scrollTo('intro')"><div class="dot"></div> Introduction</a>
+    <a class="nav-link" onclick="scrollTo('strategy')"><div class="dot"></div> Strategy</a>
+    <a class="nav-link" onclick="scrollTo('checklist')"><div class="dot"></div> Skills Checklist</a>
+
+    <div class="nav-section">Live Coding Test</div>
+    <a class="nav-link" onclick="scrollTo('task1')"><div class="dot"></div> Task 1 – Math Puzzles</a>
+    <a class="nav-link" onclick="scrollTo('task2')"><div class="dot"></div> Task 2 – Sequences</a>
+    <a class="nav-link" onclick="scrollTo('sideeffects')"><div class="dot"></div> Side Effects</a>
+
+    <div class="nav-section">Senior Topics</div>
+    <a class="nav-link" onclick="scrollTo('concurrency')"><div class="dot"></div> Concurrency & Coroutines</a>
+    <a class="nav-link" onclick="scrollTo('di')"><div class="dot"></div> Dependency Injection</a>
+    <a class="nav-link" onclick="scrollTo('generics')"><div class="dot"></div> Generics</a>
+    <a class="nav-link" onclick="scrollTo('delegation')"><div class="dot"></div> Delegation</a>
+
+    <div class="nav-section">Architecture</div>
+    <a class="nav-link" onclick="scrollTo('solid')"><div class="dot"></div> SOLID Principles</a>
+    <a class="nav-link" onclick="scrollTo('patterns')"><div class="dot"></div> Design Patterns</a>
+    <a class="nav-link" onclick="scrollTo('arch')"><div class="dot"></div> Architectures</a>
+    <a class="nav-link" onclick="scrollTo('jetpack')"><div class="dot"></div> Jetpack</a>
+
+    <div class="nav-section">Practice</div>
+    <a class="nav-link" onclick="scrollTo('exercises')"><div class="dot"></div> Practice Exercises</a>
+    <a class="nav-link" onclick="scrollTo('plan')"><div class="dot"></div> 7-Day Plan</a>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- HERO -->
+    <div class="hero" id="intro">
+      <div class="hero-badge">🎯 Interview Prep</div>
+      <h1><span>Kotlin</span> Interview Guide</h1>
+      <p>Complete preparation material for your Kotlin technical interview — live coding exercises, senior-level concepts, SOLID principles, and architecture patterns.</p>
+      <div class="tags">
+        <span class="tag">🟣 Kotlin</span>
+        <span class="tag">📱 Android Senior</span>
+        <span class="tag">🧱 SOLID</span>
+        <span class="tag">⚡ Coroutines</span>
+        <span class="tag">🏗️ MVVM / MVI</span>
+        <span class="tag">🧩 Design Patterns</span>
+      </div>
+    </div>
+
+    <!-- STRATEGY -->
+    <div class="section" id="strategy">
+      <div class="section-title"><span class="icon">🗺️</span> Resolution Strategy (5 Steps)</div>
+      <div class="alert alert-warn">
+        <span class="alert-icon">⚠️</span>
+        <div>During the live test you'll have <strong>30–90 minutes</strong>. Read <em>everything</em> before writing a single line of code.</div>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="step-num"></div><div class="step-body"><strong>Read the full statement (60–90 s)</strong> <span>– understand all tasks before starting any.</span></div></div>
+        <div class="step"><div class="step-num"></div><div class="step-body"><strong>Identify deliverables & constraints</strong> <span>– which TODOs are mandatory? What do the tests expect?</span></div></div>
+        <div class="step"><div class="step-num"></div><div class="step-body"><strong>Quick plan (30–60 s)</strong> <span>– prioritise the minimum viable solution first.</span></div></div>
+        <div class="step"><div class="step-num"></div><div class="step-body"><strong>Implement the minimum correct version</strong> <span>– working code beats elegant but incomplete code.</span></div></div>
+        <div class="step"><div class="step-num"></div><div class="step-body"><strong>Refactor if time allows</strong> <span>– add tests, explain trade-offs in 1–2 sentences.</span></div></div>
+      </div>
+    </div>
+
+    <!-- CHECKLIST -->
+    <div class="section" id="checklist">
+      <div class="section-title"><span class="icon">✅</span> Skills Checklist</div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🧮 Quick Calculations</div>
+          <ul class="checklist">
+            <li>Clock angle formulas (hours → degrees)</li>
+            <li>Basic algebra in 1 variable</li>
+            <li>Mental math under time pressure</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">🔢 Sequence Implementation</div>
+          <ul class="checklist">
+            <li>Fibonacci (iterative & memoized recursive)</li>
+            <li>Factorial, Primes, Hofstadter Q</li>
+            <li>Write tests validating first N elements</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">🧪 Determinism & Side Effects</div>
+          <ul class="checklist">
+            <li>No global mutable state in verified output</li>
+            <li>Understand the ReenterableExecutor pattern</li>
+            <li>Produce identical output across multiple runs</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">⏱️ Time Management</div>
+          <ul class="checklist">
+            <li>Deliver partial but functional solutions</li>
+            <li>Verbally explain reasoning while coding</li>
+            <li>Avoid leaving unexplained TODOs</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TASK 1 -->
+    <div class="section" id="task1">
+      <div class="section-title"><span class="icon">🧩</span> Task 1 – Quick Math Puzzles</div>
+      <div class="alert alert-info">
+        <span class="alert-icon">ℹ️</span>
+        <div>These are <strong>fill-in-the-value</strong> questions. No complex code needed — just correct math. Replace the <code>0.0</code> placeholder with the correct answer.</div>
+      </div>
+
+      <!-- Clock Angle -->
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🕒 Task 1a — Clock Angle Problem</div>
+          <span class="badge badge-purple">Math</span>
+        </div>
+        <div class="task-body">
+          <p><strong>Practice Question:</strong> At 3:30, what is the angle between the hour and minute hands?</p>
+          <div class="formula">
+            <strong>Minute hand:</strong> minutes × 6° = 30 × 6 = <strong>180°</strong><br>
+            <strong>Hour hand:</strong> (hour % 12) × 30° + minutes × 0.5° = 3 × 30 + 30 × 0.5 = 90 + 15 = <strong>105°</strong><br>
+            <strong>Angle:</strong> |105 − 180| = <strong>75°</strong> → min(75, 360−75) = <strong>75°</strong>
+          </div>
+          <div class="code-wrap">
+            <div class="code-label">Kotlin</div>
+<pre><span class="kw">val</span> angleDeg = <span class="num">75.0</span> <span class="cm">// ✅ correct answer</span></pre>
+          </div>
+          <p style="margin-top:12px;"><strong>General Formula:</strong></p>
+          <div class="formula">
+            minuteAngle = m × 6 &nbsp;|&nbsp; hourAngle = (h % 12) × 30 + m × 0.5<br>
+            result = |hourAngle − minuteAngle| &nbsp;→&nbsp; <strong>min(result, 360 − result)</strong>
+          </div>
+          <table style="margin-top:14px;">
+            <tr><th>Time</th><th>Minute°</th><th>Hour°</th><th>Angle</th></tr>
+            <tr><td>9:20</td><td>120°</td><td>280°</td><td>160°</td></tr>
+            <tr><td>8:45</td><td>270°</td><td>262.5°</td><td>7.5°</td></tr>
+            <tr><td>11:10</td><td>60°</td><td>335°</td><td>85° (min → 85°)</td></tr>
+            <tr><td>3:30</td><td>180°</td><td>105°</td><td><strong>75°</strong></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Algebra -->
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">➕ Task 1b — Algebra Puzzle</div>
+          <span class="badge badge-purple">Math</span>
+        </div>
+        <div class="task-body">
+          <p><strong>Practice Question:</strong> Item A and item B together cost 130. Item A costs 90 more than item B. What is the cost of item B?</p>
+          <div class="formula">
+            A + B = 130 &nbsp;|&nbsp; A = B + 90<br>
+            (B + 90) + B = 130 → 2B = 40 → <strong>B = 20</strong>
+          </div>
+          <div class="code-wrap">
+            <div class="code-label">Kotlin</div>
+<pre><span class="kw">val</span> itemB = <span class="num">20.0</span> <span class="cm">// ✅ correct answer</span></pre>
+          </div>
+          <div class="alert alert-warn" style="margin-top:14px;">
+            <span class="alert-icon">⚠️</span>
+            <div>Common trap: many people instinctively answer 40. The correct answer is <strong>20</strong>. Verify: A=110, B=20, 110+20=130 ✓, A−B=90 ✓</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TASK 2 -->
+    <div class="section" id="task2">
+      <div class="section-title"><span class="icon">🔢</span> Task 2 – Sequences</div>
+      <div class="alert alert-success">
+        <span class="alert-icon">✅</span>
+        <div>The test provides a harness that compares your output against <code>expected</code>. Your sequence must be <strong>deterministic</strong> and produce consistent output on every run.</div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🌀 Fibonacci – Iterative (Preferred in Interviews)</div>
+          <span class="badge badge-green">O(n) time · O(1) space</span>
+        </div>
+        <div class="task-body">
+          <p>Definition: F(0)=0, F(1)=1, F(n)=F(n-1)+F(n-2) → expected: [0,1,1,2,3,5,8,13,21,34]</p>
+          <div class="code-wrap">
+            <div class="code-label">Kotlin – Iterative list</div>
+<pre><span class="kw">fun</span> <span class="fn">fibonacciList</span>(n: <span class="cls">Int</span>): <span class="cls">List</span>&lt;<span class="cls">Int</span>&gt; {
+    <span class="kw">val</span> res = mutableListOf&lt;<span class="cls">Int</span>&gt;()
+    <span class="kw">if</span> (n &lt;= <span class="num">0</span>) <span class="kw">return</span> res
+    res.add(<span class="num">0</span>)
+    <span class="kw">if</span> (n == <span class="num">1</span>) <span class="kw">return</span> res
+    res.add(<span class="num">1</span>)
+    <span class="kw">while</span> (res.size &lt; n) {
+        <span class="kw">val</span> next = res[res.size - <span class="num">1</span>] + res[res.size - <span class="num">2</span>]
+        res.add(next)
+    }
+    <span class="kw">return</span> res
+}</pre>
+          </div>
+          <div class="code-wrap" style="margin-top:8px;">
+            <div class="code-label">Kotlin – Recursive + Memoization</div>
+<pre><span class="kw">fun</span> <span class="fn">fibonacciMemo</span>(
+    n: <span class="cls">Int</span>,
+    memo: <span class="cls">MutableMap</span>&lt;<span class="cls">Int</span>, <span class="cls">Int</span>&gt; = mutableMapOf()
+): <span class="cls">Int</span> {
+    <span class="kw">if</span> (n == <span class="num">0</span>) <span class="kw">return</span> <span class="num">0</span>
+    <span class="kw">if</span> (n == <span class="num">1</span>) <span class="kw">return</span> <span class="num">1</span>
+    memo[n]?.<span class="fn">let</span> { <span class="kw">return</span> it }
+    <span class="kw">val</span> value = <span class="fn">fibonacciMemo</span>(n - <span class="num">1</span>, memo) + <span class="fn">fibonacciMemo</span>(n - <span class="num">2</span>, memo)
+    memo[n] = value
+    <span class="kw">return</span> value
+}</pre>
+          </div>
+          <div class="alert alert-warn" style="margin-top:14px;">
+            <span class="alert-icon">⚠️</span>
+            <div>Recursive <strong>without</strong> memoization is O(2ⁿ) — exponential. Never use it in interviews without memoization.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="task-box">
+          <div class="task-header">
+            <div class="task-title">🔢 Primes</div>
+            <span class="badge badge-yellow">Bonus</span>
+          </div>
+          <div class="task-body">
+<div class="code-wrap">
+<pre><span class="kw">fun</span> <span class="fn">primes</span>(n: <span class="cls">Int</span>): <span class="cls">List</span>&lt;<span class="cls">Int</span>&gt; {
+    <span class="kw">val</span> result = mutableListOf&lt;<span class="cls">Int</span>&gt;()
+    <span class="kw">var</span> candidate = <span class="num">2</span>
+    <span class="kw">while</span> (result.size &lt; n) {
+        <span class="kw">val</span> isPrime = (<span class="num">2</span>..candidate/<span class="num">2</span>)
+            .none { candidate % it == <span class="num">0</span> }
+        <span class="kw">if</span> (isPrime) result.add(candidate)
+        candidate++
+    }
+    <span class="kw">return</span> result
+}
+<span class="cm">// [2,3,5,7,11,13,17,19,23,29]</span></pre>
+</div>
+          </div>
+        </div>
+        <div class="task-box">
+          <div class="task-header">
+            <div class="task-title">❗ Factorial</div>
+            <span class="badge badge-yellow">Bonus</span>
+          </div>
+          <div class="task-body">
+<div class="code-wrap">
+<pre><span class="kw">fun</span> <span class="fn">factorials</span>(n: <span class="cls">Int</span>): <span class="cls">List</span>&lt;<span class="cls">Long</span>&gt; {
+    <span class="kw">val</span> res = mutableListOf&lt;<span class="cls">Long</span>&gt;()
+    <span class="kw">var</span> fact = <span class="num">1L</span>
+    <span class="kw">for</span> (i <span class="kw">in</span> <span class="num">0</span>..n) {
+        <span class="kw">if</span> (i == <span class="num">0</span>) res.add(<span class="num">1L</span>)
+        <span class="kw">else</span> {
+            fact *= i
+            res.add(fact)
+        }
+    }
+    <span class="kw">return</span> res
+}
+<span class="cm">// [1,1,2,6,24,120,720...]</span></pre>
+</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🌀 Hofstadter Q-Sequence (Advanced)</div>
+          <span class="badge badge-red">Challenge</span>
+        </div>
+        <div class="task-body">
+          <p>Q(n) = Q(n−Q(n−1)) + Q(n−Q(n−2)), Q(1)=Q(2)=1 → [1,1,2,3,3,4,5,5,6,6,6,8,8,8,10…]</p>
+          <div class="code-wrap">
+            <div class="code-label">Kotlin – Memoized</div>
+<pre><span class="kw">fun</span> <span class="fn">hofstadterQ</span>(n: <span class="cls">Int</span>): <span class="cls">List</span>&lt;<span class="cls">Int</span>&gt; {
+    <span class="kw">val</span> q = <span class="cls">IntArray</span>(n + <span class="num">1</span>)
+    q[<span class="num">1</span>] = <span class="num">1</span>; <span class="kw">if</span> (n &gt;= <span class="num">2</span>) q[<span class="num">2</span>] = <span class="num">1</span>
+    <span class="kw">for</span> (i <span class="kw">in</span> <span class="num">3</span>..n) {
+        q[i] = q[i - q[i - <span class="num">1</span>]] + q[i - q[i - <span class="num">2</span>]]
+    }
+    <span class="kw">return</span> q.drop(<span class="num">1</span>)
+}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDE EFFECTS -->
+    <div class="section" id="sideeffects">
+      <div class="section-title"><span class="icon">⚡</span> Side Effects & Determinism</div>
+      <div class="alert alert-warn">
+        <span class="alert-icon">⚠️</span>
+        <div>The test harness uses a <strong>ReenterableExecutor</strong> that runs your function multiple times and compares outputs. Any global mutable state will be detected with the message: <code>!!! SIDE EFFECTS DETECTED !!!</code></div>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">🔍 How ReenterableExecutor works</div>
+        <p>It captures stdout twice, then a random number of additional times. If captured output #1 ≠ output #2, side effects are flagged. This means your logic must not rely on counters, mutable singletons, or any state that changes across calls.</p>
+      </div>
+      <div class="compare">
+        <div class="compare-box">
+          <div class="compare-header wrong">❌ HAS SIDE EFFECTS</div>
+<pre><span class="kw">var</span> counter = <span class="num">0</span> <span class="cm">// global state!</span>
+
+<span class="kw">fun</span> <span class="fn">badTask</span>() {
+    counter++
+    println(<span class="str">"Run #$counter"</span>)
+    <span class="cm">// Run 1: "Run #1"</span>
+    <span class="cm">// Run 2: "Run #2" ❌ DIFFERENT!</span>
+}</pre>
+        </div>
+        <div class="compare-box">
+          <div class="compare-header right">✅ PURE / DETERMINISTIC</div>
+<pre><span class="kw">fun</span> <span class="fn">goodTask</span>(items: <span class="cls">List</span>&lt;<span class="cls">Int</span>&gt;) {
+    items.forEach {
+        println(<span class="str">"Item: $it"</span>)
+    }
+    <span class="cm">// Always identical output ✅</span>
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONCURRENCY -->
+    <div class="section" id="concurrency">
+      <div class="section-title"><span class="icon">🧵</span> Multithreading, Concurrency & Coroutines</div>
+      <div class="grid3" style="margin-bottom:20px;">
+        <div class="card">
+          <div class="card-title" style="color:var(--blue);">Thread</div>
+          <p>Independent execution unit within a process. Has its own stack but shares the process memory.</p>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--yellow);">Concurrency</div>
+          <p>Multiple tasks interleaved — threads compete for CPU time. Does NOT mean simultaneous execution.</p>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--green);">Parallelism</div>
+          <p>Simultaneous execution on multiple CPU cores. Requires multi-core hardware.</p>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">⚡ Kotlin Coroutines</div>
+          <span class="badge badge-purple">Must Know</span>
+        </div>
+        <div class="task-body">
+          <p>Lightweight threads managed by Kotlin — write async code sequentially.</p>
+          <table>
+            <tr><th>Dispatcher</th><th>Use case</th></tr>
+            <tr><td><code>Dispatchers.Main</code></td><td>Update UI</td></tr>
+            <tr><td><code>Dispatchers.IO</code></td><td>Network, database, disk I/O</td></tr>
+            <tr><td><code>Dispatchers.Default</code></td><td>CPU-intensive calculations</td></tr>
+          </table>
+          <div class="code-wrap" style="margin-top:12px;">
+            <div class="code-label">ViewModel + Coroutines</div>
+<pre><span class="kw">class</span> <span class="cls">MyViewModel</span>(<span class="kw">private val</span> repo: <span class="cls">Repo</span>) : <span class="cls">ViewModel</span>() {
+    <span class="kw">val</span> state = <span class="cls">MutableLiveData</span>&lt;<span class="cls">String</span>&gt;()
+
+    <span class="kw">fun</span> <span class="fn">load</span>() {
+        viewModelScope.<span class="fn">launch</span> {           <span class="cm">// Main thread</span>
+            <span class="kw">try</span> {
+                <span class="kw">val</span> data = <span class="fn">withContext</span>(Dispatchers.IO) {
+                    repo.<span class="fn">fetchData</span>()       <span class="cm">// IO thread</span>
+                }
+                state.value = data           <span class="cm">// Back to Main</span>
+            } <span class="kw">catch</span> (e: <span class="cls">Exception</span>) {
+                state.value = <span class="str">"Error: ${e.message}"</span>
+            }
+        }
+    }
+}</pre>
+          </div>
+          <ul class="checklist" style="margin-top:12px;">
+            <li>Never use <code>GlobalScope</code> for lifecycle-bound tasks</li>
+            <li>Cancel coroutines in <code>onCleared()</code> or use proper scopes</li>
+            <li>Use <code>SupervisorJob</code> or <code>CoroutineExceptionHandler</code> for advanced error handling</li>
+            <li>Use Flows for reactive continuous data streams</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-label">ReentrantLock example</div>
+<pre><span class="kw">class</span> <span class="cls">Counter</span> {
+    <span class="kw">private var</span> count = <span class="num">0</span>
+    <span class="kw">private val</span> lock = <span class="cls">ReentrantLock</span>()
+
+    <span class="kw">fun</span> <span class="fn">increment</span>() {
+        lock.<span class="fn">withLock</span> {
+            count += <span class="num">1</span>
+            println(<span class="str">"Current: $count"</span>)
+        }
+    }
+}</pre>
+      </div>
+    </div>
+
+    <!-- DI -->
+    <div class="section" id="di">
+      <div class="section-title"><span class="icon">🔧</span> Dependency Injection</div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">📌 Definition</div>
+        <p>Pattern to decouple object creation from usage. Improves testability and follows the DIP principle (SOLID). Main libraries: <strong>Hilt</strong> (recommended), Dagger 2, Koin.</p>
+      </div>
+      <div class="code-wrap">
+        <div class="code-label">Hilt – Module + Activity</div>
+<pre><span class="ann">@Module</span>
+<span class="ann">@InstallIn</span>(SingletonComponent::<span class="kw">class</span>)
+<span class="kw">object</span> <span class="cls">NetworkModule</span> {
+    <span class="ann">@Provides @Singleton</span>
+    <span class="kw">fun</span> <span class="fn">provideApi</span>(retrofit: <span class="cls">Retrofit</span>): <span class="cls">ApiService</span> =
+        retrofit.<span class="fn">create</span>(ApiService::<span class="kw">class</span>.java)
+}
+
+<span class="ann">@AndroidEntryPoint</span>
+<span class="kw">class</span> <span class="cls">MainActivity</span> : <span class="cls">AppCompatActivity</span>() {
+    <span class="ann">@Inject</span> <span class="kw">lateinit var</span> api: <span class="cls">ApiService</span>
+}</pre>
+      </div>
+    </div>
+
+    <!-- GENERICS -->
+    <div class="section" id="generics">
+      <div class="section-title"><span class="icon">🔣</span> Generics</div>
+      <div class="grid3" style="margin-bottom:20px;">
+        <div class="card">
+          <div class="card-title" style="color:var(--muted);">Invariant &lt;T&gt;</div>
+          <p>Reads <strong>and</strong> writes T. Most common case.</p>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--green);">Covariant &lt;out T&gt;</div>
+          <p>Produces T only — can be used as <code>List&lt;Any&gt;</code>.</p>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--blue);">Contravariant &lt;in T&gt;</div>
+          <p>Consumes T only — accepts supertypes.</p>
+        </div>
+      </div>
+      <div class="code-wrap">
+        <div class="code-label">Generic Stack + reified</div>
+<pre><span class="kw">class</span> <span class="cls">Stack</span>&lt;T&gt; {
+    <span class="kw">private val</span> elements = mutableListOf&lt;T&gt;()
+    <span class="kw">fun</span> <span class="fn">push</span>(item: T) = elements.add(item)
+    <span class="kw">fun</span> <span class="fn">pop</span>(): T? = <span class="kw">if</span> (elements.isEmpty()) <span class="kw">null</span> <span class="kw">else</span> elements.removeAt(elements.lastIndex)
+    <span class="kw">fun</span> <span class="fn">peek</span>(): T? = elements.lastOrNull()
+}
+
+<span class="cm">// reified: access T type info at runtime</span>
+<span class="kw">inline fun</span> &lt;<span class="kw">reified</span> T&gt; <span class="cls">Gson</span>.<span class="fn">fromJson</span>(json: <span class="cls">String</span>): T =
+    <span class="kw">this</span>.<span class="fn">fromJson</span>(json, T::<span class="kw">class</span>.java)</pre>
+      </div>
+    </div>
+
+    <!-- DELEGATION -->
+    <div class="section" id="delegation">
+      <div class="section-title"><span class="icon">🤝</span> Delegation</div>
+      <div class="compare">
+        <div class="compare-box">
+          <div class="compare-header right">Class Delegation (by)</div>
+<pre><span class="kw">interface</span> <span class="cls">Logger</span> { <span class="kw">fun</span> <span class="fn">log</span>(msg: <span class="cls">String</span>) }
+
+<span class="kw">class</span> <span class="cls">ConsoleLogger</span> : <span class="cls">Logger</span> {
+    <span class="kw">override fun</span> <span class="fn">log</span>(msg: <span class="cls">String</span>) =
+        println(<span class="str">"LOG: $msg"</span>)
+}
+
+<span class="kw">class</span> <span class="cls">Service</span>(logger: <span class="cls">Logger</span>) : <span class="cls">Logger</span> <span class="kw">by</span> logger {
+    <span class="kw">fun</span> <span class="fn">run</span>() = <span class="fn">log</span>(<span class="str">"Running..."</span>)
+}</pre>
+        </div>
+        <div class="compare-box">
+          <div class="compare-header right">Property Delegation</div>
+<pre><span class="kw">class</span> <span class="cls">MyClass</span> {
+    <span class="cm">// lazy: init only on first access</span>
+    <span class="kw">val</span> heavy: <span class="cls">Resource</span> <span class="kw">by</span> lazy { <span class="cls">Resource</span>() }
+
+    <span class="cm">// observable: fires on every change</span>
+    <span class="kw">var</span> name: <span class="cls">String</span> <span class="kw">by</span>
+        <span class="cls">Delegates</span>.<span class="fn">observable</span>(<span class="str">""</span>) { _, old, new -&gt;
+            println(<span class="str">"Changed $old → $new"</span>)
+        }
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOLID -->
+    <div class="section" id="solid">
+      <div class="section-title"><span class="icon">🧱</span> SOLID Principles</div>
+
+      <div class="task-box">
+        <div class="task-header"><div class="task-title">S — Single Responsibility Principle</div><span class="badge badge-purple">SRP</span></div>
+        <div class="task-body">
+          <p>Each class should have <strong>one reason to change</strong>.</p>
+          <div class="compare">
+            <div class="compare-box"><div class="compare-header wrong">❌ Wrong</div><pre><span class="kw">class</span> <span class="cls">UserRepository</span> {
+    <span class="kw">fun</span> <span class="fn">getUser</span>(): <span class="cls">User</span> { ... }
+    <span class="kw">fun</span> <span class="fn">validateUser</span>(u: <span class="cls">User</span>): <span class="cls">Boolean</span> { ... }
+}</pre></div>
+            <div class="compare-box"><div class="compare-header right">✅ Correct</div><pre><span class="kw">class</span> <span class="cls">UserRepository</span> {
+    <span class="kw">fun</span> <span class="fn">getUser</span>(): <span class="cls">User</span> { ... }
+}
+<span class="kw">class</span> <span class="cls">UserValidator</span> {
+    <span class="kw">fun</span> <span class="fn">validateUser</span>(u: <span class="cls">User</span>): <span class="cls">Boolean</span> { ... }
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header"><div class="task-title">O — Open/Closed Principle</div><span class="badge badge-purple">OCP</span></div>
+        <div class="task-body">
+          <p>Open for <strong>extension</strong>, closed for <strong>modification</strong>.</p>
+          <div class="compare">
+            <div class="compare-box"><div class="compare-header wrong">❌ Wrong</div><pre><span class="kw">class</span> <span class="cls">Payment</span> {
+    <span class="kw">fun</span> <span class="fn">pay</span>(method: <span class="cls">String</span>) {
+        <span class="kw">if</span> (method == <span class="str">"cash"</span>) { ... }
+        <span class="kw">else if</span> (method == <span class="str">"card"</span>) { ... }
+    }
+}</pre></div>
+            <div class="compare-box"><div class="compare-header right">✅ Correct</div><pre><span class="kw">interface</span> <span class="cls">PaymentMethod</span> { <span class="kw">fun</span> <span class="fn">pay</span>() }
+<span class="kw">class</span> <span class="cls">Cash</span> : <span class="cls">PaymentMethod</span> { <span class="kw">override fun</span> <span class="fn">pay</span>() { ... } }
+<span class="kw">class</span> <span class="cls">Card</span> : <span class="cls">PaymentMethod</span> { <span class="kw">override fun</span> <span class="fn">pay</span>() { ... } }</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header"><div class="task-title">L — Liskov Substitution Principle</div><span class="badge badge-purple">LSP</span></div>
+        <div class="task-body">
+          <p>Subclasses must be substitutable for their base class <strong>without breaking behavior</strong>.</p>
+          <div class="compare">
+            <div class="compare-box"><div class="compare-header wrong">❌ Wrong</div><pre><span class="kw">open class</span> <span class="cls">Bird</span> { <span class="kw">open fun</span> <span class="fn">fly</span>() { ... } }
+<span class="kw">class</span> <span class="cls">Penguin</span> : <span class="cls">Bird</span>() {
+    <span class="kw">override fun</span> <span class="fn">fly</span>() { <span class="kw">throw</span> <span class="cls">Exception</span>(<span class="str">"Can't!"</span>) }
+}</pre></div>
+            <div class="compare-box"><div class="compare-header right">✅ Correct</div><pre><span class="kw">interface</span> <span class="cls">Bird</span> { <span class="kw">fun</span> <span class="fn">move</span>() }
+<span class="kw">class</span> <span class="cls">Sparrow</span> : <span class="cls">Bird</span> { <span class="kw">override fun</span> <span class="fn">move</span>() = <span class="fn">fly</span>() }
+<span class="kw">class</span> <span class="cls">Penguin</span> : <span class="cls">Bird</span> { <span class="kw">override fun</span> <span class="fn">move</span>() = <span class="fn">walk</span>() }</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header"><div class="task-title">I — Interface Segregation Principle</div><span class="badge badge-purple">ISP</span></div>
+        <div class="task-body">
+          <p>Clients should not depend on interfaces they don't use. <strong>Split large interfaces.</strong></p>
+          <div class="compare">
+            <div class="compare-box"><div class="compare-header wrong">❌ Wrong</div><pre><span class="kw">interface</span> <span class="cls">Animal</span> { <span class="kw">fun</span> <span class="fn">fly</span>(); <span class="kw">fun</span> <span class="fn">swim</span>() }
+<span class="kw">class</span> <span class="cls">Penguin</span> : <span class="cls">Animal</span> {
+    <span class="kw">override fun</span> <span class="fn">fly</span>() { ... } <span class="cm">// ❌ doesn't apply</span>
+    <span class="kw">override fun</span> <span class="fn">swim</span>() { ... }
+}</pre></div>
+            <div class="compare-box"><div class="compare-header right">✅ Correct</div><pre><span class="kw">interface</span> <span class="cls">Swimmer</span> { <span class="kw">fun</span> <span class="fn">swim</span>() }
+<span class="kw">class</span> <span class="cls">Penguin</span> : <span class="cls">Swimmer</span> {
+    <span class="kw">override fun</span> <span class="fn">swim</span>() { ... }
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header"><div class="task-title">D — Dependency Inversion Principle</div><span class="badge badge-purple">DIP</span></div>
+        <div class="task-body">
+          <p>Depend on <strong>abstractions</strong>, not on concrete implementations.</p>
+          <div class="compare">
+            <div class="compare-box"><div class="compare-header wrong">❌ Wrong</div><pre><span class="kw">class</span> <span class="cls">UserService</span> {
+    <span class="kw">val</span> repo = <span class="cls">UserRepository</span>() <span class="cm">// ❌ concrete</span>
+}</pre></div>
+            <div class="compare-box"><div class="compare-header right">✅ Correct</div><pre><span class="kw">interface</span> <span class="cls">UserRepository</span> { <span class="kw">fun</span> <span class="fn">getUser</span>(): <span class="cls">User</span> }
+<span class="kw">class</span> <span class="cls">UserService</span>(<span class="kw">val</span> repo: <span class="cls">UserRepository</span>)</pre></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PATTERNS -->
+    <div class="section" id="patterns">
+      <div class="section-title"><span class="icon">🛠️</span> Design Patterns in Android</div>
+      <div class="grid3">
+        <div class="task-box">
+          <div class="task-header"><div class="task-title">🏭 Factory</div><span class="badge badge-green">Creational</span></div>
+          <div class="task-body">
+<pre style="font-size:.77rem;"><span class="kw">object</span> <span class="cls">NotificationFactory</span> {
+    <span class="kw">fun</span> <span class="fn">create</span>(type: <span class="cls">String</span>): <span class="cls">Notification</span> =
+        <span class="kw">when</span> (type) {
+            <span class="str">"email"</span> -&gt; <span class="cls">EmailNotification</span>()
+            <span class="str">"sms"</span>   -&gt; <span class="cls">SMSNotification</span>()
+            <span class="kw">else</span>    -&gt; <span class="kw">throw</span> <span class="cls">IllegalArgumentException</span>()
+        }
+}</pre>
+          </div>
+        </div>
+        <div class="task-box">
+          <div class="task-header"><div class="task-title">👁️ Observer / LiveData</div><span class="badge badge-blue">Behavioral</span></div>
+          <div class="task-body">
+<pre style="font-size:.77rem;"><span class="kw">val</span> liveData = <span class="cls">MutableLiveData</span>&lt;<span class="cls">String</span>&gt;()
+liveData.<span class="fn">observe</span>(<span class="kw">this</span>) { value -&gt;
+    println(<span class="str">"Changed: $value"</span>)
+}
+liveData.value = <span class="str">"Hello"</span></pre>
+          </div>
+        </div>
+        <div class="task-box">
+          <div class="task-header"><div class="task-title">🏗️ Builder</div><span class="badge badge-green">Creational</span></div>
+          <div class="task-body">
+<pre style="font-size:.77rem;"><span class="kw">class</span> <span class="cls">UserBuilder</span> {
+    <span class="kw">private var</span> name = <span class="str">""</span>
+    <span class="kw">private var</span> age = <span class="num">0</span>
+    <span class="kw">fun</span> <span class="fn">setName</span>(n: <span class="cls">String</span>) = <span class="fn">apply</span> { name = n }
+    <span class="kw">fun</span> <span class="fn">setAge</span>(a: <span class="cls">Int</span>) = <span class="fn">apply</span> { age = a }
+    <span class="kw">fun</span> <span class="fn">build</span>() = <span class="cls">User</span>(name, age)
+}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARCHITECTURES -->
+    <div class="section" id="arch">
+      <div class="section-title"><span class="icon">🏛️</span> Android Architectures</div>
+      <div class="compare">
+        <div class="compare-box">
+          <div class="compare-header right">MVVM</div>
+<pre><span class="kw">class</span> <span class="cls">LoginViewModel</span> : <span class="cls">ViewModel</span>() {
+    <span class="kw">val</span> email = <span class="cls">MutableLiveData</span>&lt;<span class="cls">String</span>&gt;()
+    <span class="kw">val</span> password = <span class="cls">MutableLiveData</span>&lt;<span class="cls">String</span>&gt;()
+    <span class="kw">fun</span> <span class="fn">login</span>() { <span class="cm">/* business logic */</span> }
+}
+<span class="cm">// View:</span>
+loginButton.<span class="fn">setOnClickListener</span> { viewModel.<span class="fn">login</span>() }</pre>
+        </div>
+        <div class="compare-box">
+          <div class="compare-header right">MVI (StateFlow)</div>
+<pre><span class="kw">sealed class</span> <span class="cls">LoginIntent</span> {
+    data <span class="kw">class</span> <span class="cls">Submit</span>(
+        <span class="kw">val</span> email: <span class="cls">String</span>, <span class="kw">val</span> password: <span class="cls">String</span>
+    ) : <span class="cls">LoginIntent</span>()
+}
+<span class="kw">sealed class</span> <span class="cls">LoginState</span> {
+    <span class="kw">object</span> <span class="cls">Idle</span> : <span class="cls">LoginState</span>()
+    <span class="kw">object</span> <span class="cls">Loading</span> : <span class="cls">LoginState</span>()
+    <span class="kw">object</span> <span class="cls">Success</span> : <span class="cls">LoginState</span>()
+    data <span class="kw">class</span> <span class="cls">Error</span>(<span class="kw">val</span> msg: <span class="cls">String</span>) : <span class="cls">LoginState</span>()
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- JETPACK -->
+    <div class="section" id="jetpack">
+      <div class="section-title"><span class="icon">📦</span> Jetpack Essentials</div>
+      <div class="grid2">
+        <div class="card"><div class="card-title">🧭 Navigation</div><p>Declarative navigation between screens via <code>nav_graph.xml</code>. Manages back stack automatically.</p></div>
+        <div class="card"><div class="card-title">🔋 ViewModel</div><p>Survives configuration changes (screen rotations). Holds UI state and business logic.</p></div>
+        <div class="card"><div class="card-title">📡 LiveData</div><p>Lifecycle-aware observable data holder. Auto-unsubscribes when lifecycle is destroyed.</p></div>
+        <div class="card"><div class="card-title">💾 Room</div><p>SQLite abstraction with DAO, <code>@Entity</code>, and compile-time verified SQL queries.</p></div>
+        <div class="card"><div class="card-title">⚙️ WorkManager</div><p>Guaranteed background tasks that persist even after process death or reboot.</p></div>
+        <div class="card"><div class="card-title">🌊 Flow</div><p>Kotlin's reactive stream. Cold by default — use <code>StateFlow</code>/<code>SharedFlow</code> for hot streams in UI.</p></div>
+      </div>
+    </div>
+
+    <!-- EXERCISES -->
+    <div class="section" id="exercises">
+      <div class="section-title"><span class="icon">🏋️</span> Practice Exercises</div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🕒 Clock Puzzles (pick 2)</div>
+          <ul class="checklist">
+            <li>At 8:45 — angle between hands?</li>
+            <li>At 11:10 — angle between hands?</li>
+            <li>At 3:00 — angle between hands?</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">➕ Algebra Puzzles (pick 2)</div>
+          <ul class="checklist">
+            <li>A + B = 220, A is 120 more than B → B = ?</li>
+            <li>X + Y = 300, X costs 80 more than Y → Y = ?</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">🔢 Sequences (pick 1)</div>
+          <ul class="checklist">
+            <li>Fibonacci: return first N elements, validate N=10</li>
+            <li>Factorial: iterative, test n=0,1,5,10</li>
+            <li>Hofstadter Q with memoization up to n=20</li>
+            <li>Primes: generate first N prime numbers</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">⚡ Side Effects Challenge</div>
+          <ul class="checklist">
+            <li>Write a function that prints a given list</li>
+            <li>Write one that depends on a global counter</li>
+            <li>Capture stdout and prove side effects exist</li>
+            <li>Refactor to make it pure / deterministic</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7-DAY PLAN -->
+    <div class="section" id="plan">
+      <div class="section-title"><span class="icon">📅</span> 7-Day Study Plan</div>
+      <div class="plan-grid">
+        <div class="plan-day"><div class="day-num">Day 1</div><div class="day-title">Quick Math & Algebra</div><div class="day-time">⏱ 30 min</div></div>
+        <div class="plan-day"><div class="day-num">Day 2</div><div class="day-title">Fibonacci & Factorial Iterative + Tests</div><div class="day-time">⏱ 30–45 min</div></div>
+        <div class="plan-day"><div class="day-num">Day 3</div><div class="day-title">Prime Numbers Generation</div><div class="day-time">⏱ 30 min</div></div>
+        <div class="plan-day"><div class="day-num">Day 4</div><div class="day-title">Hofstadter Q + Recursive Memo</div><div class="day-time">⏱ 45 min</div></div>
+        <div class="plan-day"><div class="day-num">Day 5</div><div class="day-title">Side Effects & stdout Capture</div><div class="day-time">⏱ 30 min</div></div>
+        <div class="plan-day"><div class="day-num">Day 6</div><div class="day-title">SOLID + Design Patterns Review</div><div class="day-time">⏱ 45 min</div></div>
+        <div class="plan-day"><div class="day-num">Day 7</div><div class="day-title">Full Timed Mock (45 min) + Feedback</div><div class="day-time">⏱ 60 min</div></div>
+      </div>
+      <div class="alert alert-success" style="margin-top:20px;">
+        <span class="alert-icon">🚀</span>
+        <div>After completing this 7-day plan you'll be ready to solve the live coding test, explain your reasoning clearly, and answer senior-level Android/Kotlin questions confidently.</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  function scrollTo(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+  }
+
+  // Highlight active section on scroll
+  const sections = ['intro','strategy','checklist','task1','task2','sideeffects','concurrency','di','generics','delegation','solid','patterns','arch','jetpack','exercises','plan'];
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        document.querySelectorAll('.nav-link').forEach(l => {
+          l.classList.toggle('active', l.getAttribute('onclick')?.includes(id));
+        });
+      }
+    });
+  }, { threshold: 0.25 });
+  sections.forEach(id => { const el = document.getElementById(id); if(el) observer.observe(el); });
+</script>
+</body>
+</html>

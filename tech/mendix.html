@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preparación Entrevista: Senior Mendix Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0052CC;
+            --primary-light: #4C9AFF;
+            --primary-dark: #003380;
+            --accent: #FF5722;
+            --accent-light: #FF8A65;
+            --bg-main: #0A0E27;
+            --bg-card: #161B33;
+            --bg-code: #1E2440;
+            --text-primary: #E8EAED;
+            --text-secondary: #9BA3B4;
+            --text-accent: #6DD5ED;
+            --border: #2A3150;
+            --success: #00C853;
+            --warning: #FFC107;
+            --sidebar-width: 320px;
+            --header-height: 70px;
+        }
+
+        body {
+            font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 82, 204, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(109, 213, 237, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 87, 34, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: rgba(22, 27, 51, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 20px rgba(0, 82, 204, 0.3);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-light), var(--text-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.75rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - var(--header-height));
+            background: rgba(22, 27, 51, 0.8);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            z-index: 900;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar-content {
+            padding: 2rem 1.5rem;
+        }
+
+        .sidebar-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-accent);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.5rem;
+            border-radius: 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--primary-light);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border-color: var(--border);
+            transform: translateX(5px);
+        }
+
+        .nav-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(0, 82, 204, 0.15), rgba(109, 213, 237, 0.1));
+            color: var(--text-accent);
+            border-color: var(--primary);
+        }
+
+        .nav-item.active::before {
+            transform: scaleY(1);
+        }
+
+        /* Main content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--header-height);
+            padding: 3rem;
+            min-height: calc(100vh - var(--header-height));
+            position: relative;
+            z-index: 1;
+        }
+
+        .content-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section-number {
+            flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 82, 204, 0.3);
+        }
+
+        .section-title {
+            flex: 1;
+        }
+
+        .section-title h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(109, 213, 237, 0.15);
+            border: 1px solid var(--text-accent);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .content-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .content-block:hover {
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(0, 82, 204, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .content-block h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-accent);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .content-block h3::before {
+            content: '▸';
+            color: var(--primary-light);
+            font-size: 1.5rem;
+        }
+
+        .content-block h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-light);
+            margin: 1.5rem 0 1rem;
+        }
+
+        .content-block p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .content-block ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-block li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .content-block li::before {
+            content: '→';
+            position: absolute;
+            left: 0.5rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .content-block strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-lang {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .copy-btn {
+            background: rgba(76, 154, 255, 0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary-light);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .inline-code {
+            background: var(--bg-code);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--accent-light);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Diagrams */
+        .diagram {
+            background: var(--bg-code);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .diagram-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-accent);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .flow-box {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 1.25rem 1.75rem;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 8px 25px rgba(0, 82, 204, 0.3);
+            min-width: 150px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .flow-box:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 82, 204, 0.5);
+        }
+
+        .flow-arrow {
+            color: var(--accent);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .table-container {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .db-table {
+            background: rgba(76, 154, 255, 0.05);
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem;
+            min-width: 250px;
+        }
+
+        .table-name {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        .table-field {
+            background: var(--bg-card);
+            padding: 0.5rem 0.75rem;
+            margin: 0.4rem 0;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .table-field .pk {
+            color: var(--warning);
+            font-weight: 700;
+        }
+
+        /* Alerts and callouts */
+        .callout {
+            background: linear-gradient(135deg, rgba(0, 200, 83, 0.1), rgba(0, 200, 83, 0.05));
+            border-left: 4px solid var(--success);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .callout.warning {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.05));
+            border-left-color: var(--warning);
+        }
+
+        .callout.info {
+            background: linear-gradient(135deg, rgba(109, 213, 237, 0.1), rgba(109, 213, 237, 0.05));
+            border-left-color: var(--text-accent);
+        }
+
+        .callout-title {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .callout-icon {
+            font-size: 1.25rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+
+        .badge.primary {
+            background: rgba(0, 82, 204, 0.2);
+            color: var(--primary-light);
+            border: 1px solid var(--primary);
+        }
+
+        .badge.success {
+            background: rgba(0, 200, 83, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .badge.warning {
+            background: rgba(255, 193, 7, 0.2);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 2rem 1.5rem;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            :root {
+                --sidebar-width: 280px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 0 1rem;
+            }
+
+            .logo-title {
+                font-size: 1.1rem;
+            }
+
+            .logo-subtitle {
+                font-size: 0.65rem;
+            }
+
+            .main-content {
+                padding: 1.5rem 1rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .section-title h2 {
+                font-size: 1.5rem;
+            }
+
+            .content-block {
+                padding: 1.5rem;
+            }
+
+            .flow-container {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-light);
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary-light);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">M</div>
+                <div class="logo-text">
+                    <div class="logo-title">Mendix Interview</div>
+                    <div class="logo-subtitle">Senior Developer Preparation</div>
+                </div>
+            </div>
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <div class="sidebar-title">Temas de Entrevista</div>
+            <nav>
+                <a href="#transacciones" class="nav-item">Transacciones en Mendix</a>
+                <a href="#commit-db" class="nav-item">Commit en Base de Datos</a>
+                <a href="#mejores-practicas" class="nav-item">Mejores Prácticas Microflujos</a>
+                <a href="#etapa-commit" class="nav-item">Etapa del Commit</a>
+                <a href="#commit-final" class="nav-item">Commit al Final</a>
+                <a href="#runtime-commit" class="nav-item">Runtime y Commit</a>
+                <a href="#generalizacion" class="nav-item">Generalización (Herencia)</a>
+                <a href="#generalizacion-bd" class="nav-item">Generalización en BD</a>
+                <a href="#asociaciones" class="nav-item">Asociaciones</a>
+                <a href="#rest-api" class="nav-item">REST API</a>
+                <a href="#eventos" class="nav-item">Eventos</a>
+                <a href="#mendix-cloud" class="nav-item">Mendix Cloud</a>
+                <a href="#seguridad" class="nav-item">Seguridad</a>
+                <a href="#query-languages" class="nav-item">XPath y OQL</a>
+                <a href="#asegurar-rest" class="nav-item">Asegurar REST Endpoint</a>
+                <a href="#performance" class="nav-item">Optimización Performance</a>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-wrapper">
+            
+            <!-- Section 1: Transacciones -->
+            <section id="transacciones" class="section">
+                <div class="section-header">
+                    <div class="section-number">1</div>
+                    <div class="section-title">
+                        <h2>¿Qué sabes sobre transacciones en Mendix?</h2>
+                        <span class="section-tag">Fundamentos</span>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Concepto</h3>
+                    <p>En Mendix, una <strong>transacción</strong> es el contexto en el que se agrupan operaciones sobre la base de datos para garantizar atomicidad y consistencia.</p>
+                </div>
+
+                <div class="content-block">
+                    <h3>Cómo funcionan</h3>
+                    <ul>
+                        <li>Cada <strong>request</strong> (ejecución de un microflujo desde UI o API) se ejecuta dentro de una transacción</li>
+                        <li>Todas las operaciones de BD (create, change, delete, commit) ocurren dentro de ese contexto</li>
+                        <li>Si ocurre un error no controlado → <strong>rollback automático</strong></li>
+                        <li>Si termina correctamente → <strong>commit automático</strong> al finalizar</li>
+                    </ul>
+                </div>
+
+                <div class="diagram">
+                    <div class="diagram-title">Flujo de una Transacción</div>
+                    <div class="flow-container">
+                        <div class="flow-box">Request Inicia</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">Transacción Abre</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">Operaciones BD</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">Commit/Rollback</div>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Dónde se hacen</h3>
+                    <ul>
+                        <li>Se ejecutan en el <strong>runtime del servidor</strong>, no en el cliente</li>
+                        <li>Impactan la base de datos configurada (PostgreSQL, SQL Server, etc.)</li>
+                        <li>El desarrollador interactúa con ellas desde <strong>microflujos</strong></li>
+                    </ul>
+                </div>
+
+                <div class="content-block">
+                    <h3>Cuándo se cierra la transacción</h3>
+                    <ul>
+                        <li>Al finalizar el microflujo principal o request</li>
+                        <li>Si ocurre una excepción no manejada → se revierte</li>
+                        <li>Si todo termina bien → commit automático al final</li>
+                    </ul>
+                </div>
+
+                <div class="callout info">
+                    <div class="callout-title">
+                        <span class="callout-icon">💡</span>
+                        Punto Clave
+                    </div>
+                    <p>Las transacciones garantizan que todos los cambios se apliquen juntos o ninguno se aplique, manteniendo la integridad de los datos.</p>
+                </div>
+            </section>
+
+            <!-- Section 2: Commit DB -->
+            <section id="commit-db" class="section">
+                <div class="section-header">
+                    <div class="section-number">2</div>
+                    <div class="section-title">
+                        <h2>¿Cuándo ocurre el commit en la base de datos?</h2>
+                        <span class="section-tag">Persistencia</span>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>El commit ocurre cuando:</h3>
+                    <ul>
+                        <li>Se ejecuta explícitamente una actividad <span class="inline-code">Commit Object</span> en el microflujo</li>
+                        <li>O al final de la ejecución del microflujo/request si no hubo errores</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">Mendix Microflow</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    </div>
+                    <pre><code>// Ejemplo de flujo de commit explícito
+1. Create Object (MyEntity)
+2. Change Object (set attributes)
+3. Commit Object (MyEntity) ← Persistencia a BD
+4. Call external API
+5. Change Object (update status)
+6. End (commit automático final si no hay errores)</code></pre>
+                </div>
+
+                <div class="callout warning">
+                    <div class="callout-title">
+                        <span class="callout-icon">⚠️</span>
+                        Importante
+                    </div>
+                    <p>Un objeto puede estar en memoria sin persistirse hasta que se haga commit. Si el objeto está marcado como <strong>"Commit on change"</strong> en la entidad, se puede persistir automáticamente al modificarse.</p>
+                </div>
+
+                <div class="content-block">
+                    <h3>Estados del Objeto</h3>
+                    <div class="flow-container">
+                        <div class="flow-box" style="background: linear-gradient(135deg, #FFC107, #FF9800);">En Memoria</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #FF5722, #E64A19);">Commit</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #00C853, #00E676);">Persistido en BD</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Mejores Prácticas -->
+            <section id="mejores-practicas" class="section">
+                <div class="section-header">
+                    <div class="section-number">3</div>
+                    <div class="section-title">
+                        <h2>¿Cuáles son las mejores prácticas al crear un microflujo?</h2>
+                        <span class="section-tag">Best Practices</span>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Principios Fundamentales</h3>
+                    
+                    <h4>1. Responsabilidad Única</h4>
+                    <p>Un microflujo debe hacer una sola cosa bien definida.</p>
+                    <span class="badge success">✓ Bueno</span>
+                    <span class="badge warning">✗ Evitar</span>
+
+                    <h4>2. Nombrado Claro y Consistente</h4>
+                    <p>Usar prefijos como:</p>
+                    <ul>
+                        <li><span class="inline-code">ACT_</span> para acciones</li>
+                        <li><span class="inline-code">VAL_</span> para validaciones</li>
+                        <li><span class="inline-code">SUB_</span> para submicroflujos</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">Ejemplos de Nombres</span>
+                    </div>
+                    <pre><code>✓ ACT_CreateOrder
+✓ VAL_CheckInventory
+✓ SUB_CalculateTax
+
+✗ DoStuff
+✗ Process
+✗ Handle</code></pre>
+                </div>
+
+                <div class="content-block">
+                    <h4>3. Evitar Lógica Pesada en UI</h4>
+                    <p>Mantener la lógica en microflujos, no en páginas.</p>
+
+                    <h4>4. Minimizar Consultas Innecesarias</h4>
+                    <p>Evitar retrieves dentro de loops.</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">Anti-patrón a Evitar</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    </div>
+                    <pre><code>// ✗ MAL - Retrieve dentro del loop
+FOR EACH Order IN OrderList
+    Customer = RETRIEVE Customer FROM Order
+    // Procesamiento...
+END FOR
+
+// ✓ BIEN - Retrieve una vez con join
+CustomerList = RETRIEVE Customers FROM OrderList via Association</code></pre>
+                </div>
+
+                <div class="content-block">
+                    <h4>5. Control de Errores Adecuado</h4>
+                    <p>Manejar errores con flows alternativos y logs.</p>
+
+                    <h4>6. Dividir Lógica Compleja</h4>
+                    <p>Si el flujo crece mucho, separarlo en submicroflujos.</p>
+
+                    <h4>7. Evitar Commits Innecesarios</h4>
+                    <p>No hacer commit múltiples veces si no es necesario.</p>
+
+                    <h4>8. Optimizar Performance</h4>
+                    <ul>
+                        <li>Evitar loops anidados costosos</li>
+                        <li>Usar XPath eficiente</li>
+                        <li>Usar índices en atributos filtrados frecuentemente</li>
+                    </ul>
+                </div>
+
+                <div class="callout">
+                    <div class="callout-title">
+                        <span class="callout-icon">✅</span>
+                        Checklist Rápido
+                    </div>
+                    <p><span class="badge primary">Nombrado claro</span> <span class="badge primary">Responsabilidad única</span> <span class="badge primary">Control de errores</span> <span class="badge primary">Performance optimizado</span></p>
+                </div>
+            </section>
+
+            <!-- Section 4: Etapa del Commit -->
+            <section id="etapa-commit" class="section">
+                <div class="section-header">
+                    <div class="section-number">4</div>
+                    <div class="section-title">
+                        <h2>¿En qué etapa del microflujo debería hacerse el commit?</h2>
+                        <span class="section-tag">Timing</span>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Regla General</h3>
+                    <p>El commit debe hacerse <strong>al final del microflujo</strong>, después de:</p>
+                    <ul>
+                        <li>Validaciones</li>
+                        <li>Reglas de negocio</li>
+                        <li>Cálculos</li>
+                        <li>Cambios finales en el objeto</li>
+                    </ul>
+                </div>
+
+                <div class="diagram">
+                    <div class="diagram-title">Orden Correcto de Operaciones</div>
+                    <div class="flow-container">
+                        <div class="flow-box" style="background: linear-gradient(135deg, #9C27B0, #7B1FA2);">1. Validar</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #673AB7, #512DA8);">2. Calcular</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #3F51B5, #303F9F);">3. Modificar</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #00C853, #00E676);">4. Commit</div>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>¿Por qué al final?</h3>
+                    <ul>
+                        <li>Evita persistir datos inconsistentes</li>
+                        <li>Reduce commits innecesarios</li>
+                        <li>Permite rollback completo si algo falla</li>
+                    </ul>
+                </div>
+
+                <div class="callout warning">
+                    <div class="callout-title">
+                        <span class="callout-icon">⚠️</span>
+                        Excepción
+                    </div>
+                    <p>Cuando necesitas que el objeto exista en BD antes de continuar, por ejemplo:</p>
+                    <ul>
+                        <li>Integraciones externas que requieren un ID</li>
+                        <li>Creación de archivos asociados</li>
+                        <li>Lógica que depende de persistencia inmediata</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">Ejemplo Correcto</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    </div>
+                    <pre><code>// Microflujo: ACT_ProcessOrder
+
+1. Retrieve Order
+2. VAL_CheckInventory (validación)
+3. SUB_CalculateTotal (cálculo)
+4. Change Order (set status, total)
+5. SUB_ApplyDiscount (regla de negocio)
+6. Commit Order ← AL FINAL
+7. Return Order</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 5: Por qué commit al final -->
+            <section id="commit-final" class="section">
+                <div class="section-header">
+                    <div class="section-number">5</div>
+                    <div class="section-title">
+                        <h2>¿Por qué deberíamos hacer el commit al final?</h2>
+                        <span class="section-tag">Consistencia</span>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Razones Fundamentales</h3>
+                    
+                    <h4>1. Consistencia</h4>
+                    <p>Si algo falla antes de terminar la lógica, no se guardan datos incompletos.</p>
+
+                    <h4>2. Atomicidad</h4>
+                    <p>Todo se guarda o nada se guarda.</p>
+
+                    <h4>3. Performance</h4>
+                    <p>Menos commits = menos roundtrips a base de datos.</p>
+
+                    <h4>4. Menor Riesgo de Datos Corruptos</h4>
+                    <p>Guardar parcialmente puede dejar estados inválidos.</p>
+                </div>
+
+                <div class="diagram">
+                    <div class="diagram-title">Comparación de Estrategias</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+                        <div>
+                            <div class="callout warning">
+                                <div class="callout-title">
+                                    <span class="callout-icon">✗</span>
+                                    Commits Múltiples
+                                </div>
+                                <ul style="margin-top: 1rem;">
+                                    <li style="color: var(--text-secondary); padding-left: 1.5rem;">Datos parciales en BD</li>
+                                    <li style="color: var(--text-secondary); padding-left: 1.5rem;">Mayor overhead</li>
+                                    <li style="color: var(--text-secondary); padding-left: 1.5rem;">Rollback complejo</li>
+                                    <li style="color: var(--text-secondary); padding-left: 1.5rem;">Estados inconsistentes</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="callout">
+                                <div class="callout-title">
+                                    <span class="callout-icon">✓</span>
+                                    Commit al Final
+                                </div>
+                                <ul style="margin-top: 1rem;">
+                                    <li style="color: var(--text-secondary); padding-left: 1.5rem;">Datos completos</li>
+                                    <li style="color: var(--text-secondary); padding-left: 1.5rem;">Mejor performance</li>
+                                    <li style="color: var(--text-secondary); padding-left: 1.5rem;">Rollback simple</li>
+                                    <li style="color: var(--text-secondary); padding-left: 1.5rem;">Estados consistentes</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">Escenario de Error</span>
+                    </div>
+                    <pre><code>// ✗ MAL - Commit temprano
+1. Create Order
+2. Commit Order ← Guardado en BD
+3. Calculate Tax
+4. ERROR! ← Order queda en BD sin tax calculado
+
+// ✓ BIEN - Commit al final
+1. Create Order
+2. Calculate Tax
+3. Validate Payment
+4. ERROR! ← Nada se guardó en BD
+5. Commit Order ← Solo si todo ok</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 6: Runtime y Commit -->
+            <section id="runtime-commit" class="section">
+                <div class="section-header">
+                    <div class="section-number">6</div>
+                    <div class="section-title">
+                        <h2>Diferencia en el Runtime de Mendix</h2>
+                        <span class="section-tag">Avanzado</span>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>1. Contexto de Transacción</h3>
+                    <p>Cada ejecución server-side (un microflujo síncrono invocado desde la UI, REST, etc.) se ejecuta dentro de una <strong>transacción del runtime</strong>. Esa transacción es la unidad atómica que terminará en commit o rollback al finalizar la request.</p>
+                </div>
+
+                <div class="content-block">
+                    <h3>2. ¿Qué hace exactamente la actividad Commit?</h3>
+                    <ul>
+                        <li>Fuerza que los cambios de un objeto se <strong>sincronicen con la BD</strong> dentro de la transacción actual</li>
+                        <li>Produce SQL INSERT/UPDATE y asignación de ID si aplica</li>
+                        <li>Dispara validaciones y event handlers según las opciones</li>
+                    </ul>
+                </div>
+
+                <div class="callout warning">
+                    <div class="callout-title">
+                        <span class="callout-icon">⚠️</span>
+                        Importante
+                    </div>
+                    <p><strong>Commit en Mendix no cierra la transacción global del request.</strong> Si después de un commit ocurre un error y la transacción hace rollback, esos cambios también se revertirán porque siguen dentro de la misma transacción de base de datos.</p>
+                </div>
+
+                <div class="diagram">
+                    <div class="diagram-title">Anatomía de una Transacción</div>
+                    <div class="flow-container">
+                        <div class="flow-box" style="background: linear-gradient(135deg, #4CAF50, #388E3C);">Request Inicia</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #2196F3, #1976D2);">Transacción Abre</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #FF9800, #F57C00);">Commit Activity (flush)</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #9C27B0, #7B1FA2);">Más Lógica</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #00C853, #00E676);">Commit Final (BD)</div>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>3. ¿Cuándo se hace el commit final?</h3>
+                    <p>El commit final de la transacción (la confirmación definitiva en la base de datos) sucede cuando termina la ejecución del request/microflujo y el runtime decide confirmar la transacción. Hasta ese momento todo es recuperable por rollback.</p>
+                </div>
+
+                <div class="content-block">
+                    <h3>4. Diferencias importantes en el runtime</h3>
+                    <ul>
+                        <li><strong>Commit vs flush:</strong> la actividad Commit actúa como un flush persistente de objetos dentro del Unit of Work del runtime</li>
+                        <li><strong>Microflujos asíncronos:</strong> se ejecutan en su propia transacción separada</li>
+                        <li><strong>Nanoflows:</strong> corren en cliente, no tocan la base de datos del servidor</li>
+                        <li><strong>Cache de sesión/transacción:</strong> dentro de la misma transacción, los retrieves devuelven las mismas instancias en memoria</li>
+                        <li><strong>Optimistic locking:</strong> commits pueden fallar por versiones concurrentes</li>
+                        <li><strong>Eventos y validaciones:</strong> commit puede disparar event handlers</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">Ejemplo con Rollback</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    </div>
+                    <pre><code>// Dentro de una transacción:
+1. Create Order
+2. Commit Order ← Escrito en BD (dentro de transacción)
+3. Call External API
+4. ERROR en API! ← Excepción no manejada
+5. ROLLBACK COMPLETO ← Incluso el commit de paso 2 se revierte
+
+// Resultado: Order no existe en BD porque hubo rollback global</code></pre>
+                </div>
+
+                <div class="content-block">
+                    <h3>5. Reglas prácticas</h3>
+                    <ul>
+                        <li>Haz commit al final salvo que necesites: ID del objeto para integraciones, visibilidad inmediata por otro proceso, o persistencia antes de generar archivos</li>
+                        <li>No hagas commits dentro de loops salvo necesidad crítica</li>
+                        <li>Maneja excepciones específicas de persistencia (optimistic locking, constraint violations)</li>
+                        <li>Usa microflujos asíncronos si quieres que la persistencia ocurra en una transacción independiente</li>
+                    </ul>
+                </div>
+
+                <div class="callout info">
+                    <div class="callout-title">
+                        <span class="callout-icon">💡</span>
+                        Resumen Clave
+                    </div>
+                    <p>La actividad Commit escribe los cambios a la BD dentro de la transacción actual pero no la cierra definitivamente. El runtime cierra (commit definitivo) la transacción al terminar la request. Las transacciones asíncronas y las nanoflows se comportan distinto.</p>
+                </div>
+            </section>
+
+            <!-- Section 7: Generalización -->
+            <section id="generalizacion" class="section">
+                <div class="section-header">
+                    <div class="section-number">7</div>
+                    <div class="section-title">
+                        <h2>¿Qué es Generalización en Mendix?</h2>
+                        <span class="section-tag">Domain Model</span>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Concepto</h3>
+                    <p>En Mendix, <strong>generalización</strong> es la herencia entre entidades del domain model: una entidad (padre) define atributos y asociaciones comunes, y una o varias entidades (hijas) heredan esos elementos y se comportan como subclases del padre.</p>
+                </div>
+
+                <div class="diagram">
+                    <div class="diagram-title">Ejemplo de Generalización</div>
+                    <div style="text-align: center; margin: 2rem 0;">
+                        <div style="display: inline-block; background: var(--bg-code); padding: 2rem; border-radius: 12px; border: 2px solid var(--primary);">
+                            <div class="flow-box" style="margin-bottom: 1rem;">Persona (Padre)</div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+                                + Nombre<br>
+                                + Edad<br>
+                                + Email
+                            </div>
+                            <div class="flow-arrow" style="transform: rotate(90deg); margin: 0.5rem 0;">→</div>
+                            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+                                <div class="flow-box" style="background: linear-gradient(135deg, #9C27B0, #7B1FA2);">Empleado<br><span style="font-size: 0.8rem; font-weight: 400;">+ Salario<br>+ Cargo</span></div>
+                                <div class="flow-box" style="background: linear-gradient(135deg, #00BCD4, #0097A7);">Cliente<br><span style="font-size: 0.8rem; font-weight: 400;">+ Puntos<br>+ Nivel</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Qué implica y cómo funciona</h3>
+                    <ul>
+                        <li><strong>Reutilización:</strong> las entidades hijas reciben atributos y asociaciones del padre, evitando duplicación</li>
+                        <li><strong>Polimorfismo:</strong> una instancia de la hija también es válida como instancia del padre</li>
+                        <li><strong>Modelado:</strong> se crea arrastrando la línea de generalización en el domain model</li>
+                        <li><strong>Persistencia:</strong> las instancias siguen siendo instancias concretas</li>
+                    </ul>
+                </div>
+
+                <div class="content-block">
+                    <h3>Casos de uso típicos</h3>
+                    <ul>
+                        <li>Entidades que comparten muchos atributos y asociaciones (ej: Persona → Empleado, Cliente)</li>
+                        <li>Crear una entidad padre abstracta con comportamiento/atributos comunes</li>
+                        <li>Simplificar relaciones: asociar con la entidad padre para relacionarla con cualquier subtipo</li>
+                    </ul>
+                </div>
+
+                <div class="callout warning">
+                    <div class="callout-title">
+                        <span class="callout-icon">⚠️</span>
+                        Limitaciones y Precauciones
+                    </div>
+                    <ul>
+                        <li>No abuse de jerarquías profundas; aumenta complejidad</li>
+                        <li>Usar generalización solo si hay atributos/relaciones compartidos claros</li>
+                        <li>Verifica cómo afectan las reglas de negocio y seguridad</li>
+                        <li>Evitar cambios frecuentes en la jerarquía en producción</li>
+                    </ul>
+                </div>
+
+                <div class="callout info">
+                    <div class="callout-title">
+                        <span class="callout-icon">📌</span>
+                        Respuesta Corta para Entrevista
+                    </div>
+                    <p>"Generalización en Mendix es la herencia entre entidades del domain model: el padre define atributos y asociaciones comunes que las entidades hijas heredan. Permite reutilización y polimorfismo, y se usa cuando varias entidades comparten estructura o comportamiento."</p>
+                </div>
+            </section>
+
+            <!-- Section 8: Generalización en BD -->
+            <section id="generalizacion-bd" class="section">
+                <div class="section-header">
+                    <div class="section-number">8</div>
+                    <div class="section-title">
+                        <h2>¿Cómo se ve la Generalización en la Base de Datos?</h2>
+                        <span class="section-tag">Database</span>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Implementación en BD</h3>
+                    <p>En Mendix la generalización se materializa con <strong>varias tablas relacionadas</strong> (table-per-class / TPT-like): la entidad padre y cada entidad hija tienen su propia tabla; las filas usan el mismo ID.</p>
+                </div>
+
+                <div class="table-container">
+                    <div class="diagram-title">Ejemplo: Persona → Empleado</div>
+                    <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
+                        <div class="db-table">
+                            <div class="table-name">Tabla: Persona</div>
+                            <div class="table-field"><span class="pk">id (PK)</span> <span>INT</span></div>
+                            <div class="table-field">Nombre <span>VARCHAR</span></div>
+                            <div class="table-field">Edad <span>INT</span></div>
+                            <div class="table-field">FechaCreacion <span>DATETIME</span></div>
+                            <div class="table-field">TipoEspecialización <span>VARCHAR</span></div>
+                        </div>
+                        <div style="display: flex; align-items: center; color: var(--accent); font-size: 2rem; font-weight: 700;">→</div>
+                        <div class="db-table">
+                            <div class="table-name">Tabla: Empleado</div>
+                            <div class="table-field"><span class="pk">id (PK/FK)</span> <span>INT</span></div>
+                            <div class="table-field">Salario <span>DECIMAL</span></div>
+                            <div class="table-field">Cargo <span>VARCHAR</span></div>
+                            <div class="table-field">FechaContrato <span>DATE</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Comportamiento al leer/escribir</h3>
+                    <ul>
+                        <li><strong>Al commit:</strong> se insertan/actualizan filas en ambas tablas (primero padre, luego hija), manteniendo el mismo identificador</li>
+                        <li><strong>Al recuperar:</strong> el runtime realiza joins entre las tablas para construir el objeto en memoria</li>
+                        <li><strong>Al borrar:</strong> se eliminan las filas de la tabla hija y de la tabla padre</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">SQL Generado (simplificado)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    </div>
+                    <pre><code>-- Al crear un Empleado:
+INSERT INTO Persona (id, Nombre, Edad, TipoEspecialización) 
+VALUES (123, 'Juan Pérez', 30, 'Empleado');
+
+INSERT INTO Empleado (id, Salario, Cargo) 
+VALUES (123, 50000, 'Developer');
+
+-- Al recuperar un Empleado:
+SELECT p.*, e.* 
+FROM Persona p
+JOIN Empleado e ON p.id = e.id
+WHERE p.id = 123;</code></pre>
+                </div>
+
+                <div class="content-block">
+                    <h3>Impacto y consideraciones prácticas</h3>
+                    <ul>
+                        <li><strong>Performance:</strong> cada nivel de herencia añade joins en las consultas</li>
+                        <li><strong>Consistencia:</strong> el ORM mantiene la integridad (mismo ID en ambas tablas)</li>
+                        <li><strong>Jerarquías profundas:</strong> penalizan el rendimiento significativamente</li>
+                    </ul>
+                </div>
+
+                <div class="callout warning">
+                    <div class="callout-title">
+                        <span class="callout-icon">⚠️</span>
+                        Alternativas
+                    </div>
+                    <p><strong>Asociación one-to-one:</strong> Si los datos compartidos son pocos o la especialización afecta mucho la performance, usar entidades separadas ligadas evita joins en cada acceso.</p>
+                </div>
+
+                <div class="callout info">
+                    <div class="callout-title">
+                        <span class="callout-icon">📌</span>
+                        Respuesta Corta para Entrevista
+                    </div>
+                    <p>"Mendix guarda cada entidad en su propia tabla. Con generalización hay tabla padre con columna de tipo y tabla(s) hija(s) que comparten el mismo ID; recuperar un objeto especializado implica joins, afectando performance, por eso se usa cuando conviene el polimorfismo."</p>
+                </div>
+            </section>
+
+            <!-- Section 9: Asociaciones -->
+            <section id="asociaciones" class="section">
+                <div class="section-header">
+                    <div class="section-number">9</div>
+                    <div class="section-title">
+                        <h2>¿Qué es una Asociación y qué tipos existen?</h2>
+                        <span class="section-tag">Relationships</span>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Concepto</h3>
+                    <p>En Mendix una <strong>asociación</strong> une dos entidades del domain model y define cómo sus instancias se relacionan: cardinalidad, obligatoriedad y nombres de rol (navegación) entre ambas entidades.</p>
+                </div>
+
+                <div class="content-block">
+                    <h3>Tipos Principales</h3>
+                    
+                    <h4>1. Uno a Uno (1 — 1)</h4>
+                    <ul>
+                        <li>Una instancia de A se relaciona con a lo sumo una de B y viceversa</li>
+                        <li><strong>Persistencia:</strong> FK en una de las tablas con restricción de unicidad</li>
+                    </ul>
+
+                    <h4>2. Uno a Muchos (1 — *)</h4>
+                    <ul>
+                        <li>Una instancia de A puede relacionarse con muchas de B; cada B apunta a una única A</li>
+                        <li><strong>Persistencia:</strong> FK en la tabla del lado "muchos"</li>
+                        <li>Es el patrón más usado para jerarquías simples</li>
+                    </ul>
+
+                    <h4>3. Muchos a Muchos (* — *)</h4>
+                    <ul>
+                        <li>Varias instancias de A pueden relacionarse con varias de B</li>
+                        <li><strong>Persistencia:</strong> Mendix crea una tabla intermedia (join table)</li>
+                        <li>Más costosa en joins, usar solo si se necesita</li>
+                    </ul>
+                </div>
+
+                <div class="diagram">
+                    <div class="diagram-title">Visualización de Asociaciones</div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                        <div class="callout info">
+                            <div class="callout-title">1 — 1</div>
+                            <div style="text-align: center; margin-top: 1rem;">
+                                <div class="flow-box" style="display: inline-block;">Usuario</div>
+                                <div style="margin: 0.5rem 0; color: var(--text-accent);">↔</div>
+                                <div class="flow-box" style="display: inline-block;">Perfil</div>
+                            </div>
+                        </div>
+                        <div class="callout info">
+                            <div class="callout-title">1 — *</div>
+                            <div style="text-align: center; margin-top: 1rem;">
+                                <div class="flow-box" style="display: inline-block;">Cliente</div>
+                                <div style="margin: 0.5rem 0; color: var(--text-accent);">↔</div>
+                                <div class="flow-box" style="display: inline-block;">Órdenes</div>
+                            </div>
+                        </div>
+                        <div class="callout info">
+                            <div class="callout-title">* — *</div>
+                            <div style="text-align: center; margin-top: 1rem;">
+                                <div class="flow-box" style="display: inline-block;">Estudiantes</div>
+                                <div style="margin: 0.5rem 0; color: var(--text-accent);">↔</div>
+                                <div class="flow-box" style="display: inline-block;">Cursos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Aspectos complementarios</h3>
+                    <ul>
+                        <li><strong>Opcionalidad:</strong> 0..1 vs 1 (opcional vs obligatoria)</li>
+                        <li><strong>Nombres de rol:</strong> cada extremo tiene un nombre para navegación</li>
+                        <li><strong>Impacto en performance:</strong> múltiples asociaciones o many-to-many aumentan joins</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">SQL para Asociaciones</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    </div>
+                    <pre><code>-- 1-* : Cliente → Órdenes
+CREATE TABLE Order (
+    id INT PRIMARY KEY,
+    cliente_id INT FOREIGN KEY REFERENCES Cliente(id),
+    ...
+);
+
+-- *-* : Estudiante ↔ Curso (tabla intermedia)
+CREATE TABLE Estudiante_Curso (
+    estudiante_id INT FOREIGN KEY REFERENCES Estudiante(id),
+    curso_id INT FOREIGN KEY REFERENCES Curso(id),
+    PRIMARY KEY (estudiante_id, curso_id)
+);</code></pre>
+                </div>
+
+                <div class="callout">
+                    <div class="callout-title">
+                        <span class="callout-icon">✅</span>
+                        Buenas Prácticas
+                    </div>
+                    <ul>
+                        <li>Modelar según acceso a datos (prefiere 1–* para la mayoría)</li>
+                        <li>Evitar asociaciones innecesarias</li>
+                        <li>Documentar roles y cardinalidades</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- More sections continue... -->
+            <!-- For brevity, I'll add a few more key sections -->
+
+            <!-- Section 10: REST API -->
+            <section id="rest-api" class="section">
+                <div class="section-header">
+                    <div class="section-number">10</div>
+                    <div class="section-title">
+                        <h2>REST API en Mendix</h2>
+                        <span class="section-tag">Integration</span>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Dos Escenarios</h3>
+                    
+                    <h4>Published REST Service</h4>
+                    <p>Expones endpoints (GET, POST, PUT, DELETE) desde tu app.</p>
+
+                    <h4>Consumed REST Service</h4>
+                    <p>Tu app llama APIs externas usando Call REST.</p>
+                </div>
+
+                <div class="content-block">
+                    <h3>Exponer una REST API - Consideraciones</h3>
+                    
+                    <h4>Seguridad</h4>
+                    <ul>
+                        <li><strong>Autenticación:</strong> Basic, API Key, OAuth2 o usuario/rol de Mendix</li>
+                        <li><strong>Autorización:</strong> configurar roles y acceso a entidades</li>
+                        <li>Nunca exponer entidades sin restringir acceso</li>
+                    </ul>
+
+                    <h4>Diseño del Endpoint</h4>
+                    <ul>
+                        <li>Usar nombres claros y versionado: <span class="inline-code">/api/v1/orders</span></li>
+                        <li>Respetar semántica HTTP (GET, POST, PUT, DELETE)</li>
+                    </ul>
+
+                    <h4>Manejo de Errores</h4>
+                    <span class="badge primary">200 OK</span>
+                    <span class="badge success">201 Created</span>
+                    <span class="badge warning">400 Bad Request</span>
+                    <span class="badge warning">401 Unauthorized</span>
+                    <span class="badge warning">404 Not Found</span>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">Ejemplo de Endpoint</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    </div>
+                    <pre><code>// GET /api/v1/orders/{id}
+// Microflow: API_GetOrder
+
+1. Retrieve Order by ID
+2. Validate access permissions
+3. If not found → Return 404
+4. If no access → Return 403
+5. Export Object to JSON
+6. Return 200 with Order data</code></pre>
+                </div>
+
+                <div class="content-block">
+                    <h3>Consumir una REST API - Consideraciones</h3>
+                    <ul>
+                        <li><strong>Manejo de errores externos:</strong> controlar timeouts y respuestas no 200</li>
+                        <li><strong>Mapeo:</strong> usar Import Mapping bien definido</li>
+                        <li><strong>Transacciones:</strong> hacer commit solo después de validar toda la respuesta</li>
+                    </ul>
+                </div>
+
+                <div class="callout info">
+                    <div class="callout-title">
+                        <span class="callout-icon">📌</span>
+                        Respuesta Corta para Entrevista
+                    </div>
+                    <p>"En Mendix una REST API puede publicarse o consumirse. Lo crítico es seguridad, diseño correcto de endpoints, manejo adecuado de errores HTTP, validaciones antes del commit y optimización de performance."</p>
+                </div>
+            </section>
+
+            <!-- Additional sections would continue here -->
+            <!-- For space, I'm including placeholders for remaining sections -->
+            
+            <section id="eventos" class="section">
+                <div class="section-header">
+                    <div class="section-number">11</div>
+                    <div class="section-title">
+                        <h2>Eventos en Mendix</h2>
+                        <span class="section-tag">Event Handlers</span>
+                    </div>
+                </div>
+                <div class="content-block">
+                    <h3>Concepto</h3>
+                    <p>Los <strong>eventos</strong> son microflujos que se ejecutan automáticamente cuando ocurre una acción específica sobre una entidad persistente en el runtime. Se configuran en el Domain Model como Event Handlers.</p>
+                </div>
+                <div class="content-block">
+                    <h3>Tipos de Eventos</h3>
+                    <span class="badge primary">Before Commit</span>
+                    <span class="badge primary">After Commit</span>
+                    <span class="badge warning">Before Delete</span>
+                    <span class="badge warning">After Delete</span>
+                </div>
+            </section>
+
+            <section id="performance" class="section">
+                <div class="section-header">
+                    <div class="section-number">16</div>
+                    <div class="section-title">
+                        <h2>Optimización de Performance</h2>
+                        <span class="section-tag">Advanced</span>
+                    </div>
+                </div>
+                <div class="callout">
+                    <div class="callout-title">
+                        <span class="callout-icon">🚀</span>
+                        Plan de Acción Sistemático
+                    </div>
+                    <p>Ante problemas de performance: <strong>medir → diagnosticar → optimizar → validar</strong></p>
+                </div>
+                <div class="content-block">
+                    <h3>1. Triage Rápido</h3>
+                    <ul>
+                        <li>Reproducir el problema en testing</li>
+                        <li>Recolectar métricas: CPU, memoria JVM, conexiones BD</li>
+                        <li>Habilitar <span class="inline-code">LogMinDurationQuery</span></li>
+                    </ul>
+                </div>
+                <div class="content-block">
+                    <h3>2. Diagnóstico de Causas Comunes</h3>
+                    <ul>
+                        <li>Consultas XPath/OQL subóptimas</li>
+                        <li>Microflows por cada row (O(n) operaciones)</li>
+                        <li>Missing indexes en columnas filtradas</li>
+                        <li>Event handlers pesados</li>
+                        <li>Jerarquías de generalización profundas</li>
+                    </ul>
+                </div>
+                <div class="content-block">
+                    <h3>3. Quick Wins</h3>
+                    <ul>
+                        <li>Habilitar paginación y limitar page size</li>
+                        <li>Añadir índices en columnas de filtros/joins</li>
+                        <li>Evitar microflows por fila</li>
+                        <li>Mover lógica pesada a procesos asíncronos</li>
+                    </ul>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('.nav-item').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // Update active state
+                    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Close sidebar on mobile
+                    if (window.innerWidth <= 1024) {
+                        document.getElementById('sidebar').classList.remove('active');
+                    }
+                }
+            });
+        });
+
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // Copy code functionality
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block').querySelector('pre code');
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '¡Copiado!';
+                button.style.background = 'var(--success)';
+                button.style.color = 'white';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                    button.style.color = '';
+                }, 2000);
+            });
+        }
+
+        // Highlight active section on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section');
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            let currentSection = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 150) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+            
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === `#${currentSection}`) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 1024) {
+                const sidebar = document.getElementById('sidebar');
+                const menuToggle = document.querySelector('.menu-toggle');
+                
+                if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

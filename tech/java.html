@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend – Interview Preparation</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1e2533;
+    --border: #30363d;
+    --java: #f89820;
+    --java2: #5382a1;
+    --green: #3fb950;
+    --red: #f85149;
+    --yellow: #d29922;
+    --blue: #58a6ff;
+    --orange: #fa7343;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --code-bg: #0d1117;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+
+  /* SIDEBAR */
+  .layout { display:flex; min-height:100vh; }
+  .sidebar {
+    width:260px; background:var(--surface); border-right:1px solid var(--border);
+    position:fixed; top:0; left:0; height:100vh; overflow-y:auto;
+    display:flex; flex-direction:column; z-index:100;
+  }
+  .sidebar-logo {
+    padding:24px 20px 16px;
+    background:linear-gradient(135deg,var(--java),var(--java2));
+    font-size:1.3rem; font-weight:800; color:#fff; letter-spacing:-0.5px;
+  }
+  .sidebar-logo span { font-weight:300; opacity:.8; font-size:.9rem; display:block; }
+  .nav-section { padding:12px 20px 4px; font-size:.7rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); font-weight:600; }
+  .nav-link {
+    display:flex; align-items:center; gap:10px;
+    padding:9px 20px; color:var(--muted); text-decoration:none;
+    font-size:.88rem; transition:all .2s; border-left:3px solid transparent;
+    cursor:pointer;
+  }
+  .nav-link:hover, .nav-link.active { color:var(--text); background:rgba(248,152,32,.1); border-left-color:var(--java); }
+  .nav-link .dot { width:7px; height:7px; border-radius:50%; background:var(--muted); flex-shrink:0; }
+  .nav-link.active .dot, .nav-link:hover .dot { background:var(--java); }
+
+  /* MAIN */
+  .main { margin-left:260px; flex:1; padding:0 40px 60px; max-width:1100px; }
+  
+  /* HERO */
+  .hero {
+    padding:50px 0 30px;
+    border-bottom:1px solid var(--border); margin-bottom:40px;
+  }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(248,152,32,.15); border:1px solid rgba(248,152,32,.3);
+    color:var(--java); padding:4px 14px; border-radius:20px;
+    font-size:.8rem; font-weight:600; margin-bottom:18px;
+  }
+  .hero h1 { font-size:2.6rem; font-weight:800; letter-spacing:-1px; margin-bottom:12px; }
+  .hero h1 span { background:linear-gradient(90deg,var(--java),var(--java2)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .hero p { color:var(--muted); font-size:1.05rem; max-width:620px; }
+  .tags { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
+  .tag { background:var(--surface2); border:1px solid var(--border); color:var(--muted); padding:3px 12px; border-radius:20px; font-size:.78rem; }
+
+  /* SECTIONS */
+  .section { margin-bottom:56px; scroll-margin-top:20px; }
+  .section-title {
+    font-size:1.4rem; font-weight:700; margin-bottom:20px;
+    display:flex; align-items:center; gap:10px;
+    padding-bottom:12px; border-bottom:1px solid var(--border);
+  }
+  .section-title .icon { font-size:1.3rem; }
+
+  /* CARDS */
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:16px; }
+  .card-title { font-weight:700; font-size:1rem; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .card p { color:var(--muted); font-size:.92rem; line-height:1.6; }
+  .card ul { margin-top:8px; }
+
+  /* ALERT */
+  .alert { border-radius:10px; padding:16px 20px; margin-bottom:20px; display:flex; gap:12px; font-size:.9rem; }
+  .alert-warn { background:rgba(210,153,34,.1); border:1px solid rgba(210,153,34,.3); color:#e3b341; }
+  .alert-info { background:rgba(88,166,255,.1); border:1px solid rgba(88,166,255,.3); color:var(--blue); }
+  .alert-success { background:rgba(63,185,80,.1); border:1px solid rgba(63,185,80,.3); color:var(--green); }
+  .alert-icon { font-size:1.1rem; flex-shrink:0; margin-top:1px; }
+
+  /* CODE */
+  .code-wrap { position:relative; margin:12px 0; }
+  .code-label { position:absolute; top:10px; right:14px; font-size:.7rem; color:var(--muted); background:var(--surface2); padding:2px 8px; border-radius:4px; z-index:2; }
+  pre {
+    background:var(--code-bg); border:1px solid var(--border); border-radius:10px;
+    padding:20px; overflow-x:auto; font-size:.83rem; line-height:1.6;
+    font-family:'Cascadia Code','Fira Code','Consolas',monospace;
+  }
+  .kw { color:#ff7b72; }
+  .fn { color:#d2a8ff; }
+  .str { color:#a5d6ff; }
+  .num { color:#79c0ff; }
+  .cm { color:#6e7681; font-style:italic; }
+  .cls { color:#ffa657; }
+  .ann { color:#7ee787; }
+
+  /* TASK BOX */
+  .task-box {
+    background:var(--surface2); border:1px solid var(--border); border-radius:12px;
+    overflow:hidden; margin-bottom:20px;
+  }
+  .task-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 20px; background:rgba(248,152,32,.08);
+    border-bottom:1px solid var(--border);
+  }
+  .task-title { font-weight:700; font-size:.95rem; display:flex; align-items:center; gap:8px; }
+  .badge { padding:3px 10px; border-radius:20px; font-size:.72rem; font-weight:700; }
+  .badge-orange { background:rgba(248,152,32,.2); color:#ffc266; }
+  .badge-green { background:rgba(63,185,80,.15); color:var(--green); }
+  .badge-yellow { background:rgba(210,153,34,.15); color:var(--yellow); }
+  .badge-blue { background:rgba(88,166,255,.15); color:var(--blue); }
+  .badge-red { background:rgba(248,81,73,.15); color:var(--red); }
+  .task-body { padding:20px; }
+  .task-body p { color:var(--muted); font-size:.9rem; margin-bottom:12px; }
+
+  /* STEPS */
+  .steps { counter-reset:step; display:flex; flex-direction:column; gap:12px; }
+  .step { display:flex; gap:14px; align-items:flex-start; }
+  .step-num {
+    counter-increment:step; content:counter(step);
+    width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,var(--java),var(--java2));
+    display:flex; align-items:center; justify-content:center;
+    font-size:.75rem; font-weight:700; flex-shrink:0; margin-top:2px;
+  }
+  .step-num::before { content:counter(step); }
+  .step-body { font-size:.9rem; }
+  .step-body strong { color:var(--text); }
+  .step-body span { color:var(--muted); }
+
+  /* TABLE */
+  table { width:100%; border-collapse:collapse; font-size:.88rem; margin:12px 0; }
+  th { background:var(--surface2); color:var(--muted); font-weight:600; padding:10px 16px; text-align:left; border-bottom:2px solid var(--border); }
+  td { padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text); }
+  td code { background:var(--surface2); padding:2px 7px; border-radius:4px; font-size:.82rem; color:var(--blue); }
+  tr:hover td { background:rgba(248,152,32,.04); }
+
+  /* GRID 2 */
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+
+  /* CHECKLIST */
+  .checklist { list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+  .checklist li { display:flex; align-items:flex-start; gap:10px; font-size:.9rem; color:var(--muted); }
+  .checklist li::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; margin-top:1px; }
+
+  /* COMPARE */
+  .compare { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0; }
+  .compare-box { border-radius:8px; overflow:hidden; }
+  .compare-header { padding:8px 14px; font-size:.78rem; font-weight:700; letter-spacing:.5px; }
+  .compare-header.wrong { background:rgba(248,81,73,.15); color:var(--red); }
+  .compare-header.right { background:rgba(63,185,80,.15); color:var(--green); }
+  .compare-box pre { border-radius:0; border:none; border-top:1px solid var(--border); font-size:.78rem; }
+
+  /* INTRO VERSIONS */
+  .intro-box { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:20px; margin-bottom:16px; }
+  .intro-box .version-label { display:inline-block; padding:4px 12px; background:rgba(248,152,32,.2); color:var(--java); border-radius:20px; font-size:.75rem; font-weight:700; margin-bottom:12px; }
+  .intro-box .time { color:var(--muted); font-size:.85rem; margin-bottom:10px; }
+  .intro-box .script { color:var(--text); font-size:.92rem; line-height:1.7; font-style:italic; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width:6px; height:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+  /* RESPONSIVE */
+  @media(max-width:900px) {
+    .sidebar { width:200px; }
+    .main { margin-left:200px; padding:0 20px 60px; }
+    .grid2,.compare { grid-template-columns:1fr; }
+    .grid3 { grid-template-columns:1fr 1fr; }
+  }
+  @media(max-width:650px) {
+    .sidebar { display:none; }
+    .main { margin-left:0; }
+    .hero h1 { font-size:1.8rem; }
+    .grid3 { grid-template-columns:1fr; }
+  }
+
+  html { scroll-behavior:smooth; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      🎯 Entrevista
+      <span>Java Backend Track</span>
+    </div>
+    <div class="nav-section">Foundation</div>
+    <a class="nav-link active" onclick="scrollTo('intro')"><div class="dot"></div> Introduction</a>
+    <a class="nav-link" onclick="scrollTo('whyjava')"><div class="dot"></div> Why Java?</a>
+    <a class="nav-link" onclick="scrollTo('jvm')"><div class="dot"></div> How JVM Works</a>
+
+    <div class="nav-section">Architecture & Design</div>
+    <a class="nav-link" onclick="scrollTo('rest')"><div class="dot"></div> REST Levels</a>
+    <a class="nav-link" onclick="scrollTo('microservices')"><div class="dot"></div> Microservices vs Monolith</a>
+    <a class="nav-link" onclick="scrollTo('ddd')"><div class="dot"></div> Domain-Driven Design</a>
+
+    <div class="nav-section">Data Structures</div>
+    <a class="nav-link" onclick="scrollTo('linkedlist')"><div class="dot"></div> Linked Lists</a>
+    <a class="nav-link" onclick="scrollTo('cycles')"><div class="dot"></div> Cycle Detection</a>
+
+    <div class="nav-section">Cloud & Messaging</div>
+    <a class="nav-link" onclick="scrollTo('sqs')"><div class="dot"></div> Amazon SQS</a>
+    <a class="nav-link" onclick="scrollTo('kafka')"><div class="dot"></div> SQS vs Kafka</a>
+
+    <div class="nav-section">Performance</div>
+    <a class="nav-link" onclick="scrollTo('loadtest')"><div class="dot"></div> Load Testing</a>
+    <a class="nav-link" onclick="scrollTo('tips')"><div class="dot"></div> Interview Tips</a>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- HERO -->
+    <div class="hero" id="intro">
+      <div class="hero-badge">☕ Backend Focus</div>
+      <h1><span>Java Backend</span> Interview Guide</h1>
+      <p>Complete preparation for your Java Backend Developer technical interview — covering JVM internals, architecture patterns, REST APIs, microservices, data structures, and cloud messaging systems.</p>
+      <div class="tags">
+        <span class="tag">☕ Java 8+/11/17</span>
+        <span class="tag">🍃 Spring Boot</span>
+        <span class="tag">🏗️ Microservices</span>
+        <span class="tag">☁️ AWS</span>
+        <span class="tag">📡 Kafka/SQS</span>
+        <span class="tag">🧪 JUnit/Mockito</span>
+      </div>
+    </div>
+
+    <!-- INTRODUCTION -->
+    <div class="section">
+      <div class="section-title"><span class="icon">👋</span> How to Introduce Yourself</div>
+      <div class="alert alert-info">
+        <span class="alert-icon">ℹ️</span>
+        <div>Choose the version that matches your interview duration and seniority level. Practice out loud until it feels natural.</div>
+      </div>
+
+      <div class="intro-box">
+        <div class="version-label">BRIEF VERSION</div>
+        <div class="time">⏱ 15–20 seconds · Junior to Mid-level</div>
+        <div class="script">"I'm a Java Backend Developer with X years of experience. I work with Java 11/17, develop REST APIs using Spring Boot, handle persistence with JPA/Hibernate and SQL databases. I have experience deploying with Docker and Kubernetes, testing with JUnit/Mockito, and implementing CI/CD practices. I focus on performance, code quality, and continuous delivery."</div>
+      </div>
+
+      <div class="intro-box">
+        <div class="version-label">STANDARD VERSION</div>
+        <div class="time">⏱ 30–45 seconds · Mid-level balanced</div>
+        <div class="script">"I have X years developing Java backends. I use Java 8+ and understand JVM internals relevant to performance. I build microservices with Spring Boot (Spring MVC, Spring Data, Spring Security), handle persistence with JPA/Hibernate on Postgres/MySQL, and implement caching with Redis. I work with messaging systems like Kafka and RabbitMQ, design and consume REST and gRPC APIs, and write tests with JUnit and Mockito. I deploy using Docker and Kubernetes on AWS/GCP, implement CI/CD pipelines, and monitor with Prometheus/Grafana. In projects, I prioritize scalability, observability, and best practices for testing and code review."</div>
+      </div>
+
+      <div class="intro-box">
+        <div class="version-label">DETAILED VERSION</div>
+        <div class="time">⏱ 60–90 seconds · Senior / Lead-level</div>
+        <div class="script">"I'm a Java Backend Developer with X years building distributed systems and scalable APIs. I'm proficient in Java 8+ and understand the JVM well: GC tuning, profiling, and memory optimization. I design microservices architectures using Spring Boot and Spring Cloud, implement security with Spring Security, and apply design patterns to the domain. I handle persistence with JPA/Hibernate and advanced SQL; I use NoSQL when appropriate (MongoDB, Redis). For messaging I use Kafka for events, design RESTful APIs and gRPC for efficient communication. Testing includes JUnit, Mockito, integration tests, and contract testing. Infrastructure: Docker, Kubernetes, basic IaC, deployments on AWS/GCP, and pipelines with GitHub Actions/Jenkins. Observability with structured logs, metrics, and distributed tracing. I've been responsible for defining SLAs, optimizing latencies, and mentoring teams. I can provide concrete examples of performance and architecture improvements."</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🎯 What to Mention (Recommended Order)</div>
+        <ul class="checklist">
+          <li>Years of experience, roles, industries</li>
+          <li>Language version: Java 8/11/17, modern features (Streams, Optional, records)</li>
+          <li>Core concepts: concurrency, collections, exceptions, memory management, JVM basics</li>
+          <li>Main frameworks: Spring Boot, Spring MVC, Spring Data, Spring Security</li>
+          <li>Persistence: JPA/Hibernate, SQL (Postgres/MySQL), migrations (Flyway/Liquibase)</li>
+          <li>Inter-service communication: REST, gRPC, messaging (Kafka/RabbitMQ)</li>
+          <li>Testing: unit, integration, contract tests; JUnit, Mockito, Testcontainers</li>
+          <li>Build tools: Maven or Gradle, dependency management</li>
+          <li>Containerization: Docker, Kubernetes</li>
+          <li>Cloud/Infrastructure: AWS/GCP/Azure services, basic IaC</li>
+          <li>CI/CD: pipelines, rollback strategies, blue/green, canary deployments</li>
+          <li>Observability: logging, metrics, tracing, alerting</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- WHY JAVA -->
+    <div class="section" id="whyjava">
+      <div class="section-title"><span class="icon">☕</span> Why Java?</div>
+      
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">💡 Why Java over other languages?</div>
+          <span class="badge badge-orange">Common Question</span>
+        </div>
+        <div class="task-body">
+          <p><strong>Recommended Answer:</strong></p>
+          <p>"I use Java because it's a mature, stable, and highly optimized language for high-performance backend applications. It has a solid ecosystem, especially with Spring, and the JVM provides portability, good memory management, and advanced monitoring and tuning tools. It's ideal for critical systems that require scalability, concurrency, and long-term maintainability."</p>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🚀 Coolest Java Feature</div>
+          <span class="badge badge-orange">Show Expertise</span>
+        </div>
+        <div class="task-body">
+          <p><strong>Option 1 (Strong choice): Concurrency & Multithreading</strong></p>
+          <p>"One of Java's most powerful features is its concurrency model. With tools like CompletableFuture, ExecutorService, and now virtual threads (Project Loom), you can handle thousands of concurrent tasks efficiently. This is crucial in backend for processing multiple requests without blocking the system."</p>
+          
+          <p style="margin-top:14px;"><strong>Option 2 (Modern): Virtual Threads (Java 21+)</strong></p>
+          <p>"A very powerful recent feature is virtual threads. They allow handling many concurrent operations with very low cost compared to traditional threads. This simplifies concurrent code and improves scalability without needing complex frameworks."</p>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🐍 Java vs Python</div>
+          <span class="badge badge-blue">Comparison</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"Why Java and not Python for backend?"</strong></p>
+          <p>"Python is excellent for scripting, data science, and rapid prototyping, but for high-performance backend systems I prefer Java for several reasons:"</p>
+          <ul class="checklist">
+            <li><strong>Performance:</strong> Java is typically faster and more CPU-efficient</li>
+            <li><strong>True concurrency:</strong> Java handles multiple threads better; Python has limitations like the GIL</li>
+            <li><strong>Strong typing:</strong> Helps prevent errors in large systems</li>
+            <li><strong>Scalability:</strong> Java is more proven in high-traffic enterprise systems</li>
+            <li><strong>Backend ecosystem:</strong> Spring offers very complete production-ready solutions</li>
+          </ul>
+          <p style="margin-top:10px;color:var(--muted);">I'd use Python for data analysis or quick scripts, but for robust and scalable microservices, Java is more suitable.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- JVM -->
+    <div class="section" id="jvm">
+      <div class="section-title"><span class="icon">⚙️</span> How the JVM Works</div>
+      
+      <div class="alert alert-warn">
+        <span class="alert-icon">⚠️</span>
+        <div>This is a <strong>very common</strong> question. Be ready to explain the JVM flow and its key components clearly.</div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔄 JVM Execution Flow</div>
+          <span class="badge badge-orange">Core Concept</span>
+        </div>
+        <div class="task-body">
+          <p>"The JVM (Java Virtual Machine) is the component that executes Java bytecode and allows the same program to run on any operating system without changes."</p>
+          
+          <div class="steps" style="margin-top:16px;">
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Compilation</strong> <span>— .java code is compiled with javac to bytecode (.class). This bytecode is OS-independent.</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Class Loading</strong> <span>— The JVM loads necessary classes into memory using different classloaders (Bootstrap, Extension, Application).</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Verification</strong> <span>— The JVM validates bytecode to prevent unsafe or corrupted code.</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Execution</strong> <span>— Bytecode is executed in two ways: interpreted (line by line) or JIT compiled (Just-In-Time: compiles critical parts to native code for better performance).</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid3" style="margin-bottom:20px;">
+        <div class="card">
+          <div class="card-title" style="color:var(--java);">Memory Areas</div>
+          <ul class="checklist">
+            <li><strong>Heap:</strong> where objects live (managed by GC)</li>
+            <li><strong>Stack:</strong> local variables and method calls (per thread)</li>
+            <li><strong>Metaspace:</strong> class metadata</li>
+            <li><strong>PC Register:</strong> execution tracking per thread</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--green);">Garbage Collector</div>
+          <p>Automatically manages memory by removing unused objects. Algorithms: G1, ZGC, Shenandoah. Reduces memory leaks and simplifies development.</p>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--blue);">Execution Engine</div>
+          <ul class="checklist">
+            <li><strong>Interpreter:</strong> fast startup</li>
+            <li><strong>JIT Compiler:</strong> optimizes runtime performance by detecting and optimizing "hot code"</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">⚡ The Killer Feature of JVM</div>
+          <span class="badge badge-green">Must Know</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What is the killer feature of the JVM?"</strong></p>
+          <p>"The killer feature of the JVM is its ability to <strong>combine portability with high performance</strong> through the <strong>Just-In-Time (JIT) compiler</strong>. It allows Java code to be written once, run anywhere, and still achieve near-native performance by optimizing hot code at runtime."</p>
+          
+          <div class="alert alert-success" style="margin-top:14px;">
+            <span class="alert-icon">💡</span>
+            <div><strong>Pro tip:</strong> "Unlike traditional compiled languages, the JVM can optimize based on real execution patterns, not assumptions made at compile time." — This shows deep understanding.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REST -->
+    <div class="section" id="rest">
+      <div class="section-title"><span class="icon">🌐</span> REST API Levels</div>
+      
+      <div class="alert alert-info">
+        <span class="alert-icon">ℹ️</span>
+        <div>The question "How many levels of REST do you know?" refers to the <strong>Richardson Maturity Model</strong>.</div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">📊 Richardson Maturity Model</div>
+          <span class="badge badge-blue">4 Levels</span>
+        </div>
+        <div class="task-body">
+          <p>"REST has 4 levels according to Richardson's maturity model, from level 0 to level 3."</p>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title" style="color:var(--red);">Level 0 – The Swamp of POX</div>
+          <p>Uses HTTP but without REST principles.</p>
+          <ul class="checklist">
+            <li>Single endpoint</li>
+            <li>Everything is POST</li>
+            <li>Example: <code>/api</code> for everything</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--yellow);">Level 1 – Resources</div>
+          <p>Introduces resources.</p>
+          <ul class="checklist">
+            <li>Separate URLs per entity</li>
+            <li>Example: <code>/users</code>, <code>/orders</code></li>
+            <li>But still misuses HTTP (everything POST)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--green);">Level 2 – HTTP Verbs</div>
+          <p>Correctly uses HTTP methods.</p>
+          <ul class="checklist">
+            <li>GET, POST, PUT, DELETE</li>
+            <li>Correct status codes (200, 404, 500)</li>
+            <li>✅ This is REST "done right"</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--blue);">Level 3 – HATEOAS</div>
+          <p>API guides the client dynamically through links.</p>
+          <div class="code-wrap" style="margin-top:8px;">
+<pre><span class="cm">// Response includes navigation</span>
+{
+  <span class="str">"user"</span>: <span class="str">"123"</span>,
+  <span class="str">"links"</span>: [
+    { <span class="str">"rel"</span>: <span class="str">"orders"</span>, <span class="str">"href"</span>: <span class="str">"/users/123/orders"</span> }
+  ]
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-warn" style="margin-top:12px;">
+        <span class="alert-icon">💡</span>
+        <div><strong>Industry reality:</strong> "In practice, almost nobody fully implements HATEOAS; level 2 is the industry standard."</div>
+      </div>
+    </div>
+
+    <!-- MICROSERVICES -->
+    <div class="section" id="microservices">
+      <div class="section-title"><span class="icon">🏗️</span> Microservices vs Monolith</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🤔 Why Microservices? Why not Monolithic?</div>
+          <span class="badge badge-orange">Architecture Decision</span>
+        </div>
+        <div class="task-body">
+          <p><strong>Brief Summary:</strong></p>
+          <p>"Microservices solve organizational scalability, independent deployment, and resilience at the cost of greater operational complexity. A monolith is simpler and often sufficient; choose based on the real problem, not trends."</p>
+        </div>
+      </div>
+
+      <div class="compare">
+        <div class="compare-box">
+          <div class="compare-header right">✅ Why Choose Microservices</div>
+          <ul class="checklist" style="padding:16px;">
+            <li><strong>Component scaling:</strong> scale only the service that needs more resources</li>
+            <li><strong>Independent deployments:</strong> teams deploy without coordinating the entire system</li>
+            <li><strong>Fault isolation:</strong> a failure in one service doesn't bring down the whole app</li>
+            <li><strong>Heterogeneous technologies:</strong> each service can use the best-fit technology</li>
+            <li><strong>Team ownership:</strong> self-contained teams with clear ownership</li>
+            <li><strong>Incremental evolution:</strong> replace or version parts without rebuilding everything</li>
+          </ul>
+        </div>
+        <div class="compare-box">
+          <div class="compare-header wrong">⚠️ Microservices Costs</div>
+          <ul class="checklist" style="padding:16px;">
+            <li><strong>Operational complexity:</strong> needs orchestration, discovery, gateway, distributed logging, tracing</li>
+            <li><strong>Higher latency:</strong> RPC/HTTP calls between services add latency</li>
+            <li><strong>Consistency challenges:</strong> eventual consistency and distributed transactions (Sagas)</li>
+            <li><strong>Complex testing:</strong> integration and E2E require simulated infra</li>
+            <li><strong>Initial cost:</strong> infrastructure and DevOps skills increase time and budget</li>
+            <li><strong>Observability required:</strong> without metrics/tracing, debugging is impossible</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px;">
+        <div class="card-title">✅ Why Choose a Monolith</div>
+        <ul class="checklist">
+          <li><strong>Simplicity to start:</strong> less infra, lower DevOps learning curve</li>
+          <li><strong>Lower internal latency:</strong> in-memory calls, predictable performance</li>
+          <li><strong>Simpler development and testing:</strong> single deployment, fewer mocks</li>
+          <li><strong>Lower initial cost:</strong> ideal for MVPs or small teams</li>
+        </ul>
+      </div>
+
+      <div class="task-box" style="margin-top:16px;">
+        <div class="task-header">
+          <div class="task-title">📋 When to Use Each</div>
+          <span class="badge badge-green">Decision Framework</span>
+        </div>
+        <div class="task-body">
+          <p><strong>Start with Monolith if:</strong></p>
+          <ul class="checklist">
+            <li>You're a startup/MVP</li>
+            <li>Small team (&lt;6-8 developers)</li>
+            <li>Product in exploration phase</li>
+            <li>Predictable load</li>
+          </ul>
+          
+          <p style="margin-top:14px;"><strong>Consider Microservices if:</strong></p>
+          <ul class="checklist">
+            <li>Multiple teams (&gt;8-10) blocking each other</li>
+            <li>Parts of the domain have very different scaling or availability requirements</li>
+            <li>Need independent deployments for business reasons</li>
+            <li>Have DevOps culture and capacity</li>
+          </ul>
+
+          <div class="alert alert-success" style="margin-top:14px;">
+            <span class="alert-icon">💡</span>
+            <div><strong>Middle ground:</strong> Modular Monolith — clear modules in a single codebase with well-defined boundaries; makes it easier to extract services later.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DDD -->
+    <div class="section" id="ddd">
+      <div class="section-title"><span class="icon">🎯</span> Domain-Driven Design (DDD)</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">📚 What is DDD?</div>
+          <span class="badge badge-orange">Core Concept</span>
+        </div>
+        <div class="task-body">
+          <p>"DDD (Domain-Driven Design) is a software design approach where development centers on the business domain. The idea is to model the system based on how the business actually works, using a common language between developers and domain experts."</p>
+          
+          <p style="margin-top:12px;"><strong>Main Idea:</strong></p>
+          <p>"The goal is for the code to directly reflect business rules, not just the technical part."</p>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🗣️ Ubiquitous Language</div>
+          <p>A shared language between business and development to avoid misunderstandings. Terms used in code match exactly what the business uses.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🔲 Bounded Context</div>
+          <p>Divides the system into contexts where a model has a specific meaning. Different contexts can have different models for the same concept.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🏛️ Entities & Value Objects</div>
+          <p><strong>Entities</strong> have identity (User with ID). <strong>Value Objects</strong> are immutable and defined by their values (Money, Address).</p>
+        </div>
+        <div class="card">
+          <div class="card-title">📦 Aggregates</div>
+          <p>Group entities and guarantee consistency through a root. Only the aggregate root can be referenced from outside.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">💾 Repositories</div>
+          <p>Abstract data access. Provide collection-like interface for aggregates, hiding persistence details.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">⚙️ Domain Services</div>
+          <p>Encapsulate business logic that doesn't naturally fit in entities or value objects.</p>
+        </div>
+      </div>
+
+      <div class="alert alert-info" style="margin-top:16px;">
+        <span class="alert-icon">💡</span>
+        <div><strong>Why use DDD:</strong> "It helps manage complex systems, improves communication with business, and produces more maintainable code aligned with actual requirements."</div>
+      </div>
+
+      <div class="alert alert-warn" style="margin-top:12px;">
+        <span class="alert-icon">⚠️</span>
+        <div><strong>Common mistakes to avoid:</strong> Don't say "DDD is just using many layers" or "DDD is only architecture" — that shows you don't understand it well.</div>
+      </div>
+    </div>
+
+    <!-- LINKED LIST -->
+    <div class="section" id="linkedlist">
+      <div class="section-title"><span class="icon">🔗</span> Linked Lists</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">⏱️ Access Complexity</div>
+          <span class="badge badge-blue">O(n)</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What is the complexity to get an element from a linked list?"</strong></p>
+          <p>"The complexity to get an element from a linked list is <strong>O(n)</strong>, because you must traverse the list from the start until you find the element."</p>
+          
+          <p style="margin-top:12px;"><strong>Why O(n):</strong></p>
+          <ul class="checklist">
+            <li>In a linked list there's no direct access by index</li>
+            <li>Each node points to the next one</li>
+            <li>To reach position k, you traverse k elements</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="compare">
+        <div class="compare-box">
+          <div class="compare-header right">Array / ArrayList</div>
+          <pre><span class="cm">// Direct index access</span>
+<span class="kw">int</span> value = array[<span class="num">5</span>]; <span class="cm">// O(1)</span>
+
+<span class="cm">// Fast random access</span>
+<span class="cls">ArrayList</span>&lt;<span class="cls">Integer</span>&gt; list = <span class="kw">new</span> <span class="cls">ArrayList</span>&lt;&gt;();
+<span class="kw">int</span> val = list.<span class="fn">get</span>(<span class="num">5</span>); <span class="cm">// O(1)</span></pre>
+        </div>
+        <div class="compare-box">
+          <div class="compare-header wrong">LinkedList</div>
+          <pre><span class="cm">// Must traverse nodes</span>
+<span class="cls">LinkedList</span>&lt;<span class="cls">Integer</span>&gt; list = <span class="kw">new</span> <span class="cls">LinkedList</span>&lt;&gt;();
+<span class="kw">int</span> val = list.<span class="fn">get</span>(<span class="num">5</span>); <span class="cm">// O(n)</span>
+
+<span class="cm">// Sequential access required</span></pre>
+        </div>
+      </div>
+
+      <div class="alert alert-success" style="margin-top:12px;">
+        <span class="alert-icon">💡</span>
+        <div><strong>Pro tip:</strong> "Although insertion or deletion in a linked list can be O(1) if you already have the node reference, access is still O(n), making it less efficient for frequent reads."</div>
+      </div>
+    </div>
+
+    <!-- CYCLE DETECTION -->
+    <div class="section" id="cycles">
+      <div class="section-title"><span class="icon">🔄</span> Cycle Detection in Linked Lists</div>
+
+      <div class="alert alert-warn">
+        <span class="alert-icon">⚠️</span>
+        <div>This is a <strong>classic interview question</strong>. Be ready to explain Floyd's algorithm clearly.</div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔍 The Problem</div>
+          <span class="badge badge-red">Classic Algorithm</span>
+        </div>
+        <div class="task-body">
+          <p><strong>Scenario:</strong> "A linked list where a node points to a previous node instead of the next one — for example, node 5 → node 3 instead of 5 → 6. This creates an infinite loop (cycle)."</p>
+          
+          <p style="margin-top:12px;"><strong>Problem:</strong></p>
+          <p>"In that case, there's no end to the list and traversing it can generate an infinite loop."</p>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">✅ Floyd's Algorithm (Tortoise and Hare)</div>
+          <span class="badge badge-green">Optimal Solution</span>
+        </div>
+        <div class="task-body">
+          <p>"To detect this type of cycle, we use <strong>Floyd's algorithm</strong> with two pointers:"</p>
+          
+          <div class="steps" style="margin-top:14px;">
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Slow pointer</strong> <span>— advances 1 step at a time</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Fast pointer</strong> <span>— advances 2 steps at a time</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>If there's a cycle</strong> <span>— they will eventually meet</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>If no cycle</strong> <span>— fast pointer reaches null</span></div></div>
+          </div>
+
+          <div class="code-wrap" style="margin-top:16px;">
+            <div class="code-label">Java — Floyd's Cycle Detection</div>
+<pre><span class="kw">public boolean</span> <span class="fn">hasCycle</span>(<span class="cls">ListNode</span> head) {
+    <span class="kw">if</span> (head == <span class="kw">null</span>) <span class="kw">return false</span>;
+    
+    <span class="cls">ListNode</span> slow = head;
+    <span class="cls">ListNode</span> fast = head;
+    
+    <span class="kw">while</span> (fast != <span class="kw">null</span> && fast.next != <span class="kw">null</span>) {
+        slow = slow.next;        <span class="cm">// Move 1 step</span>
+        fast = fast.next.next;   <span class="cm">// Move 2 steps</span>
+        
+        <span class="kw">if</span> (slow == fast) {
+            <span class="kw">return true</span>;  <span class="cm">// Cycle detected!</span>
+        }
+    }
+    
+    <span class="kw">return false</span>;  <span class="cm">// No cycle</span>
+}</pre>
+          </div>
+
+          <p style="margin-top:12px;"><strong>Complexity:</strong></p>
+          <ul class="checklist">
+            <li><strong>Time:</strong> O(n)</li>
+            <li><strong>Space:</strong> O(1) — only two pointers!</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔄 Alternative: HashSet Approach</div>
+          <span class="badge badge-yellow">Uses More Memory</span>
+        </div>
+        <div class="task-body">
+          <p>"You can also use a HashSet to store visited nodes. If you see a node again, there's a cycle. But this uses O(n) space."</p>
+          
+          <div class="code-wrap" style="margin-top:12px;">
+            <div class="code-label">Java — HashSet Approach</div>
+<pre><span class="kw">public boolean</span> <span class="fn">hasCycle</span>(<span class="cls">ListNode</span> head) {
+    <span class="cls">Set</span>&lt;<span class="cls">ListNode</span>&gt; visited = <span class="kw">new</span> <span class="cls">HashSet</span>&lt;&gt;();
+    <span class="cls">ListNode</span> current = head;
+    
+    <span class="kw">while</span> (current != <span class="kw">null</span>) {
+        <span class="kw">if</span> (visited.<span class="fn">contains</span>(current)) {
+            <span class="kw">return true</span>;  <span class="cm">// Cycle found</span>
+        }
+        visited.<span class="fn">add</span>(current);
+        current = current.next;
+    }
+    
+    <span class="kw">return false</span>;
+}</pre>
+          </div>
+          <p style="margin-top:8px; color:var(--muted);">Time: O(n), Space: O(n) — Floyd's algorithm is more space-efficient.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SQS -->
+    <div class="section" id="sqs">
+      <div class="section-title"><span class="icon">📨</span> Amazon SQS</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">☁️ What is SQS?</div>
+          <span class="badge badge-orange">AWS Service</span>
+        </div>
+        <div class="task-body">
+          <p>"SQS (Amazon Simple Queue Service) is a fully managed messaging service from AWS that allows you to decouple system components using queues. Producers send messages to the queue and consumers process them asynchronously."</p>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">📋 Standard Queue</div>
+          <ul class="checklist">
+            <li>High scalability</li>
+            <li>Best-effort ordering (not guaranteed)</li>
+            <li>At-least-once delivery (possible duplicates)</li>
+            <li>Nearly unlimited throughput</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">🎯 FIFO Queue</div>
+          <ul class="checklist">
+            <li>Guaranteed order</li>
+            <li>Exactly-once processing</li>
+            <li>No duplicates</li>
+            <li>Limited to 300 TPS (3000 with batching)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="task-box" style="margin-top:16px;">
+        <div class="task-header">
+          <div class="task-title">⚙️ Key Concepts</div>
+          <span class="badge badge-blue">Must Know</span>
+        </div>
+        <div class="task-body">
+          <table>
+            <tr><th>Concept</th><th>Description</th></tr>
+            <tr><td><strong>Visibility Timeout</strong></td><td>Time a message is hidden while being processed</td></tr>
+            <tr><td><strong>Message Retention</strong></td><td>How long a message lives in the queue (default 4 days, max 14)</td></tr>
+            <tr><td><strong>Dead Letter Queue (DLQ)</strong></td><td>Messages that fail multiple times are sent here for analysis</td></tr>
+            <tr><td><strong>Long Polling</strong></td><td>Reduces empty responses and costs by waiting for messages</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">👥 How Many Consumers Can SQS Have?</div>
+          <span class="badge badge-green">Scalability</span>
+        </div>
+        <div class="task-body">
+          <p><strong>Answer:</strong> "SQS has no fixed limit on consumers. You can have as many as you need."</p>
+          
+          <p style="margin-top:12px;"><strong>Standard Queue:</strong></p>
+          <p>"Allows multiple consumers without practical limit, with high concurrency, but may have duplicate messages and no guaranteed order."</p>
+          
+          <p style="margin-top:12px;"><strong>FIFO Queue:</strong></p>
+          <p>"Also allows multiple consumers, but processing is limited by <strong>message group IDs</strong>; within the same group, messages are processed sequentially one at a time. Different groups can be processed in parallel."</p>
+
+          <div class="alert alert-info" style="margin-top:14px;">
+            <span class="alert-icon">💡</span>
+            <div><strong>Key point:</strong> "Parallelism in FIFO depends on how many message groups you have."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KAFKA VS SQS -->
+    <div class="section" id="kafka">
+      <div class="section-title"><span class="icon">⚖️</span> SQS vs Kafka</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔄 Main Difference</div>
+          <span class="badge badge-orange">Architecture Choice</span>
+        </div>
+        <div class="task-body">
+          <p>"The main difference is that SQS is a managed queue service for simple decoupled messaging, while Kafka is an event streaming platform oriented towards event logs, with high retention and replay capability."</p>
+        </div>
+      </div>
+
+      <div class="compare">
+        <div class="compare-box">
+          <div class="compare-header right">Amazon SQS</div>
+          <div style="padding:16px;">
+            <ul class="checklist">
+              <li><strong>Model:</strong> Queue</li>
+              <li><strong>Consumption:</strong> Messages consumed and deleted</li>
+              <li><strong>Replay:</strong> No native replay</li>
+              <li><strong>Management:</strong> Fully managed (no infrastructure)</li>
+              <li><strong>Best for:</strong> Async tasks, decoupling microservices</li>
+            </ul>
+          </div>
+        </div>
+        <div class="compare-box">
+          <div class="compare-header right">Apache Kafka</div>
+          <div style="padding:16px;">
+            <ul class="checklist">
+              <li><strong>Model:</strong> Distributed log (streaming)</li>
+              <li><strong>Retention:</strong> Messages stored for defined time</li>
+              <li><strong>Replay:</strong> Can re-read events</li>
+              <li><strong>Management:</strong> Requires management (or MSK/Confluent)</li>
+              <li><strong>Best for:</strong> Event streaming, analytics, data pipelines</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:16px;">
+        <div class="card">
+          <div class="card-title">📊 Key Differences</div>
+          <table style="margin-top:10px;">
+            <tr><th>Aspect</th><th>SQS</th><th>Kafka</th></tr>
+            <tr><td>Consumption</td><td>Deleted after</td><td>Persisted</td></tr>
+            <tr><td>Ordering</td><td>FIFO only</td><td>Per partition</td></tr>
+            <tr><td>Scalability</td><td>Automatic</td><td>Manual (partitions)</td></tr>
+            <tr><td>Complexity</td><td>Low</td><td>High</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-title">🎯 When to Use Each</div>
+          <p><strong>Use SQS if:</strong></p>
+          <ul class="checklist">
+            <li>You want simplicity and quick decoupling</li>
+            <li>Task-based processing</li>
+            <li>Don't need replay</li>
+          </ul>
+          <p style="margin-top:10px;"><strong>Use Kafka if:</strong></p>
+          <ul class="checklist">
+            <li>Event streaming needed</li>
+            <li>Multiple independent consumers</li>
+            <li>Replay and audit capabilities</li>
+            <li>High throughput requirements</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert alert-success" style="margin-top:16px;">
+        <span class="alert-icon">💡</span>
+        <div><strong>Senior answer:</strong> "SQS is pull-based and oriented to task processing, while Kafka is log-based and allows multiple independent consumers with offsets, enabling replay and advanced parallel processing."</div>
+      </div>
+    </div>
+
+    <!-- LOAD TESTING -->
+    <div class="section" id="loadtest">
+      <div class="section-title"><span class="icon">🔥</span> Load Testing</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">📊 How Did You Do Load Testing?</div>
+          <span class="badge badge-orange">Common Question</span>
+        </div>
+        <div class="task-body">
+          <p>"In my projects, I perform load testing by simulating real traffic to validate system behavior under different load levels."</p>
+          
+          <div class="steps" style="margin-top:16px;">
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Define scenarios</strong> <span>— Based on real usage: critical endpoints, concurrent user peaks, main business flows (login, frequent queries, heavy processes like payments).</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Choose tools</strong> <span>— Apache JMeter, Gatling, or k6 to generate concurrent load.</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Execute progressive tests</strong> <span>— Baseline (normal load), Stress testing (until system breaks), Spike testing (sudden peaks), Soak testing (sustained load over time).</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Analyze key metrics</strong> <span>— Latency (response time), Throughput (requests per second), Error rate, CPU and memory usage.</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Optimize bottlenecks</strong> <span>— Slow database queries, concurrency issues, lack of caching. Implement solutions like Redis caching, connection pool tuning, or query optimization.</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Validate improvements</strong> <span>— Repeat tests to confirm optimizations and ensure stability.</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid3" style="margin-top:16px;">
+        <div class="card">
+          <div class="card-title">🛠️ Tools</div>
+          <ul class="checklist">
+            <li><strong>JMeter:</strong> GUI-based, widely used</li>
+            <li><strong>Gatling:</strong> Scala-based, great reports</li>
+            <li><strong>k6:</strong> JavaScript, developer-friendly</li>
+            <li><strong>Locust:</strong> Python-based</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">📊 Test Types</div>
+          <ul class="checklist">
+            <li><strong>Baseline:</strong> Normal expected load</li>
+            <li><strong>Stress:</strong> Push until failure</li>
+            <li><strong>Spike:</strong> Sudden traffic bursts</li>
+            <li><strong>Soak:</strong> Long duration test</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">📈 Key Metrics</div>
+          <ul class="checklist">
+            <li>Response time (p50, p95, p99)</li>
+            <li>Throughput (RPS)</li>
+            <li>Error rate (%)</li>
+            <li>Resource usage (CPU/Memory)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert alert-success" style="margin-top:16px;">
+        <span class="alert-icon">💡</span>
+        <div><strong>To stand out:</strong> "In a project we reduced latency by X% by optimizing queries and adding caching, after identifying the bottleneck through load tests."</div>
+      </div>
+    </div>
+
+    <!-- TIPS -->
+    <div class="section" id="tips">
+      <div class="section-title"><span class="icon">💡</span> Interview Tips & Best Practices</div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">✅ Do's</div>
+          <ul class="checklist">
+            <li>Give concrete examples with metrics when possible</li>
+            <li>Explain trade-offs in your decisions</li>
+            <li>If you don't know something, explain what you do know and how you'd learn</li>
+            <li>Use the STAR method for behavioral questions</li>
+            <li>Ask clarifying questions before jumping to solutions</li>
+            <li>Mention modern Java features (Streams, Optional, Records)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">❌ Don'ts</div>
+          <ul class="checklist">
+            <li>Never say "I know a little bit of X" without examples</li>
+            <li>Don't give generic answers without concrete details</li>
+            <li>Avoid claiming expertise in technologies you barely used</li>
+            <li>Don't bash previous employers or technologies</li>
+            <li>Don't ignore the business context — code serves business needs</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="task-box" style="margin-top:16px;">
+        <div class="task-header">
+          <div class="task-title">🎯 Strong Closing Statements</div>
+          <span class="badge badge-green">Make an Impact</span>
+        </div>
+        <div class="task-body">
+          <p>Use these to end your introduction or technical answers:</p>
+          <ul class="checklist">
+            <li>"I can explain a recent design I implemented and the trade-offs we evaluated."</li>
+            <li>"In my last project we reduced response time by X% thanks to [specific optimization]."</li>
+            <li>"I'm available for questions about architecture, performance, or deployment strategies."</li>
+            <li>"I focus on delivering value to the business while maintaining code quality and team velocity."</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert alert-warn" style="margin-top:16px;">
+        <span class="alert-icon">⚠️</span>
+        <div><strong>Remember:</strong> Prioritize what the job description asks for. Tailor your answers to match the company's tech stack and values.</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  function scrollTo(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+  }
+
+  // Highlight active section on scroll
+  const sections = ['intro','whyjava','jvm','rest','microservices','ddd','linkedlist','cycles','sqs','kafka','loadtest','tips'];
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        document.querySelectorAll('.nav-link').forEach(l => {
+          l.classList.toggle('active', l.getAttribute('onclick')?.includes(id));
+        });
+      }
+    });
+  }, { threshold: 0.25 });
+  sections.forEach(id => { const el = document.getElementById(id); if(el) observer.observe(el); });
+</script>
+</body>
+</html>

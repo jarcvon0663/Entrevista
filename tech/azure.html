@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azure Support – Interview Preparation</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1e2533;
+    --border: #30363d;
+    --azure: #0078d4;
+    --azure2: #50e6ff;
+    --green: #3fb950;
+    --red: #f85149;
+    --yellow: #d29922;
+    --blue: #58a6ff;
+    --orange: #fa7343;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --code-bg: #0d1117;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+
+  /* SIDEBAR */
+  .layout { display:flex; min-height:100vh; }
+  .sidebar {
+    width:260px; background:var(--surface); border-right:1px solid var(--border);
+    position:fixed; top:0; left:0; height:100vh; overflow-y:auto;
+    display:flex; flex-direction:column; z-index:100;
+  }
+  .sidebar-logo {
+    padding:24px 20px 16px;
+    background:linear-gradient(135deg,var(--azure),var(--azure2));
+    font-size:1.3rem; font-weight:800; color:#fff; letter-spacing:-0.5px;
+  }
+  .sidebar-logo span { font-weight:300; opacity:.8; font-size:.9rem; display:block; }
+  .nav-section { padding:12px 20px 4px; font-size:.7rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); font-weight:600; }
+  .nav-link {
+    display:flex; align-items:center; gap:10px;
+    padding:9px 20px; color:var(--muted); text-decoration:none;
+    font-size:.88rem; transition:all .2s; border-left:3px solid transparent;
+    cursor:pointer;
+  }
+  .nav-link:hover, .nav-link.active { color:var(--text); background:rgba(0,120,212,.1); border-left-color:var(--azure); }
+  .nav-link .dot { width:7px; height:7px; border-radius:50%; background:var(--muted); flex-shrink:0; }
+  .nav-link.active .dot, .nav-link:hover .dot { background:var(--azure); }
+
+  /* MAIN */
+  .main { margin-left:260px; flex:1; padding:0 40px 60px; max-width:1100px; }
+  
+  /* HERO */
+  .hero {
+    padding:50px 0 30px;
+    border-bottom:1px solid var(--border); margin-bottom:40px;
+  }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(0,120,212,.15); border:1px solid rgba(0,120,212,.3);
+    color:var(--azure); padding:4px 14px; border-radius:20px;
+    font-size:.8rem; font-weight:600; margin-bottom:18px;
+  }
+  .hero h1 { font-size:2.6rem; font-weight:800; letter-spacing:-1px; margin-bottom:12px; }
+  .hero h1 span { background:linear-gradient(90deg,var(--azure),var(--azure2)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .hero p { color:var(--muted); font-size:1.05rem; max-width:680px; }
+  .tags { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
+  .tag { background:var(--surface2); border:1px solid var(--border); color:var(--muted); padding:3px 12px; border-radius:20px; font-size:.78rem; }
+
+  /* SECTIONS */
+  .section { margin-bottom:56px; scroll-margin-top:20px; }
+  .section-title {
+    font-size:1.4rem; font-weight:700; margin-bottom:20px;
+    display:flex; align-items:center; gap:10px;
+    padding-bottom:12px; border-bottom:1px solid var(--border);
+  }
+  .section-title .icon { font-size:1.3rem; }
+
+  /* CARDS */
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:16px; }
+  .card-title { font-weight:700; font-size:1rem; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .card p { color:var(--muted); font-size:.92rem; line-height:1.6; }
+
+  /* ALERT */
+  .alert { border-radius:10px; padding:16px 20px; margin-bottom:20px; display:flex; gap:12px; font-size:.9rem; }
+  .alert-warn { background:rgba(210,153,34,.1); border:1px solid rgba(210,153,34,.3); color:#e3b341; }
+  .alert-info { background:rgba(88,166,255,.1); border:1px solid rgba(88,166,255,.3); color:var(--blue); }
+  .alert-success { background:rgba(63,185,80,.1); border:1px solid rgba(63,185,80,.3); color:var(--green); }
+  .alert-danger { background:rgba(248,81,73,.1); border:1px solid rgba(248,81,73,.3); color:var(--red); }
+  .alert-icon { font-size:1.1rem; flex-shrink:0; margin-top:1px; }
+
+  /* CODE */
+  .code-wrap { position:relative; margin:12px 0; }
+  .code-label { position:absolute; top:10px; right:14px; font-size:.7rem; color:var(--muted); background:var(--surface2); padding:2px 8px; border-radius:4px; z-index:2; }
+  pre {
+    background:var(--code-bg); border:1px solid var(--border); border-radius:10px;
+    padding:20px; overflow-x:auto; font-size:.83rem; line-height:1.6;
+    font-family:'Cascadia Code','Fira Code','Consolas',monospace;
+  }
+  .kw { color:#ff7b72; }
+  .fn { color:#d2a8ff; }
+  .str { color:#a5d6ff; }
+  .num { color:#79c0ff; }
+  .cm { color:#6e7681; font-style:italic; }
+  .cls { color:#ffa657; }
+  .cmd { color:#7ee787; }
+
+  /* TASK BOX */
+  .task-box {
+    background:var(--surface2); border:1px solid var(--border); border-radius:12px;
+    overflow:hidden; margin-bottom:20px;
+  }
+  .task-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 20px; background:rgba(0,120,212,.08);
+    border-bottom:1px solid var(--border);
+  }
+  .task-title { font-weight:700; font-size:.95rem; display:flex; align-items:center; gap:8px; }
+  .badge { padding:3px 10px; border-radius:20px; font-size:.72rem; font-weight:700; }
+  .badge-azure { background:rgba(0,120,212,.2); color:#50b6ff; }
+  .badge-green { background:rgba(63,185,80,.15); color:var(--green); }
+  .badge-yellow { background:rgba(210,153,34,.15); color:var(--yellow); }
+  .badge-red { background:rgba(248,81,73,.15); color:var(--red); }
+  .task-body { padding:20px; }
+  .task-body p { color:var(--muted); font-size:.9rem; margin-bottom:12px; }
+
+  /* STEPS */
+  .steps { counter-reset:step; display:flex; flex-direction:column; gap:12px; }
+  .step { display:flex; gap:14px; align-items:flex-start; }
+  .step-num {
+    counter-increment:step; content:counter(step);
+    width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,var(--azure),var(--azure2));
+    display:flex; align-items:center; justify-content:center;
+    font-size:.75rem; font-weight:700; flex-shrink:0; margin-top:2px;
+  }
+  .step-num::before { content:counter(step); }
+  .step-body { font-size:.9rem; line-height:1.6; }
+  .step-body strong { color:var(--text); }
+  .step-body span { color:var(--muted); }
+
+  /* CHECKLIST */
+  .checklist { list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+  .checklist li { display:flex; align-items:flex-start; gap:10px; font-size:.9rem; color:var(--muted); }
+  .checklist li::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; margin-top:1px; }
+
+  .redflags { list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+  .redflags li { display:flex; align-items:flex-start; gap:10px; font-size:.9rem; color:var(--muted); }
+  .redflags li::before { content:'✗'; color:var(--red); font-weight:700; flex-shrink:0; margin-top:1px; }
+
+  /* GRID */
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+
+  /* TABLE */
+  table { width:100%; border-collapse:collapse; font-size:.88rem; margin:12px 0; }
+  th { background:var(--surface2); color:var(--muted); font-weight:600; padding:10px 16px; text-align:left; border-bottom:2px solid var(--border); }
+  td { padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text); }
+  td code { background:var(--surface2); padding:2px 7px; border-radius:4px; font-size:.82rem; color:var(--azure); }
+  tr:hover td { background:rgba(0,120,212,.04); }
+
+  /* LAYER BOX */
+  .layer-box {
+    background:var(--surface2); border-left:3px solid var(--azure);
+    padding:16px 20px; border-radius:8px; margin-bottom:12px;
+  }
+  .layer-box .layer-title {
+    font-weight:700; color:var(--azure); margin-bottom:8px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .layer-box .layer-desc { color:var(--muted); font-size:.9rem; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width:6px; height:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+  /* RESPONSIVE */
+  @media(max-width:900px) {
+    .sidebar { width:200px; }
+    .main { margin-left:200px; padding:0 20px 60px; }
+    .grid2,.grid3 { grid-template-columns:1fr; }
+  }
+  @media(max-width:650px) {
+    .sidebar { display:none; }
+    .main { margin-left:0; }
+    .hero h1 { font-size:1.8rem; }
+  }
+
+  html { scroll-behavior:smooth; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      🎯 Entrevista
+      <span>Azure Support Track</span>
+    </div>
+    <div class="nav-section">Foundation</div>
+    <a class="nav-link active" onclick="scrollTo('intro')"><div class="dot"></div> Introduction</a>
+    <a class="nav-link" onclick="scrollTo('mindset')"><div class="dot"></div> Senior Mindset</a>
+
+    <div class="nav-section">VM Troubleshooting</div>
+    <a class="nav-link" onclick="scrollTo('vmconnect')"><div class="dot"></div> Cannot Connect to VM</a>
+    <a class="nav-link" onclick="scrollTo('flowchart')"><div class="dot"></div> Troubleshooting Flow</a>
+    <a class="nav-link" onclick="scrollTo('noaccess')"><div class="dot"></div> Without VM Access</a>
+
+    <div class="nav-section">Diagnosis</div>
+    <a class="nav-link" onclick="scrollTo('platform')"><div class="dot"></div> Platform vs Application</a>
+    <a class="nav-link" onclick="scrollTo('metrics')"><div class="dot"></div> Key Metrics</a>
+
+    <div class="nav-section">Tools & Commands</div>
+    <a class="nav-link" onclick="scrollTo('bash')"><div class="dot"></div> Bash on Windows</a>
+    <a class="nav-link" onclick="scrollTo('aztools')"><div class="dot"></div> Azure Diagnostics</a>
+
+    <div class="nav-section">Best Practices</div>
+    <a class="nav-link" onclick="scrollTo('prevention')"><div class="dot"></div> Prevention & Automation</a>
+    <a class="nav-link" onclick="scrollTo('tips')"><div class="dot"></div> Interview Tips</a>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- HERO -->
+    <div class="hero" id="intro">
+      <div class="hero-badge">☁️ Azure Focus</div>
+      <h1><span>Azure Support</span> Interview Guide</h1>
+      <p>Complete preparation for your Senior Technical Support Engineer interview — covering VM troubleshooting, platform diagnostics, network analysis, identity & access, and production-ready support strategies for Azure environments.</p>
+      <div class="tags">
+        <span class="tag">☁️ Azure</span>
+        <span class="tag">🖥️ VM Troubleshooting</span>
+        <span class="tag">🔍 Diagnostics</span>
+        <span class="tag">🛡️ Network & Security</span>
+        <span class="tag">🚨 Incident Response</span>
+        <span class="tag">⚙️ Automation</span>
+      </div>
+    </div>
+
+    <!-- MINDSET -->
+    <div class="section" id="mindset">
+      <div class="section-title"><span class="icon">🧠</span> Senior Support Engineer Mindset</div>
+      
+      <div class="alert alert-info">
+        <span class="alert-icon">ℹ️</span>
+        <div>A Senior Support Engineer doesn't just fix issues — they <strong>diagnose systematically</strong>, <strong>prevent recurrence</strong>, and <strong>improve systems</strong>. Show structured thinking, not trial-and-error.</div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title" style="color:var(--green);">✅ Senior Behaviors</div>
+          <ul class="checklist">
+            <li>Follow structured troubleshooting flows</li>
+            <li>Isolate issues by layer (infra → network → OS → app)</li>
+            <li>Use diagnostics tools before making changes</li>
+            <li>Document findings and root causes</li>
+            <li>Propose preventive measures</li>
+            <li>Communicate clearly throughout</li>
+            <li>Think about automation and scale</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--red);">❌ Junior Red Flags</div>
+          <ul class="redflags">
+            <li>Jump to conclusions without investigation</li>
+            <li>"Just restart it" without understanding why</li>
+            <li>Skip network diagnostics</li>
+            <li>Don't check logs or metrics</li>
+            <li>Assume user error without validation</li>
+            <li>Make changes without documenting</li>
+            <li>Don't follow up or prevent recurrence</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert alert-warn" style="margin-top:16px;">
+        <span class="alert-icon">⚠️</span>
+        <div><strong>Critical:</strong> If you answer "I check credentials and that's it" to VM connectivity issues, you're not demonstrating senior-level thinking. You must show a <strong>structured troubleshooting flow</strong> covering infrastructure, network, identity, and OS layers.</div>
+      </div>
+    </div>
+
+    <!-- VM TROUBLESHOOTING -->
+    <div class="section" id="vmconnect">
+      <div class="section-title"><span class="icon">🖥️</span> VM Connectivity Troubleshooting</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🎯 The Question</div>
+          <span class="badge badge-red">Critical Scenario</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"A user cannot connect to their Azure VM. How do you troubleshoot this?"</strong></p>
+          <p style="margin-top:10px;">This question tests whether you have a <strong>structured approach</strong> or just guess randomly. A senior follows a logical flow through all layers.</p>
+        </div>
+      </div>
+
+      <div class="alert alert-danger">
+        <span class="alert-icon">🚨</span>
+        <div><strong>Red Flag Answer:</strong> "I reset the password and restart the VM." — This shows no diagnostic process and could waste time or make things worse.</div>
+      </div>
+    </div>
+
+    <!-- FLOWCHART -->
+    <div class="section" id="flowchart">
+      <div class="section-title"><span class="icon">🔄</span> Structured Troubleshooting Flow</div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <strong>Clarify the Problem</strong>
+            <span>— Before touching anything, understand the exact situation.</span>
+            <div style="margin-top:10px;">
+              <p style="color:var(--text); margin-bottom:6px;"><strong>Ask:</strong></p>
+              <ul class="checklist">
+                <li>How is the user trying to connect? (RDP / SSH / Bastion)</li>
+                <li>What's the exact error message?</li>
+                <li>Is this affecting one user or multiple?</li>
+                <li>When did it start? Any recent changes?</li>
+                <li>Was it working before?</li>
+              </ul>
+            </div>
+            <div class="code-wrap" style="margin-top:12px;">
+              <div class="code-label">Interview Answer</div>
+<pre><span class="str">"First, I clarify the issue: how the user is trying to connect 
+(RDP/SSH), the exact error message, and whether it's affecting only 
+one user or multiple. I also ask when it started and if there were 
+any recent changes."</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <strong>Validate VM Infrastructure Status</strong>
+            <span>— Ensure Azure platform and VM are healthy.</span>
+            <div style="margin-top:10px;">
+              <p style="color:var(--text); margin-bottom:6px;"><strong>Check:</strong></p>
+              <ul class="checklist">
+                <li>VM state: Running / Stopped / Deallocated</li>
+                <li>Health status in Azure Portal</li>
+                <li>Instance view for any platform issues</li>
+                <li>Resource consumption (CPU, Memory, Disk)</li>
+                <li>Recent Azure maintenance or regional issues</li>
+              </ul>
+            </div>
+            <div class="code-wrap" style="margin-top:12px;">
+              <div class="code-label">Azure CLI</div>
+<pre><span class="cm"># Check VM status</span>
+az vm get-instance-view --name myVM --resource-group myRG \
+  --query <span class="str">"instanceView.statuses"</span>
+
+<span class="cm"># Check regional health</span>
+az vm list-skus --location eastus --output table</pre>
+            </div>
+            <div class="code-wrap">
+              <div class="code-label">Interview Answer</div>
+<pre><span class="str">"I check if the VM is running and healthy by reviewing its state, 
+health status, and resource consumption in the Azure Portal or via CLI."</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <strong>Review Network Connectivity</strong>
+            <span>— This is where many people fail. Network issues are the most common cause.</span>
+            <div class="alert alert-warn" style="margin-top:10px;">
+              <span class="alert-icon">⚠️</span>
+              <div><strong>Critical:</strong> Not checking network is a <strong>major red flag</strong> in senior interviews.</div>
+            </div>
+            <div style="margin-top:10px;">
+              <p style="color:var(--text); margin-bottom:6px;"><strong>Validate:</strong></p>
+              <ul class="checklist">
+                <li><strong>NSG Rules:</strong> Inbound rules allow RDP (3389) or SSH (22)</li>
+                <li><strong>Public IP:</strong> Does VM have public IP? Is it assigned correctly?</li>
+                <li><strong>VPN/ExpressRoute:</strong> If private access, is connection up?</li>
+                <li><strong>Azure Bastion:</strong> If using Bastion, is it deployed and healthy?</li>
+                <li><strong>Load Balancer:</strong> If behind LB, check health probes</li>
+                <li><strong>Firewall Rules:</strong> Azure Firewall or third-party NVA blocking?</li>
+              </ul>
+            </div>
+            <div class="code-wrap" style="margin-top:12px;">
+              <div class="code-label">Network Watcher - Test Connectivity</div>
+<pre><span class="cm"># Test if port 3389 (RDP) is accessible</span>
+az network watcher test-connectivity \
+  --source-resource myVM \
+  --dest-address <span class="num">10.0.0.4</span> \
+  --dest-port <span class="num">3389</span>
+
+<span class="cm"># View effective NSG rules</span>
+az network nic show-effective-nsg \
+  --name myNIC --resource-group myRG</pre>
+            </div>
+            <div class="code-wrap">
+              <div class="code-label">Interview Answer</div>
+<pre><span class="str">"I validate network connectivity, including NSG rules to ensure ports 
+3389 (RDP) or 22 (SSH) are open, verify the VM has a public IP or 
+proper private access via VPN/Bastion, and use Network Watcher to 
+test connectivity. I also check load balancer health probes if applicable."</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <strong>Check OS-Level Services</strong>
+            <span>— If network is fine, problem might be inside the VM.</span>
+            <div style="margin-top:10px;">
+              <p style="color:var(--text); margin-bottom:6px;"><strong>Validate:</strong></p>
+              <ul class="checklist">
+                <li>RDP service running (Windows: TermService)</li>
+                <li>SSH daemon running (Linux: sshd)</li>
+                <li>OS firewall not blocking ports internally</li>
+                <li>Listening on correct ports (netstat/ss)</li>
+                <li>System resources not exhausted</li>
+              </ul>
+            </div>
+            <div class="code-wrap" style="margin-top:12px;">
+              <div class="code-label">Windows - Check RDP Service</div>
+<pre><span class="cm"># Check if TermService is running</span>
+Get-Service TermService
+
+<span class="cm"># Check firewall rules</span>
+Get-NetFirewallRule -DisplayName <span class="str">"Remote Desktop*"</span>
+
+<span class="cm"># Check listening ports</span>
+netstat -ano | findstr <span class="num">3389</span></pre>
+            </div>
+            <div class="code-wrap">
+              <div class="code-label">Linux - Check SSH</div>
+<pre><span class="cm"># Check sshd status</span>
+sudo systemctl status sshd
+
+<span class="cm"># Check if listening on port 22</span>
+sudo ss -tlnp | grep <span class="num">22</span>
+
+<span class="cm"># Check firewall</span>
+sudo iptables -L -n</pre>
+            </div>
+            <div class="code-wrap">
+              <div class="code-label">Interview Answer</div>
+<pre><span class="str">"If the VM is reachable at the network level, I check the OS layer 
+to ensure RDP or SSH services are running and not blocked by internal 
+firewall rules. I also verify the service is listening on the correct port."</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <strong>Verify Identity & Permissions</strong>
+            <span>— Authentication and authorization issues are common.</span>
+            <div style="margin-top:10px;">
+              <p style="color:var(--text); margin-bottom:6px;"><strong>Check:</strong></p>
+              <ul class="checklist">
+                <li>User has valid credentials</li>
+                <li>Account not locked or expired</li>
+                <li>Azure AD (Entra ID) integration configured correctly</li>
+                <li>User has permissions to access the VM</li>
+                <li>MFA not blocking access</li>
+                <li>Conditional Access policies not interfering</li>
+              </ul>
+            </div>
+            <div class="code-wrap" style="margin-top:12px;">
+              <div class="code-label">Interview Answer</div>
+<pre><span class="str">"I verify user credentials and permissions, especially if Azure AD 
+(Entra ID) integration is involved. I check if the account is locked, 
+expired, or if Conditional Access policies might be blocking the connection."</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <strong>Use Advanced Diagnostics</strong>
+            <span>— When the obvious checks don't reveal the issue.</span>
+            <div style="margin-top:10px;">
+              <p style="color:var(--text); margin-bottom:6px;"><strong>Tools:</strong></p>
+              <ul class="checklist">
+                <li><strong>Boot Diagnostics:</strong> Screenshot of VM console</li>
+                <li><strong>Serial Console:</strong> Direct access to VM without network</li>
+                <li><strong>System Logs:</strong> Windows Event Viewer / Linux syslog</li>
+                <li><strong>Azure Monitor:</strong> Metrics and alerts</li>
+                <li><strong>Connection Troubleshoot:</strong> Network Watcher diagnostic</li>
+              </ul>
+            </div>
+            <div class="code-wrap" style="margin-top:12px;">
+              <div class="code-label">Interview Answer</div>
+<pre><span class="str">"If needed, I use diagnostics tools like Boot Diagnostics to see the 
+console screenshot, Serial Console for direct access, and system logs 
+to identify the root cause. Network Watcher's connection troubleshoot 
+helps identify network path issues."</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <strong>Apply Appropriate Fix</strong>
+            <span>— Based on findings, implement the targeted solution.</span>
+            <div style="margin-top:10px;">
+              <p style="color:var(--text); margin-bottom:6px;"><strong>Common Fixes:</strong></p>
+              <ul class="checklist">
+                <li>Reset user password/SSH key</li>
+                <li>Add/modify NSG rule to allow port</li>
+                <li>Restart RDP/SSH service via Serial Console</li>
+                <li>Fix OS firewall configuration</li>
+                <li>Restart the VM if needed</li>
+                <li>Reconfigure network settings</li>
+                <li>Update load balancer health probe</li>
+              </ul>
+            </div>
+            <div class="code-wrap" style="margin-top:12px;">
+              <div class="code-label">Azure CLI - Reset Password</div>
+<pre><span class="cm"># Reset VM user password</span>
+az vm user update \
+  --resource-group myRG \
+  --name myVM \
+  --username adminuser \
+  --password <span class="str">'NewSecureP@ssw0rd!'</span></pre>
+            </div>
+            <div class="code-wrap">
+              <div class="code-label">Interview Answer</div>
+<pre><span class="str">"Depending on the root cause, I apply the appropriate fix, such as 
+resetting credentials, updating NSG rules, restarting services via 
+Serial Console, or restarting the VM if necessary."</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <strong>Communicate & Document</strong>
+            <span>— Keep stakeholders informed throughout.</span>
+            <div style="margin-top:10px;">
+              <ul class="checklist">
+                <li>Keep user informed of progress</li>
+                <li>Confirm access is restored</li>
+                <li>Document the issue and resolution</li>
+                <li>Create KB article if common issue</li>
+                <li>Update runbooks if needed</li>
+              </ul>
+            </div>
+            <div class="code-wrap" style="margin-top:12px;">
+              <div class="code-label">Interview Answer</div>
+<pre><span class="str">"I keep the user informed throughout the process and confirm access 
+is restored. I also document the issue, root cause, and resolution 
+for future reference."</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <strong>Prevention & Improvement</strong>
+            <span>— Senior engineers think beyond the immediate fix.</span>
+            <div style="margin-top:10px;">
+              <p style="color:var(--text); margin-bottom:6px;"><strong>Suggest:</strong></p>
+              <ul class="checklist">
+                <li>Implement monitoring and alerts</li>
+                <li>Improve access controls (Azure Bastion)</li>
+                <li>Automate health checks</li>
+                <li>Review NSG rules regularly</li>
+                <li>Set up Azure Monitor for connectivity</li>
+                <li>Create runbooks for common issues</li>
+              </ul>
+            </div>
+            <div class="code-wrap" style="margin-top:12px;">
+              <div class="code-label">Interview Answer</div>
+<pre><span class="str">"If needed, I suggest improvements like better monitoring, access 
+controls such as Azure Bastion, or automation to prevent similar 
+issues in the future."</span></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box" style="margin-top:24px;">
+        <div class="task-header">
+          <div class="task-title">💯 Complete Senior Answer</div>
+          <span class="badge badge-green">Reference Template</span>
+        </div>
+        <div class="task-body">
+          <div class="code-wrap">
+<pre><span class="str">"First, I clarify how the user is trying to connect and the exact 
+error message. Then, I check whether the VM is running and healthy.
+
+Next, I validate network connectivity, including NSG rules to ensure 
+required ports (RDP 3389 / SSH 22) are open, and whether the VM is 
+accessible via public IP, VPN, or Bastion.
+
+If the network is fine, I check the OS level, ensuring RDP or SSH 
+services are running and not blocked by internal firewall rules.
+
+I also verify user credentials and permissions, especially if Azure 
+AD authentication is involved.
+
+If needed, I use diagnostics tools like Boot Diagnostics, Serial 
+Console, or logs to identify the issue.
+
+Based on the findings, I apply the appropriate fix, such as resetting 
+credentials, updating NSG rules, or restarting services or the VM.
+
+Finally, I confirm access with the user and document the issue. If 
+appropriate, I suggest preventive measures like monitoring or improved 
+access controls."</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WITHOUT ACCESS -->
+    <div class="section" id="noaccess">
+      <div class="section-title"><span class="icon">🔒</span> Troubleshooting Without VM Access</div>
+
+      <div class="alert alert-info">
+        <span class="alert-icon">ℹ️</span>
+        <div><strong>Advanced Question:</strong> "How do you troubleshoot if you don't have access to the VM?" — This separates those who rely on VM access vs. those who truly understand Azure operations.</div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🛠️ External Diagnostics Tools</div>
+          <ul class="checklist">
+            <li><strong>Boot Diagnostics:</strong> See console screenshot without logging in</li>
+            <li><strong>Serial Console:</strong> Direct console access bypassing network</li>
+            <li><strong>Network Watcher:</strong> Test connectivity and diagnose network paths</li>
+            <li><strong>Azure Monitor:</strong> View metrics (CPU, disk, network) without VM access</li>
+            <li><strong>Activity Log:</strong> See recent operations and changes</li>
+            <li><strong>Resource Health:</strong> Platform-level health status</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">🔍 What You Can Check</div>
+          <ul class="checklist">
+            <li>VM state and health status</li>
+            <li>NSG effective rules</li>
+            <li>Public IP configuration</li>
+            <li>Network topology and routing</li>
+            <li>Boot errors via diagnostics screenshot</li>
+            <li>Resource metrics and alerts</li>
+            <li>Recent configuration changes</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="code-wrap" style="margin-top:16px;">
+        <div class="code-label">Azure CLI - Diagnostics Without Access</div>
+<pre><span class="cm"># Enable boot diagnostics</span>
+az vm boot-diagnostics enable --name myVM --resource-group myRG
+
+<span class="cm"># Get boot diagnostics screenshot URI</span>
+az vm boot-diagnostics get-boot-log --name myVM --resource-group myRG
+
+<span class="cm"># Check effective NSG rules (no VM access needed)</span>
+az network nic show-effective-nsg --name myNIC --resource-group myRG
+
+<span class="cm"># View activity log for recent changes</span>
+az monitor activity-log list --resource-group myRG --max-events <span class="num">50</span></pre>
+      </div>
+
+      <div class="task-box" style="margin-top:16px;">
+        <div class="task-header">
+          <div class="task-title">🎯 Senior Answer</div>
+          <span class="badge badge-azure">Shows Deep Azure Knowledge</span>
+        </div>
+        <div class="task-body">
+          <p>"Without VM access, I can still diagnose most issues using Azure's external tools. I check Boot Diagnostics for console screenshots to see boot errors, use Serial Console for direct access bypassing network issues, and leverage Network Watcher to test connectivity and view effective NSG rules. Azure Monitor provides metrics showing resource consumption, and Activity Log reveals recent changes. This approach allows me to identify whether the issue is platform, network, or OS-level without needing to log into the VM."</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLATFORM VS APP -->
+    <div class="section" id="platform">
+      <div class="section-title"><span class="icon">🔬</span> Platform vs Application Issues</div>
+
+      <div class="alert alert-warn">
+        <span class="alert-icon">⚠️</span>
+        <div><strong>Critical Skill:</strong> If you can't distinguish platform from application issues with clear criteria, you're not ready for senior level. This requires systematic isolation by layers.</div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🎯 The Approach: Isolate by Layers</div>
+          <span class="badge badge-azure">Systematic Diagnosis</span>
+        </div>
+        <div class="task-body">
+          <p>"I distinguish between platform and application issues by <strong>isolating each layer</strong> and validating with evidence, not assumptions."</p>
+        </div>
+      </div>
+
+      <div class="layer-box">
+        <div class="layer-title">1️⃣ Infrastructure (Azure Platform)</div>
+        <div class="layer-desc">First validate if Azure itself is having issues</div>
+        <div style="margin-top:12px;">
+          <p style="color:var(--text); margin-bottom:8px;"><strong>Check:</strong></p>
+          <ul class="checklist">
+            <li>VM state (running, restarting, unavailable)</li>
+            <li>Disk and storage accessibility</li>
+            <li>Networking (NSG, Load Balancer, IP)</li>
+            <li>Azure Service Health (regional incidents)</li>
+            <li>Recent platform maintenance</li>
+          </ul>
+          <p style="color:var(--text); margin-top:14px; margin-bottom:8px;"><strong>Platform Issue Indicators:</strong></p>
+          <ul class="checklist">
+            <li>VM won't start or fails without recent changes</li>
+            <li>Multiple resources affected in same region</li>
+            <li>Azure alerts about platform degradation</li>
+            <li>Network issues with no config changes</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="layer-box">
+        <div class="layer-title">2️⃣ Connectivity & Intermediate Layer</div>
+        <div class="layer-desc">Validate communication between components</div>
+        <div style="margin-top:12px;">
+          <p style="color:var(--text); margin-bottom:8px;"><strong>Check:</strong></p>
+          <ul class="checklist">
+            <li>Load Balancer health probes</li>
+            <li>Timeouts between services</li>
+            <li>Network Watcher connectivity tests</li>
+            <li>DNS resolution</li>
+          </ul>
+          <p style="color:var(--text); margin-top:12px; font-size:.9rem;">This could be misconfiguration (not platform) OR actual Azure network issue.</p>
+        </div>
+      </div>
+
+      <div class="layer-box">
+        <div class="layer-title">3️⃣ Operating System</div>
+        <div class="layer-desc">If infrastructure is healthy, check the OS</div>
+        <div style="margin-top:12px;">
+          <p style="color:var(--text); margin-bottom:8px;"><strong>Check:</strong></p>
+          <ul class="checklist">
+            <li>CPU/Memory saturation</li>
+            <li>Services stopped or crashed</li>
+            <li>System logs and errors</li>
+            <li>Disk space exhausted</li>
+          </ul>
+          <p style="color:var(--text); margin-top:14px; margin-bottom:8px;"><strong>OS Issue Indicators:</strong></p>
+          <ul class="checklist">
+            <li>VM responds but service doesn't</li>
+            <li>Resource exhaustion</li>
+            <li>OS-level errors in logs</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="layer-box">
+        <div class="layer-title">4️⃣ Application</div>
+        <div class="layer-desc">If OS and infrastructure are healthy, it's the app</div>
+        <div style="margin-top:12px;">
+          <p style="color:var(--text); margin-bottom:8px;"><strong>Check:</strong></p>
+          <ul class="checklist">
+            <li>Application logs and errors</li>
+            <li>HTTP 5xx errors</li>
+            <li>Dependencies (database, APIs, external services)</li>
+            <li>Application-specific metrics</li>
+          </ul>
+          <p style="color:var(--text); margin-top:14px; margin-bottom:8px;"><strong>Application Issue Indicators:</strong></p>
+          <ul class="checklist">
+            <li>Errors in application logs</li>
+            <li>Issues started after deployment</li>
+            <li>Only specific endpoints/features failing</li>
+            <li>Infrastructure metrics normal but app returns errors</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="layer-box" style="border-left-color:var(--green);">
+        <div class="layer-title" style="color:var(--green);">5️⃣ Correlation (Senior Differentiator)</div>
+        <div class="layer-desc">Correlate metrics, logs, and changes to identify origin</div>
+        <div style="margin-top:12px;">
+          <p style="color:var(--text); margin-bottom:8px;"><strong>Correlate:</strong></p>
+          <ul class="checklist">
+            <li>Metrics across all layers</li>
+            <li>Recent deployments or changes</li>
+            <li>Timeline of events</li>
+            <li>Scope of impact (one service vs. many)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:20px;">
+        <div class="card">
+          <div class="card-title" style="color:var(--azure);">🔵 Platform Issue Examples</div>
+          <ul class="checklist">
+            <li>Multiple VMs fail simultaneously</li>
+            <li>Azure reports regional incident</li>
+            <li>No recent changes in your environment</li>
+            <li>Infrastructure metrics show degradation</li>
+            <li>Azure Service Health alerts</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--orange);">🟠 Application Issue Examples</div>
+          <ul class="checklist">
+            <li>Started after code deployment</li>
+            <li>Infrastructure healthy but app errors</li>
+            <li>Only specific endpoints affected</li>
+            <li>Application logs show exceptions</li>
+            <li>Dependencies (DB, API) timing out</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="task-box" style="margin-top:20px;">
+        <div class="task-header">
+          <div class="task-title">🎯 Complete Senior Answer</div>
+          <span class="badge badge-green">Reference Template</span>
+        </div>
+        <div class="task-body">
+          <div class="code-wrap">
+<pre><span class="str">"I distinguish between platform and application issues by isolating 
+each layer systematically.
+
+First, I check Azure infrastructure health, including VM status, 
+networking, storage, and any regional issues using Azure Service Health.
+
+If infrastructure is healthy, I validate connectivity between components 
+and then check the OS level for resource usage or service failures.
+
+If everything looks stable at the infrastructure and OS levels, I 
+analyze application logs and behavior.
+
+I also correlate this with recent changes, such as deployments or 
+configuration updates.
+
+For example, if multiple resources fail without changes, it may 
+indicate a platform issue. If errors start after a deployment and 
+infrastructure is stable, it's likely an application issue.
+
+The key is using evidence from metrics and logs at each layer, not 
+making assumptions."</span></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-danger" style="margin-top:16px;">
+        <span class="alert-icon">🚨</span>
+        <div><strong>Red Flags:</strong> "Just check the logs" (which logs?), not mentioning infrastructure validation, not discussing correlation, or mixing symptoms with root causes.</div>
+      </div>
+    </div>
+
+    <!-- METRICS -->
+    <div class="section" id="metrics">
+      <div class="section-title"><span class="icon">📊</span> Key Metrics for Decision Making</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔍 What Metrics to Check</div>
+          <span class="badge badge-azure">Data-Driven Diagnosis</span>
+        </div>
+        <div class="task-body">
+          <p>"Specific metrics help determine if the issue is platform or application related. Here's what to look for at each layer:"</p>
+        </div>
+      </div>
+
+      <table>
+        <tr>
+          <th>Layer</th>
+          <th>Key Metrics</th>
+          <th>What It Indicates</th>
+        </tr>
+        <tr>
+          <td><strong>Platform</strong></td>
+          <td>VM availability, disk IOPS, network packets dropped</td>
+          <td>Azure infrastructure health</td>
+        </tr>
+        <tr>
+          <td><strong>Network</strong></td>
+          <td>Network In/Out, failed connections, latency</td>
+          <td>Connectivity and throughput issues</td>
+        </tr>
+        <tr>
+          <td><strong>OS</strong></td>
+          <td>CPU %, memory %, disk queue length, available memory</td>
+          <td>Resource exhaustion at OS level</td>
+        </tr>
+        <tr>
+          <td><strong>Application</strong></td>
+          <td>HTTP response codes, request duration, exceptions, dependency failures</td>
+          <td>Application-specific errors</td>
+        </tr>
+      </table>
+
+      <div class="code-wrap" style="margin-top:16px;">
+        <div class="code-label">Azure Monitor - Query Metrics</div>
+<pre><span class="cm"># Get CPU percentage for VM</span>
+az monitor metrics list \
+  --resource /subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.Compute/virtualMachines/{vm} \
+  --metric <span class="str">"Percentage CPU"</span> \
+  --start-time <span class="num">2024</span>-<span class="num">01</span>-<span class="num">20</span>T00:<span class="num">00</span>:<span class="num">00</span>Z
+
+<span class="cm"># Get network metrics</span>
+az monitor metrics list \
+  --resource {resourceId} \
+  --metric <span class="str">"Network In Total"</span> <span class="str">"Network Out Total"</span></pre>
+      </div>
+
+      <div class="alert alert-success" style="margin-top:16px;">
+        <span class="alert-icon">💡</span>
+        <div><strong>Senior insight:</strong> "I look at trends over time, not just current values. A spike in errors after a deployment points to application issues. Gradual platform degradation points to infrastructure problems."</div>
+      </div>
+    </div>
+
+    <!-- BASH ON WINDOWS -->
+    <div class="section" id="bash">
+      <div class="section-title"><span class="icon">💻</span> Running Bash on Windows</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">❓ The Question</div>
+          <span class="badge badge-azure">Common Interview</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"Is it possible to run Bash in Windows CMD?"</strong></p>
+          <p style="margin-top:8px;">This tests your understanding of Windows environments and modern development tools.</p>
+        </div>
+      </div>
+
+      <div class="alert alert-warn">
+        <span class="alert-icon">⚠️</span>
+        <div><strong>Quick Answer:</strong> Not directly in CMD. CMD doesn't execute Bash natively. But there are several valid ways to run Bash on Windows.</div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title" style="color:var(--green);">✅ WSL (Recommended)</div>
+          <p style="margin-bottom:10px;"><strong>Windows Subsystem for Linux</strong> — The modern, official way.</p>
+          <ul class="checklist">
+            <li>Full Linux environment on Windows</li>
+            <li>Real Bash shell (Ubuntu, Debian, etc.)</li>
+            <li>Native performance</li>
+            <li>Integrated with Windows filesystem</li>
+          </ul>
+          <div class="code-wrap" style="margin-top:12px;">
+            <div class="code-label">PowerShell - Install WSL</div>
+<pre><span class="cm"># Install WSL (one command)</span>
+wsl --install
+
+<span class="cm"># Run Bash from CMD/PowerShell</span>
+wsl
+
+<span class="cm"># Execute specific Bash commands</span>
+wsl ls -la
+wsl bash script.sh</pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title" style="color:var(--blue);">🔹 Git Bash</div>
+          <p style="margin-bottom:10px;">Lightweight Bash environment that comes with Git.</p>
+          <ul class="checklist">
+            <li>Lighter than WSL</li>
+            <li>Basic Bash utilities</li>
+            <li>Good for simple scripts</li>
+            <li>Not a full Linux environment</li>
+          </ul>
+          <div class="code-wrap" style="margin-top:12px;">
+            <div class="code-label">Usage</div>
+<pre><span class="cm"># After installing Git, use Git Bash terminal
+# Or call from CMD via full path</span>
+<span class="str">"C:\Program Files\Git\bin\bash.exe"</span> script.sh</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:16px;">
+        <div class="card">
+          <div class="card-title">⚙️ PowerShell Integration</div>
+          <p>PowerShell can invoke WSL or run compatible commands.</p>
+          <div class="code-wrap" style="margin-top:10px;">
+<pre><span class="cm"># From PowerShell, call WSL</span>
+wsl bash -c <span class="str">"./deploy.sh"</span>
+
+<span class="cm"># Or invoke Azure CLI (works everywhere)</span>
+az vm list --output table</pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🔧 Other Options</div>
+          <ul class="checklist">
+            <li><strong>Cygwin:</strong> Unix-like environment (heavier, less common now)</li>
+            <li><strong>MSYS2:</strong> Minimal Unix environment</li>
+            <li><strong>Azure Cloud Shell:</strong> Browser-based Bash for Azure</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="task-box" style="margin-top:20px;">
+        <div class="task-header">
+          <div class="task-title">🎯 Senior Answer</div>
+          <span class="badge badge-green">Complete Response</span>
+        </div>
+        <div class="task-body">
+          <p>"CMD doesn't support Bash natively. However, on Windows I typically use <strong>WSL (Windows Subsystem for Linux)</strong> to run a full Linux environment and execute Bash commands. It's the modern, official approach from Microsoft.</p>
+          <p style="margin-top:10px;">Alternatively, <strong>Git Bash</strong> provides a lightweight option for basic Bash scripting.</p>
+          <p style="margin-top:10px;">In practice, when working with Azure, I often integrate Bash scripts with Azure CLI via WSL, or run them directly in Azure Cloud Shell for cloud-native operations. For automation, I'd execute scripts through Azure DevOps pipelines or directly on Linux VMs rather than locally on Windows."</p>
+        </div>
+      </div>
+
+      <div class="alert alert-danger" style="margin-top:16px;">
+        <span class="alert-icon">🚨</span>
+        <div><strong>Red Flags:</strong> Saying "yes, directly in CMD" (wrong), not knowing WSL exists, confusing PowerShell with Bash, or not mentioning how this applies to real Azure scenarios.</div>
+      </div>
+    </div>
+
+    <!-- AZURE TOOLS -->
+    <div class="section" id="aztools">
+      <div class="section-title"><span class="icon">🛠️</span> Azure Diagnostic Tools Reference</div>
+
+      <div class="grid3">
+        <div class="card">
+          <div class="card-title">🔍 Network Watcher</div>
+          <ul class="checklist">
+            <li>Connection troubleshoot</li>
+            <li>IP flow verify</li>
+            <li>NSG diagnostics</li>
+            <li>Packet capture</li>
+            <li>Network topology</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">📊 Azure Monitor</div>
+          <ul class="checklist">
+            <li>Metrics and alerts</li>
+            <li>Log Analytics</li>
+            <li>Application Insights</li>
+            <li>Workbooks and dashboards</li>
+            <li>Action Groups</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">💻 VM Diagnostics</div>
+          <ul class="checklist">
+            <li>Boot Diagnostics</li>
+            <li>Serial Console</li>
+            <li>Run Command</li>
+            <li>Resource Health</li>
+            <li>Activity Log</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="code-wrap" style="margin-top:20px;">
+        <div class="code-label">Quick Reference - Common Azure CLI Commands</div>
+<pre><span class="cm"># VM status and health</span>
+az vm show -d --name myVM --resource-group myRG
+
+<span class="cm"># Test network connectivity</span>
+az network watcher test-connectivity \
+  --source-resource myVM \
+  --dest-address <span class="num">10.0.0.5</span> --dest-port <span class="num">443</span>
+
+<span class="cm"># View effective NSG rules</span>
+az network nic show-effective-nsg --name myNIC --resource-group myRG
+
+<span class="cm"># Enable boot diagnostics</span>
+az vm boot-diagnostics enable --name myVM --resource-group myRG
+
+<span class="cm"># Run command on VM (without SSH/RDP)</span>
+az vm run-command invoke \
+  --name myVM --resource-group myRG \
+  --command-id RunShellScript \
+  --scripts <span class="str">"systemctl status sshd"</span>
+
+<span class="cm"># Check recent activity</span>
+az monitor activity-log list --resource-group myRG --max-events <span class="num">20</span></pre>
+      </div>
+    </div>
+
+    <!-- PREVENTION -->
+    <div class="section" id="prevention">
+      <div class="section-title"><span class="icon">🛡️</span> Prevention & Automation</div>
+
+      <div class="alert alert-success">
+        <span class="alert-icon">💡</span>
+        <div><strong>Senior Mindset:</strong> Don't just fix issues — prevent them from happening again. Suggest improvements, automation, and better monitoring.</div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🔒 Access & Security</div>
+          <ul class="checklist">
+            <li>Use Azure Bastion instead of public IPs</li>
+            <li>Implement Just-In-Time VM access</li>
+            <li>Azure AD integration for authentication</li>
+            <li>Conditional Access policies</li>
+            <li>Regular NSG rule audits</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">📊 Monitoring & Alerts</div>
+          <ul class="checklist">
+            <li>Azure Monitor alerts for VM health</li>
+            <li>Log Analytics for centralized logging</li>
+            <li>Connection Monitor for network paths</li>
+            <li>Service Health alerts for platform issues</li>
+            <li>Automated runbooks for common fixes</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">⚙️ Automation</div>
+          <ul class="checklist">
+            <li>Auto-remediation with Azure Automation</li>
+            <li>Health check scripts scheduled via Azure Functions</li>
+            <li>Infrastructure as Code (ARM, Bicep, Terraform)</li>
+            <li>Policy enforcement for configurations</li>
+            <li>Runbooks for common troubleshooting steps</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">📚 Documentation</div>
+          <ul class="checklist">
+            <li>Create KB articles for common issues</li>
+            <li>Document architecture and dependencies</li>
+            <li>Maintain updated runbooks</li>
+            <li>Post-incident reviews and RCAs</li>
+            <li>Share lessons learned with team</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIPS -->
+    <div class="section" id="tips">
+      <div class="section-title"><span class="icon">💡</span> Interview Tips & Best Practices</div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title" style="color:var(--green);">✅ What Makes You Senior</div>
+          <ul class="checklist">
+            <li>Follow structured troubleshooting flows (infra → network → OS → app)</li>
+            <li>Mention specific Azure tools (Network Watcher, Serial Console, Boot Diagnostics)</li>
+            <li>Differentiate RDP vs SSH scenarios</li>
+            <li>Always check NSG rules and network connectivity</li>
+            <li>Use logs and diagnostics before making changes</li>
+            <li>Propose preventive measures and automation</li>
+            <li>Communicate clearly and document findings</li>
+            <li>Think about correlation and evidence, not assumptions</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--red);">❌ Red Flags to Avoid</div>
+          <ul class="redflags">
+            <li>Jump straight to "reset password and restart"</li>
+            <li>Don't mention network diagnostics (critical miss)</li>
+            <li>Don't differentiate between RDP and SSH</li>
+            <li>Don't mention NSG rules or ports</li>
+            <li>Skip checking logs and metrics</li>
+            <li>No mention of Azure diagnostic tools</li>
+            <li>Assume it's always user error</li>
+            <li>Don't suggest prevention or improvement</li>
+            <li>Can't explain how to diagnose without VM access</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="task-box" style="margin-top:20px;">
+        <div class="task-header">
+          <div class="task-title">🎯 Key Phrases to Use</div>
+          <span class="badge badge-green">Sound Like a Senior</span>
+        </div>
+        <div class="task-body">
+          <ul class="checklist">
+            <li>"I follow a systematic approach, starting with clarifying the issue..."</li>
+            <li>"I isolate the problem by layer: infrastructure, network, OS, then application..."</li>
+            <li>"I use Network Watcher to test connectivity and view effective NSG rules..."</li>
+            <li>"I correlate metrics and logs with recent changes to identify the root cause..."</li>
+            <li>"If I don't have VM access, I can still diagnose using Boot Diagnostics and Serial Console..."</li>
+            <li>"Based on the evidence, I determine if it's a platform issue or application issue..."</li>
+            <li>"I document the resolution and suggest preventive measures like monitoring and automation..."</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert alert-info" style="margin-top:20px;">
+        <span class="alert-icon">💡</span>
+        <div><strong>Pro Tip:</strong> Always frame your answers with "First, I...", "Then, I...", "If that doesn't work, I..." — this shows structured thinking. Avoid vague statements like "I would check things" — be specific about what you check and how.</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  function scrollTo(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+  }
+
+  const sections = ['intro','mindset','vmconnect','flowchart','noaccess','platform','metrics','bash','aztools','prevention','tips'];
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        document.querySelectorAll('.nav-link').forEach(l => {
+          l.classList.toggle('active', l.getAttribute('onclick')?.includes(id));
+        });
+      }
+    });
+  }, { threshold: 0.25 });
+  sections.forEach(id => { const el = document.getElementById(id); if(el) observer.observe(el); });
+</script>
+</body>
+</html>

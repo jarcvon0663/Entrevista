@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Node.js + React – Interview Preparation</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1e2533;
+    --border: #30363d;
+    --node: #68a063;
+    --react: #61dafb;
+    --green: #3fb950;
+    --red: #f85149;
+    --yellow: #d29922;
+    --blue: #58a6ff;
+    --orange: #fa7343;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --code-bg: #0d1117;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+
+  /* SIDEBAR */
+  .layout { display:flex; min-height:100vh; }
+  .sidebar {
+    width:260px; background:var(--surface); border-right:1px solid var(--border);
+    position:fixed; top:0; left:0; height:100vh; overflow-y:auto;
+    display:flex; flex-direction:column; z-index:100;
+  }
+  .sidebar-logo {
+    padding:24px 20px 16px;
+    background:linear-gradient(135deg,var(--node),var(--react));
+    font-size:1.3rem; font-weight:800; color:#0d1117; letter-spacing:-0.5px;
+  }
+  .sidebar-logo span { font-weight:400; opacity:.8; font-size:.9rem; display:block; color:#0d1117; }
+  .nav-section { padding:12px 20px 4px; font-size:.7rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); font-weight:600; }
+  .nav-link {
+    display:flex; align-items:center; gap:10px;
+    padding:9px 20px; color:var(--muted); text-decoration:none;
+    font-size:.88rem; transition:all .2s; border-left:3px solid transparent;
+    cursor:pointer;
+  }
+  .nav-link:hover, .nav-link.active { color:var(--text); background:rgba(104,160,99,.1); border-left-color:var(--node); }
+  .nav-link .dot { width:7px; height:7px; border-radius:50%; background:var(--muted); flex-shrink:0; }
+  .nav-link.active .dot, .nav-link:hover .dot { background:var(--react); }
+
+  /* MAIN */
+  .main { margin-left:260px; flex:1; padding:0 40px 60px; max-width:1100px; }
+  
+  /* HERO */
+  .hero {
+    padding:50px 0 30px;
+    border-bottom:1px solid var(--border); margin-bottom:40px;
+  }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(104,160,99,.15); border:1px solid rgba(104,160,99,.3);
+    color:var(--node); padding:4px 14px; border-radius:20px;
+    font-size:.8rem; font-weight:600; margin-bottom:18px;
+  }
+  .hero h1 { font-size:2.6rem; font-weight:800; letter-spacing:-1px; margin-bottom:12px; }
+  .hero h1 span { background:linear-gradient(90deg,var(--node),var(--react)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .hero p { color:var(--muted); font-size:1.05rem; max-width:680px; }
+  .tags { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
+  .tag { background:var(--surface2); border:1px solid var(--border); color:var(--muted); padding:3px 12px; border-radius:20px; font-size:.78rem; }
+
+  /* SECTIONS */
+  .section { margin-bottom:56px; scroll-margin-top:20px; }
+  .section-title {
+    font-size:1.4rem; font-weight:700; margin-bottom:20px;
+    display:flex; align-items:center; gap:10px;
+    padding-bottom:12px; border-bottom:1px solid var(--border);
+  }
+  .section-title .icon { font-size:1.3rem; }
+  .subsection-title {
+    font-size:1.1rem; font-weight:700; margin:24px 0 14px; color:var(--text);
+    display:flex; align-items:center; gap:8px;
+  }
+
+  /* CARDS */
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:16px; }
+  .card-title { font-weight:700; font-size:1rem; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .card p { color:var(--muted); font-size:.92rem; line-height:1.6; }
+
+  /* ALERT */
+  .alert { border-radius:10px; padding:16px 20px; margin-bottom:20px; display:flex; gap:12px; font-size:.9rem; }
+  .alert-warn { background:rgba(210,153,34,.1); border:1px solid rgba(210,153,34,.3); color:#e3b341; }
+  .alert-info { background:rgba(88,166,255,.1); border:1px solid rgba(88,166,255,.3); color:var(--blue); }
+  .alert-success { background:rgba(63,185,80,.1); border:1px solid rgba(63,185,80,.3); color:var(--green); }
+  .alert-danger { background:rgba(248,81,73,.1); border:1px solid rgba(248,81,73,.3); color:var(--red); }
+  .alert-icon { font-size:1.1rem; flex-shrink:0; margin-top:1px; }
+
+  /* CODE */
+  .code-wrap { position:relative; margin:12px 0; }
+  .code-label { position:absolute; top:10px; right:14px; font-size:.7rem; color:var(--muted); background:var(--surface2); padding:2px 8px; border-radius:4px; z-index:2; }
+  pre {
+    background:var(--code-bg); border:1px solid var(--border); border-radius:10px;
+    padding:20px; overflow-x:auto; font-size:.83rem; line-height:1.6;
+    font-family:'Cascadia Code','Fira Code','Consolas',monospace;
+  }
+  .kw { color:#ff7b72; }
+  .fn { color:#d2a8ff; }
+  .str { color:#a5d6ff; }
+  .num { color:#79c0ff; }
+  .cm { color:#6e7681; font-style:italic; }
+  .cls { color:#ffa657; }
+  .jsx { color:#7ee787; }
+
+  /* TASK BOX */
+  .task-box {
+    background:var(--surface2); border:1px solid var(--border); border-radius:12px;
+    overflow:hidden; margin-bottom:20px;
+  }
+  .task-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 20px; background:rgba(104,160,99,.08);
+    border-bottom:1px solid var(--border);
+    flex-wrap: wrap; gap: 8px;
+  }
+  .task-title { font-weight:700; font-size:.95rem; display:flex; align-items:center; gap:8px; }
+  .badge { padding:3px 10px; border-radius:20px; font-size:.72rem; font-weight:700; white-space: nowrap; }
+  .badge-node { background:rgba(104,160,99,.2); color:#8fd985; }
+  .badge-react { background:rgba(97,218,251,.2); color:#61dafb; }
+  .badge-green { background:rgba(63,185,80,.15); color:var(--green); }
+  .badge-yellow { background:rgba(210,153,34,.15); color:var(--yellow); }
+  .badge-red { background:rgba(248,81,73,.15); color:var(--red); }
+  .badge-blue { background:rgba(88,166,255,.15); color:var(--blue); }
+  .task-body { padding:20px; }
+  .task-body p { color:var(--muted); font-size:.9rem; margin-bottom:12px; }
+
+  /* STEPS */
+  .steps { counter-reset:step; display:flex; flex-direction:column; gap:12px; }
+  .step { display:flex; gap:14px; align-items:flex-start; }
+  .step-num {
+    counter-increment:step; content:counter(step);
+    width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,var(--node),var(--react));
+    display:flex; align-items:center; justify-content:center;
+    font-size:.75rem; font-weight:700; flex-shrink:0; margin-top:2px; color:#0d1117;
+  }
+  .step-num::before { content:counter(step); }
+  .step-body { font-size:.9rem; line-height:1.6; }
+  .step-body strong { color:var(--text); }
+  .step-body span { color:var(--muted); }
+
+  /* TABLE */
+  table { width:100%; border-collapse:collapse; font-size:.88rem; margin:12px 0; }
+  th { background:var(--surface2); color:var(--muted); font-weight:600; padding:10px 16px; text-align:left; border-bottom:2px solid var(--border); }
+  td { padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text); }
+  td code { background:var(--surface2); padding:2px 7px; border-radius:4px; font-size:.82rem; color:var(--react); }
+  tr:hover td { background:rgba(104,160,99,.04); }
+
+  /* CHECKLIST */
+  .checklist { list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+  .checklist li { display:flex; align-items:flex-start; gap:10px; font-size:.9rem; color:var(--muted); }
+  .checklist li::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; margin-top:1px; }
+
+  .qlist { list-style:none; display:flex; flex-direction:column; gap:6px; margin-top:10px; }
+  .qlist li { display:flex; align-items:flex-start; gap:10px; font-size:.88rem; color:var(--muted); padding:6px 10px; background:var(--surface); border-radius:6px; }
+  .qlist li::before { content:'❓'; flex-shrink:0; }
+
+  /* COMPARE */
+  .compare { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0; }
+  .compare-box { border-radius:8px; overflow:hidden; }
+  .compare-header { padding:8px 14px; font-size:.78rem; font-weight:700; letter-spacing:.5px; }
+  .compare-header.wrong { background:rgba(248,81,73,.15); color:var(--red); }
+  .compare-header.right { background:rgba(63,185,80,.15); color:var(--green); }
+  .compare-box pre { border-radius:0; border:none; border-top:1px solid var(--border); font-size:.78rem; }
+
+  /* GRID */
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .grid4 { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+
+  /* SCENARIO */
+  .scenario-box {
+    background:linear-gradient(135deg, rgba(104,160,99,.08), rgba(97,218,251,.08));
+    border:1px solid rgba(97,218,251,.2); border-radius:12px; padding:20px; margin-bottom:16px;
+  }
+  .scenario-box .scenario-q {
+    font-weight:700; font-size:.95rem; color:var(--text); margin-bottom:12px;
+    display:flex; gap:10px; align-items:flex-start;
+  }
+
+  /* MOBILE MENU */
+  .mobile-menu-btn {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 200;
+    background: var(--node);
+    color: #0d1117;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(104,160,99,.4);
+    transition: all .3s;
+  }
+  .mobile-menu-btn:hover { transform: scale(1.1); }
+  .sidebar.mobile-open { transform: translateX(0); }
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.7);
+    z-index: 99;
+  }
+  .overlay.active { display: block; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width:6px; height:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+  /* RESPONSIVE */
+  @media(max-width:1024px) {
+    .sidebar { width: 240px; }
+    .main { margin-left: 240px; }
+    .grid3 { grid-template-columns: 1fr 1fr; }
+    .grid4 { grid-template-columns: 1fr 1fr; }
+  }
+  
+  @media(max-width:768px) {
+    .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+    .sidebar {
+      transform: translateX(-100%);
+      transition: transform .3s ease;
+      box-shadow: 4px 0 12px rgba(0,0,0,.3);
+    }
+    .main { margin-left: 0; padding: 0 20px 60px; }
+    .hero { padding-top: 80px; }
+    .grid2, .grid3, .grid4 { grid-template-columns: 1fr; }
+    .compare { grid-template-columns: 1fr; }
+  }
+  
+  @media(max-width:480px) {
+    .hero h1 { font-size: 1.9rem; }
+    .hero p { font-size: 0.95rem; }
+    .section-title { font-size: 1.2rem; }
+    .task-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    pre { font-size: 0.75rem; padding: 14px; }
+    .step { flex-direction: column; gap: 8px; }
+    .step-num { margin-bottom: 4px; }
+  }
+
+  html { scroll-behavior:smooth; }
+</style>
+</head>
+<body>
+
+<button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+<div class="overlay" onclick="toggleMenu()"></div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      🎯 Entrevista
+      <span>Node.js + React Track</span>
+    </div>
+    <div class="nav-section">Overview</div>
+    <a class="nav-link active" onclick="scrollTo('intro')"><div class="dot"></div> Introduction</a>
+    <a class="nav-link" onclick="scrollTo('interview-intro')"><div class="dot"></div> About Yourself</a>
+
+    <div class="nav-section">Node.js</div>
+    <a class="nav-link" onclick="scrollTo('nodefund')"><div class="dot"></div> Fundamentals</a>
+    <a class="nav-link" onclick="scrollTo('javascript')"><div class="dot"></div> JavaScript Deep Dive</a>
+    <a class="nav-link" onclick="scrollTo('apis')"><div class="dot"></div> REST APIs</a>
+    <a class="nav-link" onclick="scrollTo('express')"><div class="dot"></div> Express</a>
+    <a class="nav-link" onclick="scrollTo('databases')"><div class="dot"></div> Databases</a>
+    <a class="nav-link" onclick="scrollTo('nodeperf')"><div class="dot"></div> Performance</a>
+    <a class="nav-link" onclick="scrollTo('testing')"><div class="dot"></div> Testing</a>
+
+    <div class="nav-section">React</div>
+    <a class="nav-link" onclick="scrollTo('reactbasics')"><div class="dot"></div> React Basics</a>
+    <a class="nav-link" onclick="scrollTo('hooks')"><div class="dot"></div> Hooks</a>
+    <a class="nav-link" onclick="scrollTo('state')"><div class="dot"></div> State Management</a>
+    <a class="nav-link" onclick="scrollTo('rendering')"><div class="dot"></div> Rendering (CSR/SSR/SSG)</a>
+    <a class="nav-link" onclick="scrollTo('optimization')"><div class="dot"></div> Optimization</a>
+    <a class="nav-link" onclick="scrollTo('forms')"><div class="dot"></div> Forms & Routing</a>
+
+    <div class="nav-section">Architecture & Ops</div>
+    <a class="nav-link" onclick="scrollTo('architecture')"><div class="dot"></div> Architecture</a>
+    <a class="nav-link" onclick="scrollTo('devops')"><div class="dot"></div> DevOps</a>
+    <a class="nav-link" onclick="scrollTo('cloud')"><div class="dot"></div> Cloud</a>
+
+    <div class="nav-section">Practice</div>
+    <a class="nav-link" onclick="scrollTo('scenarios')"><div class="dot"></div> Practical Scenarios</a>
+    <a class="nav-link" onclick="scrollTo('livecoding')"><div class="dot"></div> Live Coding</a>
+    <a class="nav-link" onclick="scrollTo('experience')"><div class="dot"></div> Experience Questions</a>
+    <a class="nav-link" onclick="scrollTo('level')"><div class="dot"></div> Expected Level</a>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- HERO -->
+    <div class="hero" id="intro">
+      <div class="hero-badge">🟢 Fullstack Focus</div>
+      <h1><span>Node.js + React</span> Interview Guide</h1>
+      <p>Complete preparation for your Senior Node.js/React technical interview at Intellias — covering fundamentals, JavaScript deep-dive, APIs, Express, databases, React hooks, state management, architecture, and real practical scenarios.</p>
+      <div class="tags">
+        <span class="tag">🟢 Node.js</span>
+        <span class="tag">⚛️ React</span>
+        <span class="tag">🔄 Event Loop</span>
+        <span class="tag">🎣 Hooks</span>
+        <span class="tag">🏗️ Architecture</span>
+        <span class="tag">☁️ Cloud</span>
+      </div>
+      <div class="alert alert-info" style="margin-top:20px;">
+        <span class="alert-icon">⏱️</span>
+        <div>The interview typically lasts <strong>60–90 minutes</strong> and focuses on validating <strong>real hands-on experience</strong>, not just theory. Expect follow-up questions like "why?" and "how did you solve this in production?"</div>
+      </div>
+    </div>
+
+    <!-- INTERVIEW INTRO -->
+    <div class="section" id="interview-intro">
+      <div class="section-title"><span class="icon">👋</span> Introduction Section (5–10 min)</div>
+      
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🎯 What They're Evaluating</div>
+          <span class="badge badge-node">Warm-up</span>
+        </div>
+        <div class="task-body">
+          <p>The interviewer wants to confirm you can <strong>explain your experience with detail and confidence</strong> — not memorized answers, but real project context.</p>
+          <ul class="qlist">
+            <li>Tell me about your most important project</li>
+            <li>What was your role?</li>
+            <li>What technical decisions did you make?</li>
+            <li>What size team did you work with?</li>
+            <li>What methodology did you use (Scrum, Kanban, etc.)?</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert alert-success">
+        <span class="alert-icon">💡</span>
+        <div><strong>Preparation tip:</strong> Have one strong project ready with specifics — team size, your exact responsibilities, one technical challenge you solved, and one architecture decision you'd revisit today. Concrete beats generic every time.</div>
+      </div>
+    </div>
+
+    <!-- NODE FUNDAMENTALS -->
+    <div class="section" id="nodefund">
+      <div class="section-title"><span class="icon">🟢</span> Node.js Fundamentals (20–30 min)</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔄 The Event Loop</div>
+          <span class="badge badge-node">Core Concept</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"How does the Event Loop work?"</strong></p>
+          <p>"Node.js runs JavaScript on a single thread, but the Event Loop allows it to handle thousands of concurrent operations without blocking, by delegating I/O work to the system and processing callbacks when they complete."</p>
+          
+          <div class="code-wrap" style="margin-top:14px;">
+            <div class="code-label">Event Loop Phases</div>
+<pre><span class="cm">// Simplified order of execution</span>
+<span class="num">1.</span> Timers        <span class="cm">// setTimeout, setInterval callbacks</span>
+<span class="num">2.</span> Pending callbacks
+<span class="num">3.</span> Poll           <span class="cm">// Retrieve new I/O events</span>
+<span class="num">4.</span> Check          <span class="cm">// setImmediate callbacks</span>
+<span class="num">5.</span> Close callbacks
+
+<span class="cm">// Microtasks (Promises, process.nextTick) run 
+// BETWEEN each phase, before moving to the next</span></pre>
+          </div>
+
+          <div class="code-wrap">
+            <div class="code-label">Demonstrate you understand execution order</div>
+<pre>console.<span class="fn">log</span>(<span class="str">'1 - sync'</span>);
+
+setTimeout(() => console.<span class="fn">log</span>(<span class="str">'4 - timeout'</span>), <span class="num">0</span>);
+
+Promise.<span class="fn">resolve</span>().<span class="fn">then</span>(() => console.<span class="fn">log</span>(<span class="str">'3 - promise'</span>));
+
+console.<span class="fn">log</span>(<span class="str">'2 - sync'</span>);
+
+<span class="cm">// Output: 1 - sync, 2 - sync, 3 - promise, 4 - timeout
+// Sync code first, then microtasks (Promises), then macrotasks (timers)</span></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🧵 Process vs Thread</div>
+          <p><strong>Process:</strong> an independent instance of a running program with its own memory space.</p>
+          <p style="margin-top:8px;"><strong>Thread:</strong> a unit of execution within a process; threads share the same memory.</p>
+          <p style="margin-top:8px;">Node.js runs your JS on a <strong>single main thread</strong>, but uses a thread pool (libuv) internally for I/O operations like file system and DNS.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🚫 Why Single-Threaded?</div>
+          <p>"Node.js uses a single thread for JS execution to avoid the complexity of multi-threaded programming (race conditions, locks). It achieves concurrency through the Event Loop and non-blocking I/O, delegating heavy operations to the OS or worker threads."</p>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🛑 What Blocks the Event Loop</div>
+          <span class="badge badge-red">Common Pitfall</span>
+        </div>
+        <div class="task-body">
+          <ul class="checklist">
+            <li>Heavy synchronous computation (large loops, complex regex)</li>
+            <li>Synchronous file system calls (<code style="background:var(--surface);padding:2px 6px;border-radius:4px;">fs.readFileSync</code>)</li>
+            <li>JSON.parse/stringify on very large objects</li>
+            <li>Synchronous crypto operations</li>
+            <li>Blocking loops without yielding control</li>
+          </ul>
+          <div class="alert alert-success" style="margin-top:14px;">
+            <span class="alert-icon">💡</span>
+            <div><strong>Solution:</strong> Use async versions of APIs, offload CPU-intensive work to Worker Threads, or break large tasks into chunks with <code style="background:rgba(0,0,0,.2);padding:2px 6px;border-radius:4px;">setImmediate</code>.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <div class="section" id="javascript">
+      <div class="section-title"><span class="icon">📜</span> JavaScript Deep Dive</div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🔤 var vs let vs const</div>
+          <table style="margin-top:8px; font-size:.82rem;">
+            <tr><th>Feature</th><th>var</th><th>let/const</th></tr>
+            <tr><td>Scope</td><td>Function</td><td>Block</td></tr>
+            <tr><td>Hoisting</td><td>Yes (undefined)</td><td>Yes (TDZ)</td></tr>
+            <tr><td>Redeclare</td><td>Yes</td><td>No</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-title">⬆️ Hoisting</div>
+          <p>"Variable and function declarations are moved to the top of their scope during compilation. <code style="background:var(--surface);padding:2px 6px;border-radius:4px;">var</code> is hoisted and initialized as undefined; <code style="background:var(--surface);padding:2px 6px;border-radius:4px;">let</code>/<code style="background:var(--surface);padding:2px 6px;border-radius:4px;">const</code> are hoisted but stay in the Temporal Dead Zone until declared."</p>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔒 Closures</div>
+          <span class="badge badge-node">Must Explain Clearly</span>
+        </div>
+        <div class="task-body">
+          <p>"A closure is a function that retains access to variables from its outer scope even after that outer function has finished executing."</p>
+          <div class="code-wrap">
+<pre><span class="kw">function</span> <span class="fn">counter</span>() {
+  <span class="kw">let</span> count = <span class="num">0</span>;
+  <span class="kw">return</span> () => {
+    count++;
+    <span class="kw">return</span> count;
+  };
+}
+
+<span class="kw">const</span> increment = <span class="fn">counter</span>();
+increment(); <span class="cm">// 1</span>
+increment(); <span class="cm">// 2 - "count" persists between calls</span></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">⚡ Promise.all() vs Promise.allSettled()</div>
+          <span class="badge badge-yellow">Frequently Asked</span>
+        </div>
+        <div class="task-body">
+          <div class="compare">
+            <div class="compare-box">
+              <div class="compare-header wrong">Promise.all()</div>
+<pre><span class="kw">try</span> {
+  <span class="kw">const</span> results = <span class="kw">await</span> Promise.<span class="fn">all</span>([
+    fetchUser(), fetchOrders()
+  ]);
+} <span class="kw">catch</span> (e) {
+  <span class="cm">// Fails FAST if ANY promise rejects</span>
+  <span class="cm">// You lose results from the others</span>
+}</pre>
+            </div>
+            <div class="compare-box">
+              <div class="compare-header right">Promise.allSettled()</div>
+<pre><span class="kw">const</span> results = <span class="kw">await</span> Promise.<span class="fn">allSettled</span>([
+  fetchUser(), fetchOrders()
+]);
+<span class="cm">// Always resolves, gives you status
+// per promise: 'fulfilled' or 'rejected'</span>
+results.<span class="fn">forEach</span>(r => {
+  <span class="kw">if</span> (r.status === <span class="str">'fulfilled'</span>) { ... }
+});</pre>
+            </div>
+          </div>
+          <p style="margin-top:10px;"><strong>When to use each:</strong> Use <code style="background:var(--surface);padding:2px 6px;border-radius:4px;">all()</code> when all results are required to proceed. Use <code style="background:var(--surface);padding:2px 6px;border-radius:4px;">allSettled()</code> when you want partial results even if some calls fail.</p>
+        </div>
+      </div>
+
+      <div class="grid4" style="margin-top:16px;">
+        <div class="card" style="padding:16px;">
+          <div class="card-title" style="font-size:.9rem;">Destructuring</div>
+          <pre style="font-size:.72rem;padding:10px;"><span class="kw">const</span> {name, age} = user;</pre>
+        </div>
+        <div class="card" style="padding:16px;">
+          <div class="card-title" style="font-size:.9rem;">Spread</div>
+          <pre style="font-size:.72rem;padding:10px;"><span class="kw">const</span> copy = {...obj};</pre>
+        </div>
+        <div class="card" style="padding:16px;">
+          <div class="card-title" style="font-size:.9rem;">Rest Params</div>
+          <pre style="font-size:.72rem;padding:10px;"><span class="kw">function</span> <span class="fn">f</span>(...args) {}</pre>
+        </div>
+        <div class="card" style="padding:16px;">
+          <div class="card-title" style="font-size:.9rem;">this (arrow fn)</div>
+          <pre style="font-size:.72rem;padding:10px;"><span class="cm">// Arrow fn: lexical 'this'</span></pre>
+        </div>
+      </div>
+
+      <div class="alert alert-info" style="margin-top:16px;">
+        <span class="alert-icon">📋</span>
+        <div><strong>Also review:</strong> callbacks vs promises vs async/await, arrow functions vs regular functions (this binding), async/await error handling with try/catch.</div>
+      </div>
+    </div>
+
+    <!-- APIS -->
+    <div class="section" id="apis">
+      <div class="section-title"><span class="icon">🌐</span> REST APIs</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🎯 Designing a REST Endpoint</div>
+          <span class="badge badge-node">Design Question</span>
+        </div>
+        <div class="task-body">
+          <p>Be ready to design a resource on the spot: naming, HTTP verbs, status codes, and error format.</p>
+          <div class="code-wrap">
+            <div class="code-label">Example: Orders Resource</div>
+<pre>GET    /api/v1/orders          <span class="cm">// list (with pagination)</span>
+GET    /api/v1/orders/:id      <span class="cm">// get one</span>
+POST   /api/v1/orders          <span class="cm">// create</span>
+PUT    /api/v1/orders/:id      <span class="cm">// full replace</span>
+PATCH  /api/v1/orders/:id      <span class="cm">// partial update</span>
+DELETE /api/v1/orders/:id      <span class="cm">// delete</span></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="compare">
+        <div class="compare-box">
+          <div class="compare-header right">PUT</div>
+          <div style="padding:14px; background:var(--surface2);">
+            <p style="color:var(--muted); font-size:.85rem;">Replaces the <strong>entire resource</strong>. Idempotent — sending it twice has the same effect as once. Client sends the full object.</p>
+          </div>
+        </div>
+        <div class="compare-box">
+          <div class="compare-header right">PATCH</div>
+          <div style="padding:14px; background:var(--surface2);">
+            <p style="color:var(--muted); font-size:.85rem;">Applies a <strong>partial update</strong> — only the fields sent. Not always idempotent depending on implementation.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:16px;">
+        <div class="card">
+          <div class="card-title">📟 HTTP Status Codes</div>
+          <table style="font-size:.82rem;">
+            <tr><td><code>200</code></td><td>OK</td></tr>
+            <tr><td><code>201</code></td><td>Created</td></tr>
+            <tr><td><code>204</code></td><td>No Content</td></tr>
+            <tr><td><code>400</code></td><td>Bad Request</td></tr>
+            <tr><td><code>401</code></td><td>Unauthorized</td></tr>
+            <tr><td><code>403</code></td><td>Forbidden</td></tr>
+            <tr><td><code>404</code></td><td>Not Found</td></tr>
+            <tr><td><code>409</code></td><td>Conflict</td></tr>
+            <tr><td><code>500</code></td><td>Server Error</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-title">🔢 API Versioning Strategies</div>
+          <ul class="checklist">
+            <li><strong>URL:</strong> <code style="background:var(--surface);padding:2px 6px;border-radius:4px;">/api/v1/orders</code> — most common, explicit</li>
+            <li><strong>Header:</strong> <code style="background:var(--surface);padding:2px 6px;border-radius:4px;">Accept: application/vnd.api.v2+json</code></li>
+            <li><strong>Query param:</strong> <code style="background:var(--surface);padding:2px 6px;border-radius:4px;">?version=2</code></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="task-box" style="margin-top:16px;">
+        <div class="task-header">
+          <div class="task-title">🔐 JWT, OAuth & Refresh Tokens</div>
+          <span class="badge badge-blue">Security</span>
+        </div>
+        <div class="task-body">
+          <ul class="checklist">
+            <li><strong>JWT:</strong> self-contained token with signed payload; stateless auth</li>
+            <li><strong>Access Token:</strong> short-lived (e.g. 15 min), used for API calls</li>
+            <li><strong>Refresh Token:</strong> long-lived, stored securely (httpOnly cookie), used to get new access tokens</li>
+            <li><strong>OAuth:</strong> delegated authorization framework (login with Google, etc.)</li>
+          </ul>
+          <div class="code-wrap" style="margin-top:12px;">
+            <div class="code-label">Error handling pattern</div>
+<pre><span class="kw">app</span>.<span class="fn">use</span>((err, req, res, next) => {
+  <span class="kw">const</span> status = err.statusCode || <span class="num">500</span>;
+  res.<span class="fn">status</span>(status).<span class="fn">json</span>({
+    error: {
+      message: err.message,
+      code: err.code || <span class="str">'INTERNAL_ERROR'</span>
+    }
+  });
+});</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPRESS -->
+    <div class="section" id="express">
+      <div class="section-title"><span class="icon">🚂</span> Express</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔗 Middleware</div>
+          <span class="badge badge-node">Core Concept</span>
+        </div>
+        <div class="task-body">
+          <p>"Middleware functions have access to req, res, and next. They execute in order and can modify the request, end the response, or call next() to continue the chain."</p>
+          <div class="code-wrap">
+<pre><span class="kw">const</span> authMiddleware = (req, res, next) => {
+  <span class="kw">const</span> token = req.headers.authorization;
+  <span class="kw">if</span> (!token) <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">401</span>).<span class="fn">json</span>({error: <span class="str">'No token'</span>});
+  
+  <span class="kw">try</span> {
+    req.user = <span class="fn">verifyToken</span>(token);
+    <span class="fn">next</span>();
+  } <span class="kw">catch</span> (e) {
+    res.<span class="fn">status</span>(<span class="num">401</span>).<span class="fn">json</span>({error: <span class="str">'Invalid token'</span>});
+  }
+};
+
+app.<span class="fn">get</span>(<span class="str">'/api/profile'</span>, authMiddleware, (req, res) => {
+  res.<span class="fn">json</span>(req.user);
+});</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">📁 Project Organization</div>
+          <div class="code-wrap" style="margin-top:8px;">
+<pre>src/
+  controllers/
+  routes/
+  services/
+  models/
+  middlewares/
+  utils/
+  config/</pre>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">📝 Logging</div>
+          <p>"I use structured logging with libraries like <strong>Winston</strong> or <strong>Pino</strong>, log at appropriate levels (info, warn, error), and centralize logs with tools like ELK or CloudWatch for observability."</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DATABASES -->
+    <div class="section" id="databases">
+      <div class="section-title"><span class="icon">🗄️</span> Databases</div>
+
+      <div class="compare">
+        <div class="compare-box">
+          <div class="compare-header right">SQL</div>
+          <div style="padding:16px; background:var(--surface2);">
+            <ul class="checklist">
+              <li><strong>Joins:</strong> INNER, LEFT, RIGHT, FULL combining tables</li>
+              <li><strong>Indexes:</strong> speed up reads, cost on writes</li>
+              <li><strong>Transactions:</strong> ACID guarantees, BEGIN/COMMIT/ROLLBACK</li>
+              <li><strong>Isolation Levels:</strong> Read Uncommitted → Serializable</li>
+            </ul>
+          </div>
+        </div>
+        <div class="compare-box">
+          <div class="compare-header right">MongoDB</div>
+          <div style="padding:16px; background:var(--surface2);">
+            <ul class="checklist">
+              <li><strong>Aggregations:</strong> pipeline stages ($match, $group, $lookup)</li>
+              <li><strong>Indexes:</strong> single field, compound, text</li>
+              <li><strong>Embedding:</strong> nest related data (fast reads, denormalized)</li>
+              <li><strong>Referencing:</strong> store IDs (normalized, more queries)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🤔 Embedding vs Referencing</div>
+          <span class="badge badge-yellow">Design Decision</span>
+        </div>
+        <div class="task-body">
+          <p><strong>Embed when:</strong> data is always read together, doesn't grow unbounded, and rarely changes independently (e.g. address inside user).</p>
+          <p style="margin-top:8px;"><strong>Reference when:</strong> data is large, shared across documents, or updated independently (e.g. orders referencing a product catalog).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- NODE PERFORMANCE -->
+    <div class="section" id="nodeperf">
+      <div class="section-title"><span class="icon">🚀</span> Performance</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🐌 Optimizing a Slow API</div>
+          <span class="badge badge-node">Very Common — Senior</span>
+        </div>
+        <div class="task-body">
+          <div class="steps">
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Measure first</strong> <span>— profile to find the actual bottleneck (DB query, CPU, network) instead of guessing.</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Database</strong> <span>— add indexes, avoid N+1 queries, use pagination, cache expensive queries.</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Caching</strong> <span>— Redis for frequently accessed data, HTTP caching headers.</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Async operations</strong> <span>— parallelize independent calls with Promise.all instead of sequential awaits.</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Offload heavy CPU work</strong> <span>— use Worker Threads or a queue (BullMQ) for long-running jobs.</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">💧 Avoiding Memory Leaks</div>
+          <ul class="checklist">
+            <li>Remove event listeners when no longer needed</li>
+            <li>Clear timers/intervals on cleanup</li>
+            <li>Avoid unbounded caches/arrays that keep growing</li>
+            <li>Watch closures holding references to large objects</li>
+            <li>Be careful with global variables</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">🔬 Profiling Tools</div>
+          <ul class="checklist">
+            <li><code style="background:var(--surface);padding:2px 6px;border-radius:4px;">node --inspect</code> + Chrome DevTools</li>
+            <li>Clinic.js (doctor, flame, bubbleprof)</li>
+            <li>0x for flamegraphs</li>
+            <li>New Relic / Datadog APM in production</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TESTING -->
+    <div class="section" id="testing">
+      <div class="section-title"><span class="icon">🧪</span> Testing</div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🎯 Unit vs Integration</div>
+          <p><strong>Unit:</strong> isolated function/module, dependencies mocked.</p>
+          <p style="margin-top:6px;"><strong>Integration:</strong> multiple parts working together (e.g. API + real DB in a test container).</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🛠️ Tools</div>
+          <ul class="checklist">
+            <li><strong>Jest:</strong> most common, built-in mocking & assertions</li>
+            <li><strong>Mocha + Chai:</strong> flexible, needs more setup</li>
+            <li><strong>Supertest:</strong> HTTP endpoint testing</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-label">Jest — Mocking Example</div>
+<pre><span class="kw">jest</span>.<span class="fn">mock</span>(<span class="str">'../services/userService'</span>);
+
+<span class="kw">test</span>(<span class="str">'returns 404 when user not found'</span>, <span class="kw">async</span> () => {
+  userService.<span class="fn">getUser</span>.<span class="fn">mockResolvedValue</span>(<span class="kw">null</span>);
+  
+  <span class="kw">const</span> res = <span class="kw">await</span> request(app).<span class="fn">get</span>(<span class="str">'/users/123'</span>);
+  
+  <span class="fn">expect</span>(res.status).<span class="fn">toBe</span>(<span class="num">404</span>);
+});</pre>
+      </div>
+    </div>
+
+    <!-- REACT BASICS -->
+    <div class="section" id="reactbasics">
+      <div class="section-title"><span class="icon">⚛️</span> React Basics (20–30 min)</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🌳 Virtual DOM & Rendering</div>
+          <span class="badge badge-react">Core Concept</span>
+        </div>
+        <div class="task-body">
+          <p>"React keeps a lightweight in-memory representation of the UI (Virtual DOM). When state changes, React creates a new virtual tree, diffs it against the previous one (reconciliation), and applies only the minimal changes to the real DOM — this is what makes updates fast."</p>
+        </div>
+      </div>
+
+      <div class="alert alert-info">
+        <span class="alert-icon">💡</span>
+        <div>Hooks let you use state and lifecycle features in function components — introduced to avoid the complexity of class components and enable logic reuse.</div>
+      </div>
+    </div>
+
+    <!-- HOOKS -->
+    <div class="section" id="hooks">
+      <div class="section-title"><span class="icon">🎣</span> React Hooks</div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">📦 useState</div>
+          <pre style="font-size:.78rem;padding:12px;"><span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="num">0</span>);</pre>
+          <p>Triggers re-render on update. Updates can be batched.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🔄 useEffect</div>
+          <pre style="font-size:.78rem;padding:12px;"><span class="fn">useEffect</span>(() => {
+  <span class="cm">// side effect</span>
+  <span class="kw">return</span> () => {} <span class="cm">// cleanup</span>
+}, [dep]);</pre>
+          <p>Runs after render; use dependency array to control when.</p>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">⚡ useMemo vs useCallback</div>
+          <span class="badge badge-yellow">"When would you use useMemo?"</span>
+        </div>
+        <div class="task-body">
+          <div class="compare">
+            <div class="compare-box">
+              <div class="compare-header right">useMemo</div>
+<pre><span class="kw">const</span> sorted = <span class="fn">useMemo</span>(
+  () => expensiveSort(list),
+  [list]
+);
+<span class="cm">// Memoizes a COMPUTED VALUE</span></pre>
+            </div>
+            <div class="compare-box">
+              <div class="compare-header right">useCallback</div>
+<pre><span class="kw">const</span> handleClick = <span class="fn">useCallback</span>(
+  () => <span class="fn">doSomething</span>(id),
+  [id]
+);
+<span class="cm">// Memoizes a FUNCTION reference</span></pre>
+            </div>
+          </div>
+          <p style="margin-top:10px;"><strong>Answer:</strong> "I use useMemo when a computation is expensive and its inputs haven't changed — like sorting or filtering a large list — to avoid recalculating on every render. I use useCallback when passing a function to a memoized child component, to keep its reference stable and avoid unnecessary re-renders."</p>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">📌 useRef</div>
+          <p>Persists a mutable value across renders <strong>without</strong> triggering a re-render. Common for DOM refs or storing previous values.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🧩 Custom Hooks</div>
+          <p>Extract reusable stateful logic into a function starting with "use", e.g. <code style="background:var(--surface);padding:2px 6px;border-radius:4px;">useFetch</code>, <code style="background:var(--surface);padding:2px 6px;border-radius:4px;">useDebounce</code>. Shows architectural maturity in interviews.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATE -->
+    <div class="section" id="state">
+      <div class="section-title"><span class="icon">🗃️</span> State Management</div>
+
+      <table>
+        <tr><th>Tool</th><th>Best for</th><th>Trade-off</th></tr>
+        <tr><td><strong>Context API</strong></td><td>Simple, low-frequency global state (theme, auth)</td><td>Can cause re-renders if overused</td></tr>
+        <tr><td><strong>Redux Toolkit</strong></td><td>Large apps, complex state, time-travel debugging</td><td>More boilerplate, learning curve</td></tr>
+        <tr><td><strong>Zustand</strong></td><td>Lightweight global state, minimal boilerplate</td><td>Less tooling/ecosystem than Redux</td></tr>
+        <tr><td><strong>React Query</strong></td><td>Server state — caching, refetching, sync</td><td>Not for pure client state</td></tr>
+      </table>
+
+      <div class="alert alert-success" style="margin-top:14px;">
+        <span class="alert-icon">💡</span>
+        <div><strong>Senior insight:</strong> "I separate server state (data from APIs) from client state (UI state). I use React Query or SWR for server state since it handles caching and revalidation automatically, and Zustand or Context for lightweight client state."</div>
+      </div>
+    </div>
+
+    <!-- RENDERING -->
+    <div class="section" id="rendering">
+      <div class="section-title"><span class="icon">🖼️</span> Rendering Strategies</div>
+
+      <div class="grid3">
+        <div class="card">
+          <div class="card-title" style="color:var(--react);">CSR</div>
+          <p>Client-Side Rendering. HTML is empty initially; JS builds the UI in the browser. Fast subsequent navigation, slower first paint, weaker SEO.</p>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--node);">SSR</div>
+          <p>Server-Side Rendering. HTML generated per request on the server. Better SEO and first paint, higher server load.</p>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--yellow);">SSG</div>
+          <p>Static Site Generation. HTML pre-built at build time. Fastest delivery (CDN), best for content that doesn't change per-request.</p>
+        </div>
+      </div>
+
+      <div class="task-box" style="margin-top:16px;">
+        <div class="task-header">
+          <div class="task-title">▲ Next.js Specifics</div>
+          <span class="badge badge-node">If you used Next.js</span>
+        </div>
+        <div class="task-body">
+          <table>
+            <tr><th>Feature</th><th>When it runs</th><th>Use case</th></tr>
+            <tr><td><code>getServerSideProps</code></td><td>Every request</td><td>Data changes per request, needs freshness</td></tr>
+            <tr><td><code>getStaticProps</code></td><td>Build time (+ ISR)</td><td>Content mostly static, high performance</td></tr>
+            <tr><td><strong>App Router</strong></td><td>—</td><td>File-based routing with layouts, nested routes</td></tr>
+            <tr><td><strong>Server Components</strong></td><td>Server only</td><td>Zero client JS, direct data access, smaller bundles</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTIMIZATION -->
+    <div class="section" id="optimization">
+      <div class="section-title"><span class="icon">⚡</span> React Optimization</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔁 A Component Renders 100 Times — How Do You Investigate?</div>
+          <span class="badge badge-red">Common Scenario</span>
+        </div>
+        <div class="task-body">
+          <div class="steps">
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>React DevTools Profiler</strong> <span>— record a session and see which renders happen and why ("why did this render" flag).</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Check props/state changing unnecessarily</strong> <span>— new object/array/function literals created on every render break memoization.</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Check context</strong> <span>— any component consuming a Context re-renders whenever that context value changes, even if unrelated data changed.</span></div></div>
+            <div class="step"><div class="step-num"></div><div class="step-body"><strong>Apply fixes</strong> <span>— React.memo for the component, useMemo/useCallback for values/functions passed as props, split context into smaller pieces.</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🧠 React.memo</div>
+          <pre style="font-size:.78rem;padding:10px;"><span class="kw">export default</span> React.<span class="fn">memo</span>(MyComponent);</pre>
+          <p>Skips re-render if props are shallow-equal to previous render.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">📦 Lazy Loading & Code Splitting</div>
+          <pre style="font-size:.78rem;padding:10px;"><span class="kw">const</span> Modal = React.<span class="fn">lazy</span>(() =>
+  <span class="fn">import</span>(<span class="str">'./Modal'</span>));</pre>
+          <p>Loads code only when needed, reducing initial bundle size.</p>
+        </div>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-label">Suspense</div>
+<pre>&lt;Suspense fallback={&lt;Spinner /&gt;}&gt;
+  &lt;Modal /&gt;
+&lt;/Suspense&gt;</pre>
+      </div>
+    </div>
+
+    <!-- FORMS & ROUTING -->
+    <div class="section" id="forms">
+      <div class="section-title"><span class="icon">📝</span> Forms & Routing</div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">📋 Formik vs React Hook Form</div>
+          <p><strong>React Hook Form</strong> is generally preferred today — uses uncontrolled inputs by default, so far fewer re-renders and better performance. Formik is more established but re-renders more.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🛣️ Routing</div>
+          <ul class="checklist">
+            <li><strong>React Router:</strong> nested routes, dynamic params, loaders</li>
+            <li><strong>Protected Routes:</strong> wrapper component checking auth before rendering children, redirecting if not authenticated</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-label">Protected Route Pattern</div>
+<pre><span class="kw">function</span> <span class="fn">ProtectedRoute</span>({ children }) {
+  <span class="kw">const</span> { isAuthenticated } = <span class="fn">useAuth</span>();
+  <span class="kw">if</span> (!isAuthenticated) <span class="kw">return</span> &lt;Navigate to=<span class="str">"/login"</span> /&gt;;
+  <span class="kw">return</span> children;
+}</pre>
+      </div>
+    </div>
+
+    <!-- ARCHITECTURE -->
+    <div class="section" id="architecture">
+      <div class="section-title"><span class="icon">🏗️</span> Architecture (10–15 min, Senior)</div>
+
+      <div class="qlist">
+        <li>How would you organize a large React project?</li>
+        <li>What design pattern do you use?</li>
+        <li>How would you separate frontend and backend?</li>
+      </div>
+
+      <div class="grid2" style="margin-top:16px;">
+        <div class="card">
+          <div class="card-title">📂 Feature-Based Structure</div>
+          <div class="code-wrap" style="margin-top:8px;">
+<pre>src/
+  features/
+    orders/
+      components/
+      hooks/
+      api.ts
+      types.ts
+  shared/
+    components/
+    hooks/
+    utils/</pre>
+          </div>
+          <p style="margin-top:8px;">Preferred over grouping by type (all components/, all hooks/) — keeps related code together and scales better.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🧱 Patterns to Mention</div>
+          <ul class="checklist">
+            <li><strong>SOLID</strong> — especially Single Responsibility for components/hooks</li>
+            <li><strong>Clean Architecture</strong> — separate domain logic from framework</li>
+            <li><strong>Dependency Injection</strong> — pass services as props/context, not hardcoded imports</li>
+            <li><strong>Repository Pattern</strong> — abstract data access behind an interface</li>
+            <li><strong>MVC</strong> — still relevant on the backend side</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEVOPS -->
+    <div class="section" id="devops">
+      <div class="section-title"><span class="icon">⚙️</span> DevOps</div>
+      <div class="alert alert-info">
+        <span class="alert-icon">ℹ️</span>
+        <div>Not deep — they want to know you're comfortable with the tooling, not that you're a DevOps engineer.</div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🐳 Docker & Kubernetes</div>
+          <p>Be ready to explain a basic Dockerfile for a Node app, and know Kubernetes concepts at a high level (pods, deployments, services) even if you haven't managed clusters yourself.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🔁 CI/CD & Git Flow</div>
+          <p>Explain your branching strategy (Git Flow, trunk-based), and how CI/CD pipelines run tests/build/deploy — GitHub Actions is commonly asked about.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLOUD -->
+    <div class="section" id="cloud">
+      <div class="section-title"><span class="icon">☁️</span> Cloud</div>
+      <div class="grid4">
+        <div class="card" style="padding:16px;">
+          <div class="card-title" style="font-size:.9rem;">S3</div>
+          <p style="font-size:.85rem;">Object storage for files/assets</p>
+        </div>
+        <div class="card" style="padding:16px;">
+          <div class="card-title" style="font-size:.9rem;">Lambda</div>
+          <p style="font-size:.85rem;">Serverless functions</p>
+        </div>
+        <div class="card" style="padding:16px;">
+          <div class="card-title" style="font-size:.9rem;">ECS</div>
+          <p style="font-size:.85rem;">Container orchestration</p>
+        </div>
+        <div class="card" style="padding:16px;">
+          <div class="card-title" style="font-size:.9rem;">API Gateway</div>
+          <p style="font-size:.85rem;">Managed API entry point</p>
+        </div>
+      </div>
+      <p style="color:var(--muted); margin-top:14px; font-size:.9rem;">Know at least one cloud provider (AWS, Azure, or GCP) well enough to explain how you'd deploy a Node.js API and a React frontend on it end-to-end.</p>
+    </div>
+
+    <!-- SCENARIOS -->
+    <div class="section" id="scenarios">
+      <div class="section-title"><span class="icon">🎬</span> Practical Scenarios</div>
+      <div class="alert alert-warn">
+        <span class="alert-icon">⚠️</span>
+        <div>This is where candidates are truly differentiated. Structure your answer: <strong>diagnose → propose → trade-offs</strong>.</div>
+      </div>
+
+      <div class="scenario-box">
+        <div class="scenario-q">📈 "An API receives 20,000 requests per minute. How would you scale it?"</div>
+        <ul class="checklist">
+          <li>Horizontal scaling with a load balancer across multiple instances</li>
+          <li>Cache frequent reads (Redis) to reduce DB load</li>
+          <li>Add a queue (SQS/BullMQ) for write-heavy or async-safe operations</li>
+          <li>Database read replicas for read-heavy traffic</li>
+          <li>Rate limiting and CDN for static/cacheable content</li>
+          <li>Monitor and auto-scale based on CPU/request metrics</li>
+        </ul>
+      </div>
+
+      <div class="scenario-box">
+        <div class="scenario-q">🔁 "A React component renders 100 times. How would you investigate?"</div>
+        <p style="color:var(--muted); font-size:.9rem;">See the full breakdown in the <strong>React Optimization</strong> section above — Profiler → identify cause → React.memo/useMemo/useCallback → split context.</p>
+      </div>
+
+      <div class="scenario-box">
+        <div class="scenario-q">🐢 "The database takes 8 seconds to respond. What would you do?"</div>
+        <ul class="checklist">
+          <li>Run EXPLAIN/EXPLAIN ANALYZE to see the query plan</li>
+          <li>Check for missing indexes on filtered/joined columns</li>
+          <li>Look for N+1 query patterns from the ORM</li>
+          <li>Check connection pool exhaustion</li>
+          <li>Consider caching the result if data doesn't change often</li>
+          <li>Check if it's a resource issue (CPU/memory on DB server)</li>
+        </ul>
+      </div>
+
+      <div class="scenario-box">
+        <div class="scenario-q">🔐 "Implement authentication for an SPA. What architecture would you use?"</div>
+        <ul class="checklist">
+          <li>JWT access token (short-lived) + refresh token (httpOnly cookie, long-lived)</li>
+          <li>Store access token in memory (not localStorage, to reduce XSS risk)</li>
+          <li>Silent refresh flow to renew access token before expiry</li>
+          <li>Protected routes on the client + auth middleware on the server</li>
+          <li>Consider OAuth/OIDC if integrating with third-party identity providers</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- LIVE CODING -->
+    <div class="section" id="livecoding">
+      <div class="section-title"><span class="icon">💻</span> Live Coding (Some Clients)</div>
+      <div class="alert alert-success">
+        <span class="alert-icon">💡</span>
+        <div>These are usually <strong>realistic day-to-day tasks</strong>, not LeetCode-style algorithm puzzles. Focus on clean, working code over cleverness.</div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🟢 Node.js Tasks</div>
+          <ul class="checklist">
+            <li>Create a REST API endpoint</li>
+            <li>Solve a simple algorithm problem</li>
+            <li>Read/parse a file</li>
+            <li>Consume another API and transform the response</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">⚛️ React Tasks</div>
+          <ul class="checklist">
+            <li>Build a component from a spec</li>
+            <li>Consume an API and render a list</li>
+            <li>Implement search/filter functionality</li>
+            <li>Manage local state correctly with hooks</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-label">Example — Fetch & Filter Pattern</div>
+<pre><span class="kw">function</span> <span class="fn">UserList</span>() {
+  <span class="kw">const</span> [users, setUsers] = <span class="fn">useState</span>([]);
+  <span class="kw">const</span> [query, setQuery] = <span class="fn">useState</span>(<span class="str">''</span>);
+
+  <span class="fn">useEffect</span>(() => {
+    <span class="fn">fetch</span>(<span class="str">'/api/users'</span>)
+      .<span class="fn">then</span>(res => res.<span class="fn">json</span>())
+      .<span class="fn">then</span>(setUsers);
+  }, []);
+
+  <span class="kw">const</span> filtered = users.<span class="fn">filter</span>(u =>
+    u.name.<span class="fn">toLowerCase</span>().<span class="fn">includes</span>(query.<span class="fn">toLowerCase</span>())
+  );
+
+  <span class="kw">return</span> (
+    &lt;&gt;
+      &lt;input value={query} onChange={e =&gt; <span class="fn">setQuery</span>(e.target.value)} /&gt;
+      &lt;ul&gt;{filtered.<span class="fn">map</span>(u =&gt; &lt;li key={u.id}&gt;{u.name}&lt;/li&gt;)}&lt;/ul&gt;
+    &lt;/&gt;
+  );
+}</pre>
+      </div>
+    </div>
+
+    <!-- EXPERIENCE -->
+    <div class="section" id="experience">
+      <div class="section-title"><span class="icon">💼</span> Experience Deep-Dive Questions</div>
+      <div class="qlist">
+        <li>What was the most complex technical problem you solved?</li>
+        <li>What architecture decision would you change today?</li>
+        <li>How did you handle code reviews?</li>
+        <li>How did you resolve Git conflicts?</li>
+        <li>How did you deploy to production?</li>
+        <li>How did you monitor errors?</li>
+        <li>What metrics did you use to measure performance?</li>
+      </div>
+      <div class="alert alert-info" style="margin-top:16px;">
+        <span class="alert-icon">💡</span>
+        <div>Prepare <strong>one specific story</strong> per question with a clear before/after or problem/solution structure. Vague answers ("we just fixed it") are a red flag.</div>
+      </div>
+    </div>
+
+    <!-- LEVEL -->
+    <div class="section" id="level">
+      <div class="section-title"><span class="icon">🎯</span> Expected Senior Level</div>
+
+      <div class="card">
+        <div class="card-title">What Intellias Expects From a Senior Node.js/React Candidate</div>
+        <ul class="checklist">
+          <li>Explains advanced JavaScript concepts confidently</li>
+          <li>Masters Express or an equivalent framework</li>
+          <li>Designs REST APIs following best practices</li>
+          <li>Knows authentication (JWT, OAuth) and basic security</li>
+          <li>Masters React and Hooks, including render optimization</li>
+          <li>Has worked with at least one modern state manager (Redux Toolkit, Zustand, Context API)</li>
+          <li>Has experience with automated testing</li>
+          <li>Understands architecture and application design principles</li>
+          <li>Can justify technical decisions based on real experience</li>
+        </ul>
+      </div>
+
+      <div class="alert alert-success" style="margin-top:16px;">
+        <span class="alert-icon">🎯</span>
+        <div><strong>The real differentiator:</strong> In most Intellias processes, the biggest weight isn't memorizing definitions — it's demonstrating technical judgment and explaining how problems were actually solved in real projects. A candidate who can argue architecture decisions with concrete examples outperforms someone who only recites concepts.</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  function scrollTo(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(l => {
+      if (l.getAttribute('onclick') && l.getAttribute('onclick').includes(id)) {
+        l.classList.add('active');
+      }
+    });
+    
+    if (window.innerWidth <= 768) {
+      toggleMenu();
+    }
+  }
+
+  function toggleMenu() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.querySelector('.overlay');
+    sidebar.classList.toggle('mobile-open');
+    overlay.classList.toggle('active');
+  }
+
+  const sections = ['intro','interview-intro','nodefund','javascript','apis','express','databases','nodeperf','testing','reactbasics','hooks','state','rendering','optimization','forms','architecture','devops','cloud','scenarios','livecoding','experience','level'];
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        document.querySelectorAll('.nav-link').forEach(l => {
+          const onclick = l.getAttribute('onclick');
+          if (onclick && onclick.includes(id)) {
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            l.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { threshold: 0.25 });
+  
+  sections.forEach(id => { 
+    const el = document.getElementById(id); 
+    if(el) observer.observe(el); 
+  });
+</script>
+</body>
+</html>

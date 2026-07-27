@@ -295,6 +295,11 @@
     <a class="nav-link" onclick="scrollTo('devops')"><div class="dot"></div> DevOps</a>
     <a class="nav-link" onclick="scrollTo('cloud')"><div class="dot"></div> Cloud</a>
 
+    <div class="nav-section">AI-Assisted Development</div>
+    <a class="nav-link" onclick="scrollTo('claudecode')"><div class="dot"></div> Claude Code</a>
+    <a class="nav-link" onclick="scrollTo('honojs')"><div class="dot"></div> Hono.js</a>
+    <a class="nav-link" onclick="scrollTo('specdriven')"><div class="dot"></div> Spec-Driven Development</a>
+
     <div class="nav-section">Practice</div>
     <a class="nav-link" onclick="scrollTo('scenarios')"><div class="dot"></div> Practical Scenarios</a>
     <a class="nav-link" onclick="scrollTo('livecoding')"><div class="dot"></div> Live Coding</a>
@@ -1077,6 +1082,359 @@ app.<span class="fn">get</span>(<span class="str">'/api/profile'</span>, authMid
       <p style="color:var(--muted); margin-top:14px; font-size:.9rem;">Know at least one cloud provider (AWS, Azure, or GCP) well enough to explain how you'd deploy a Node.js API and a React frontend on it end-to-end.</p>
     </div>
 
+    <!-- CLAUDE CODE -->
+    <div class="section" id="claudecode">
+      <div class="section-title"><span class="icon">🤖</span> Claude Code</div>
+
+      <div class="alert alert-info">
+        <span class="alert-icon">ℹ️</span>
+        <div>More companies now ask about <strong>AI-assisted development workflows</strong> in interviews — not to test if you can write a prompt, but to see if you can integrate AI tools productively and safely into a real engineering workflow.</div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">💡 What is Claude Code?</div>
+          <span class="badge badge-node">Core Concept</span>
+        </div>
+        <div class="task-body">
+          <p>"Claude Code is an agentic coding tool that lets developers delegate coding tasks directly from the terminal, IDE, or desktop app. It can read a codebase, plan changes, edit multiple files, run commands, and iterate — instead of just answering isolated questions like a chat assistant."</p>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🖥️ Where It Runs</div>
+          <ul class="checklist">
+            <li>Terminal (CLI)</li>
+            <li>VS Code / JetBrains extensions</li>
+            <li>Desktop app</li>
+            <li>Remotely via mobile for quick delegation</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">🎯 What It's Good For</div>
+          <ul class="checklist">
+            <li>Multi-file refactors</li>
+            <li>Writing tests for existing code</li>
+            <li>Debugging by reading logs/stack traces</li>
+            <li>Reviewing PRs and explaining diffs</li>
+            <li>Automating repetitive migration tasks</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">⌨️ Common Native Commands (CLI)</div>
+          <span class="badge badge-blue">Know These</span>
+        </div>
+        <div class="task-body">
+          <p>Inside an interactive Claude Code session, slash commands control the session itself (not the codebase):</p>
+          <table>
+            <tr><th>Command</th><th>What it does</th></tr>
+            <tr><td><code>/init</code></td><td>Scans the repo and generates a CLAUDE.md with project context</td></tr>
+            <tr><td><code>/clear</code></td><td>Clears conversation history, keeps a fresh context window</td></tr>
+            <tr><td><code>/compact</code></td><td>Summarizes the conversation to free up context space</td></tr>
+            <tr><td><code>/review</code></td><td>Requests a code review of recent changes</td></tr>
+            <tr><td><code>/agents</code></td><td>Manage custom subagents for specialized tasks</td></tr>
+            <tr><td><code>/permissions</code></td><td>View or adjust what actions are allowed automatically</td></tr>
+            <tr><td><code>/model</code></td><td>Switch between available models mid-session</td></tr>
+            <tr><td><code>/resume</code></td><td>Resume a previous session</td></tr>
+            <tr><td><code>/help</code></td><td>Lists available commands</td></tr>
+          </table>
+          <div class="code-wrap" style="margin-top:14px;">
+            <div class="code-label">Terminal — starting a session</div>
+<pre><span class="cm"># Install and start</span>
+npm install -g @anthropic-ai/claude-code
+claude
+
+<span class="cm"># Run a one-off task non-interactively</span>
+claude -p <span class="str">"add unit tests for src/utils/parser.ts"</span>
+
+<span class="cm"># Continue the previous session</span>
+claude --continue</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">📄 CLAUDE.md — Project Memory</div>
+          <span class="badge badge-green">Best Practice</span>
+        </div>
+        <div class="task-body">
+          <p>"I keep a <code style="background:var(--surface);padding:2px 6px;border-radius:4px;">CLAUDE.md</code> file at the project root describing conventions, commands, and architecture decisions — build/test commands, code style, folder structure. This gives the tool consistent context across sessions instead of re-explaining the project every time."</p>
+          <div class="code-wrap" style="margin-top:10px;">
+            <div class="code-label">Example CLAUDE.md snippet</div>
+<pre><span class="cm"># Project conventions
+- Package manager: pnpm
+- Run tests: pnpm test
+- Lint: pnpm lint
+- Use functional components + hooks, no class components
+- API layer lives in src/services, never call fetch directly in components</span></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-warn">
+        <span class="alert-icon">⚠️</span>
+        <div><strong>What interviewers want to hear:</strong> that you review AI-generated diffs before merging, that you still understand the code you ship, and that you use AI to accelerate — not replace — engineering judgment (tests, code review, and architecture decisions still go through you).</div>
+      </div>
+    </div>
+
+    <!-- HONO.JS -->
+    <div class="section" id="honojs">
+      <div class="section-title"><span class="icon">🔥</span> Hono.js</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">💡 What is Hono?</div>
+          <span class="badge badge-node">Modern Framework</span>
+        </div>
+        <div class="task-body">
+          <p>"Hono is a small, fast web framework built on Web Standards (Request/Response, Fetch API). Unlike Express, it's runtime-agnostic — the same code runs on Node.js, Cloudflare Workers, Deno, Bun, and edge platforms without changes."</p>
+        </div>
+      </div>
+
+      <div class="compare">
+        <div class="compare-box">
+          <div class="compare-header wrong">Express</div>
+          <div style="padding:14px; background:var(--surface2);">
+            <ul class="checklist">
+              <li>Node.js only (req/res are Node-specific)</li>
+              <li>Callback-based middleware signature</li>
+              <li>Huge ecosystem, very mature</li>
+              <li>No built-in TypeScript validation</li>
+            </ul>
+          </div>
+        </div>
+        <div class="compare-box">
+          <div class="compare-header right">Hono</div>
+          <div style="padding:14px; background:var(--surface2);">
+            <ul class="checklist">
+              <li>Runs on Node, Bun, Deno, edge/serverless</li>
+              <li>Built on standard Fetch API</li>
+              <li>End-to-end TypeScript type inference</li>
+              <li>Extremely lightweight, very fast router</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🧪 Basic API + Testing Example</div>
+          <span class="badge badge-blue">Hands-on</span>
+        </div>
+        <div class="task-body">
+          <div class="code-wrap">
+            <div class="code-label">src/index.ts</div>
+<pre><span class="kw">import</span> { Hono } <span class="kw">from</span> <span class="str">'hono'</span>;
+
+<span class="kw">const</span> app = <span class="kw">new</span> <span class="fn">Hono</span>();
+
+app.<span class="fn">get</span>(<span class="str">'/api/users/:id'</span>, (c) => {
+  <span class="kw">const</span> id = c.req.<span class="fn">param</span>(<span class="str">'id'</span>);
+  <span class="kw">return</span> c.<span class="fn">json</span>({ id, name: <span class="str">'Ada Lovelace'</span> });
+});
+
+<span class="kw">export default</span> app;</pre>
+          </div>
+
+          <div class="code-wrap">
+            <div class="code-label">Testing with Hono's built-in test client</div>
+<pre><span class="kw">import</span> { describe, it, expect } <span class="kw">from</span> <span class="str">'vitest'</span>;
+<span class="kw">import</span> app <span class="kw">from</span> <span class="str">'../src/index'</span>;
+
+<span class="fn">describe</span>(<span class="str">'GET /api/users/:id'</span>, () => {
+  <span class="fn">it</span>(<span class="str">'returns the user'</span>, <span class="kw">async</span> () => {
+    <span class="kw">const</span> res = <span class="kw">await</span> app.<span class="fn">request</span>(<span class="str">'/api/users/1'</span>);
+    <span class="fn">expect</span>(res.status).<span class="fn">toBe</span>(<span class="num">200</span>);
+    <span class="kw">const</span> body = <span class="kw">await</span> res.<span class="fn">json</span>();
+    <span class="fn">expect</span>(body.id).<span class="fn">toBe</span>(<span class="str">'1'</span>);
+  });
+});</pre>
+          </div>
+          <p style="margin-top:8px;">Hono's <code style="background:var(--surface);padding:2px 6px;border-radius:4px;">app.request()</code> lets you test routes directly in memory — no need to spin up a real server or use Supertest.</p>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">✅ Zod Validation Middleware</div>
+          <pre style="font-size:.75rem;padding:10px;"><span class="kw">import</span> { zValidator } <span class="kw">from</span> <span class="str">'@hono/zod-validator'</span>;
+
+app.<span class="fn">post</span>(<span class="str">'/users'</span>,
+  <span class="fn">zValidator</span>(<span class="str">'json'</span>, userSchema),
+  (c) => c.<span class="fn">json</span>(c.req.<span class="fn">valid</span>(<span class="str">'json'</span>))
+);</pre>
+        </div>
+        <div class="card">
+          <div class="card-title">🎯 When to Bring It Up</div>
+          <p>If the job mentions <strong>edge functions, Cloudflare Workers, or serverless APIs</strong>, Hono is worth mentioning as a lightweight alternative to Express — especially for cold-start-sensitive environments.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPEC-DRIVEN DEVELOPMENT -->
+    <div class="section" id="specdriven">
+      <div class="section-title"><span class="icon">📐</span> Spec-Driven Development</div>
+
+      <div class="alert alert-info">
+        <span class="alert-icon">ℹ️</span>
+        <div>If a job posting mentions <strong>"Spec-Driven Development hands-on experience"</strong>, they expect you to understand the concept and how it applies to modern AI-assisted development — not just the theory.</div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">💡 What Is It?</div>
+          <span class="badge badge-node">Core Concept</span>
+        </div>
+        <div class="task-body">
+          <p>"A methodology where the specification is the primary source of truth. Before writing code, you clearly define what the software should do and how it should behave — the spec then becomes the input for implementation, whether written by a human or generated by an LLM."</p>
+          <div class="code-wrap" style="margin-top:12px;">
+            <div class="code-label">Flow</div>
+<pre>Idea
+  ↓
+Specification (Spec)
+  ↓
+Implementation
+  ↓
+Tests
+  ↓
+Deployment</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">📋 What a Spec Usually Includes</div>
+          <ul class="checklist">
+            <li>Objective & scope</li>
+            <li>Functional requirements</li>
+            <li>Non-functional requirements</li>
+            <li>Use cases & business rules</li>
+            <li>API contracts & data model</li>
+            <li>Acceptance criteria</li>
+            <li>Edge cases</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">🎯 Why It Matters</div>
+          <p>It removes ambiguity. Instead of "we need a login," a good spec says:</p>
+          <ul class="checklist">
+            <li>Email + password authentication</li>
+            <li>Password hashed with bcrypt</li>
+            <li>JWT valid for 1 hour</li>
+            <li>Lockout after 5 failed attempts</li>
+            <li>Password reset via email</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🤖 Relationship with AI Coding Tools</div>
+          <span class="badge badge-blue">Modern Context</span>
+        </div>
+        <div class="task-body">
+          <p>"The spec becomes the context an LLM uses to generate code. The better and more precise the specification, the better the generated implementation and tests."</p>
+          <div class="code-wrap" style="margin-top:10px;">
+<pre>Spec
+  ↓
+LLM
+  ↓
+Code
+  ↓
+Tests</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">⚖️ Spec-Driven vs TDD</div>
+          <span class="badge badge-yellow">Common Follow-up</span>
+        </div>
+        <div class="task-body">
+          <div class="compare">
+            <div class="compare-box">
+              <div class="compare-header right">TDD</div>
+              <div style="padding:14px; background:var(--surface2); font-size:.88rem; color:var(--muted);">
+                Start by writing tests → then implement code to make them pass.
+              </div>
+            </div>
+            <div class="compare-box">
+              <div class="compare-header right">Spec-Driven</div>
+              <div style="padding:14px; background:var(--surface2); font-size:.88rem; color:var(--muted);">
+                Start by writing the specification → implement (or generate) the feature → tests are derived from the spec.
+              </div>
+            </div>
+          </div>
+          <p style="margin-top:10px; color:var(--muted); font-size:.9rem;">They're not mutually exclusive — a good spec often produces better, more complete tests, and TDD can be used to implement what the spec describes.</p>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🛠️ Related Tools</div>
+          <ul class="checklist">
+            <li>GitHub Copilot, Cursor, Claude Code, Windsurf, OpenAI Codex, Amazon Kiro</li>
+          </ul>
+          <p style="margin-top:10px;"><strong>Spec formats:</strong></p>
+          <ul class="checklist">
+            <li>OpenAPI (Swagger), AsyncAPI</li>
+            <li>JSON Schema</li>
+            <li>Markdown</li>
+            <li>Mermaid (for diagrams)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">✅ Best Practices</div>
+          <ul class="checklist">
+            <li>Write clear, measurable requirements</li>
+            <li>Avoid ambiguous language</li>
+            <li>Define explicit acceptance criteria</li>
+            <li>Include error cases, not just the happy path</li>
+            <li>Keep the spec updated as the feature evolves</li>
+            <li>Review the spec before development starts</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">📝 Simple Example</div>
+          <span class="badge badge-green">Reference</span>
+        </div>
+        <div class="task-body">
+          <div class="code-wrap">
+            <div class="code-label">Feature: User Registration</div>
+<pre>Objective:
+Allow new users to create an account.
+
+Requirements:
+- Name is required.
+- Email must be unique.
+- Password minimum 8 characters.
+- Email verification required.
+
+Acceptance criteria:
+- If email already exists, return 409.
+- If password is invalid, return 400.
+- If everything is valid, return 201.</pre>
+          </div>
+          <p style="margin-top:8px;">From this spec, a developer or an AI tool can implement the backend, frontend, unit tests, integration tests, and API documentation consistently.</p>
+        </div>
+      </div>
+
+      <div class="alert alert-success">
+        <span class="alert-icon">🎯</span>
+        <div><strong>What interviewers evaluate:</strong> can you read and understand a technical spec, write a clear spec for a new feature, break a spec into development tasks, implement a solution without drifting from it, validate the result against acceptance criteria, and use AI tools appropriately to generate code from specs.</div>
+      </div>
+    </div>
+
     <!-- SCENARIOS -->
     <div class="section" id="scenarios">
       <div class="section-title"><span class="icon">🎬</span> Practical Scenarios</div>
@@ -1253,7 +1611,7 @@ app.<span class="fn">get</span>(<span class="str">'/api/profile'</span>, authMid
     overlay.classList.toggle('active');
   }
 
-  const sections = ['intro','interview-intro','nodefund','javascript','apis','express','databases','nodeperf','testing','reactbasics','hooks','state','rendering','optimization','forms','architecture','devops','cloud','scenarios','livecoding','experience','level'];
+  const sections = ['intro','interview-intro','nodefund','javascript','apis','express','databases','nodeperf','testing','reactbasics','hooks','state','rendering','optimization','forms','architecture','devops','cloud','claudecode','honojs','specdriven','scenarios','livecoding','experience','level'];
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {

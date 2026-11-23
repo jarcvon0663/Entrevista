@@ -69,7 +69,7 @@
   .tag { background:var(--surface2); border:1px solid var(--border); color:var(--muted); padding:3px 12px; border-radius:20px; font-size:.78rem; }
 
   /* SECTIONS */
-  .section { margin-bottom:56px; scroll-margin-top:20px; }
+  .section { margin-bottom:56px; scroll-margin-top:70px; }
   .section-title {
     font-size:1.4rem; font-weight:700; margin-bottom:20px;
     display:flex; align-items:center; gap:10px;
@@ -179,6 +179,8 @@
   @media(max-width:900px) {
     .sidebar { width:200px; }
     .main { margin-left:200px; padding:0 20px 60px; }
+    .practice-bar { margin:0 -20px 10px; padding:10px 20px; }
+    .tl-sql { flex-basis:40%; }
     .grid2,.compare { grid-template-columns:1fr; }
     .grid3 { grid-template-columns:1fr 1fr; }
   }
@@ -188,6 +190,63 @@
     .hero h1 { font-size:1.8rem; }
     .grid3 { grid-template-columns:1fr; }
   }
+
+
+  /* SQL SECTION */
+  details.reveal { background:var(--surface2); border:1px solid var(--border); border-radius:10px; margin-top:12px; }
+  details.reveal > summary { cursor:pointer; padding:12px 18px; font-weight:700; font-size:.9rem; color:var(--java); list-style:none; }
+  details.reveal > summary::-webkit-details-marker { display:none; }
+  details.reveal > summary::before { content:'▸ '; }
+  details.reveal[open] > summary::before { content:'▾ '; }
+  details.reveal > .reveal-body { padding:0 18px 16px; }
+  .clause-map { width:100%; border-collapse:collapse; font-size:.88rem; margin-top:10px; }
+  .clause-map td { padding:8px 12px; border-bottom:1px solid var(--border); color:var(--muted); vertical-align:top; }
+  .clause-map td:first-child { color:var(--text); font-style:italic; white-space:nowrap; }
+  .clause-map code { color:var(--java); font-family:'Cascadia Code','Fira Code','Consolas',monospace; font-size:.85rem; }
+
+
+  /* INTERVIEW FORMAT */
+  .timeline { display:flex; border-radius:10px; overflow:hidden; border:1px solid var(--border); margin:14px 0 6px; font-size:.82rem; font-weight:700; }
+  .tl-seg { padding:12px 14px; }
+  .tl-sql { flex:0 0 33%; background:rgba(248,152,32,.18); color:#ffc266; }
+  .tl-qa { flex:1; background:rgba(88,166,255,.12); color:var(--blue); }
+  .tl-seg small { display:block; font-weight:400; opacity:.85; margin-top:2px; }
+  .tl-scale { display:flex; justify-content:space-between; font-size:.72rem; color:var(--muted); margin-bottom:14px; }
+
+  /* PRACTICE MODE */
+  .practice-bar {
+    position:sticky; top:0; z-index:90; margin:0 -40px 10px; padding:10px 40px;
+    background:rgba(13,17,23,.92); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  }
+  .pb-toggle, .pb-reset {
+    font:inherit; font-size:.82rem; font-weight:700; cursor:pointer; color:var(--text);
+    background:var(--surface2); border:1px solid var(--border); border-radius:20px; padding:6px 14px;
+    transition:all .2s;
+  }
+  .pb-toggle:hover, .pb-reset:hover { border-color:var(--java); }
+  .pb-toggle b { color:var(--muted); }
+  body.practice .pb-toggle { background:rgba(248,152,32,.18); border-color:var(--java); }
+  body.practice .pb-toggle b { color:var(--java); }
+  .pb-progress, .pb-reset, .pb-hint { display:none; }
+  body.practice .pb-progress { display:flex; align-items:center; gap:10px; flex:1; min-width:180px; }
+  body.practice .pb-reset { display:inline-block; }
+  .pb-track { flex:1; height:8px; background:var(--surface2); border-radius:6px; overflow:hidden; border:1px solid var(--border); }
+  .pb-fill { height:100%; width:0; background:linear-gradient(90deg,var(--java),var(--green)); transition:width .3s; }
+  #pbCount { font-size:.78rem; color:var(--muted); white-space:nowrap; }
+
+  body.practice .answer { position:relative; cursor:pointer; min-height:56px; }
+  body.practice .answer:not(.revealed) > * { filter:blur(7px); opacity:.7; user-select:none; pointer-events:none; transition:filter .25s; }
+  body.practice .answer:not(.revealed)::after {
+    content:'👆 Think it, say it out loud, then click to reveal';
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; padding:8px;
+    font-size:.85rem; font-weight:700; color:var(--java);
+    background:rgba(13,17,23,.35); border-radius:8px;
+  }
+  body.practice .answer.revealed { cursor:default; }
+  body.practice .answer.script:not(.revealed) { padding:8px 0; }
+  .answer.revealed > * { transition:filter .25s; }
 
   html { scroll-behavior:smooth; }
 </style>
@@ -203,6 +262,7 @@
     </div>
     <div class="nav-section">Foundation</div>
     <a class="nav-link active" onclick="scrollTo('intro')"><div class="dot"></div> Introduction</a>
+    <a class="nav-link" onclick="scrollTo('format')"><div class="dot"></div> Interview Format</a>
     <a class="nav-link" onclick="scrollTo('whyjava')"><div class="dot"></div> Why Java?</a>
     <a class="nav-link" onclick="scrollTo('jvm')"><div class="dot"></div> How JVM Works</a>
 
@@ -228,6 +288,9 @@
     <a class="nav-link" onclick="scrollTo('eventing')"><div class="dot"></div> Streaming vs Sourcing</a>
     <a class="nav-link" onclick="scrollTo('errors')"><div class="dot"></div> Error Handling</a>
 
+    <div class="nav-section">Live Coding</div>
+    <a class="nav-link" onclick="scrollTo('sql')"><div class="dot"></div> PostgreSQL Query Test</a>
+
     <div class="nav-section">Performance</div>
     <a class="nav-link" onclick="scrollTo('loadtest')"><div class="dot"></div> Load Testing</a>
     <a class="nav-link" onclick="scrollTo('tips')"><div class="dot"></div> Interview Tips</a>
@@ -235,6 +298,13 @@
 
   <!-- MAIN CONTENT -->
   <main class="main">
+    <!-- PRACTICE BAR -->
+    <div class="practice-bar">
+      <button class="pb-toggle" id="pbToggle" type="button" aria-pressed="false">🎯 Practice mode: <b id="pbState">OFF</b></button>
+      <div class="pb-progress"><div class="pb-track"><div class="pb-fill" id="pbFill"></div></div><span id="pbCount">0 / 0 revealed</span></div>
+      <button class="pb-reset" id="pbReset" type="button">↺ Reset</button>
+    </div>
+
 
     <!-- HERO -->
     <div class="hero" id="intro">
@@ -248,6 +318,40 @@
         <span class="tag">☁️ AWS</span>
         <span class="tag">📡 Kafka/SQS</span>
         <span class="tag">🧪 JUnit/Mockito</span>
+        <span class="tag">🐘 PostgreSQL</span>
+      </div>
+    </div>
+
+
+    <!-- INTERVIEW FORMAT -->
+    <div class="section" id="format">
+      <div class="section-title"><span class="icon">🗓️</span> How the Interview Works</div>
+
+      <div class="timeline">
+        <div class="tl-seg tl-sql">🐘 Live SQL test<small>~15–20 min · manual</small></div>
+        <div class="tl-seg tl-qa">💬 Questions &amp; answers<small>~40–45 min · Java, architecture, experience</small></div>
+      </div>
+      <div class="tl-scale"><span>0 min</span><span>15–20 min</span><span>60 min</span></div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">1️⃣ First 15–20 minutes: SQL exercise</div>
+          <p>The one-hour interview opens with a hands-on <strong>PostgreSQL query</strong> over several related tables. You write it yourself, live. Jump to the <a href="#sql" style="color:var(--java);">PostgreSQL Query Test</a> section to practice it.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">2️⃣ Rest of the hour: questions vs. answers</div>
+          <p>The remaining time is a conversation: concepts, design decisions and your experience. Everything else in this guide prepares you for it.</p>
+        </div>
+      </div>
+
+      <div class="alert alert-info">
+        <span class="alert-icon">🤖</span>
+        <div><strong>About AI tools:</strong> the client <strong>allows the use of AI</strong> in general. For <strong>database work</strong>, however, they want to protect their data and avoid exposing it to an AI, so they look for developers who can <strong>write queries manually</strong>. That is why the SQL exercise is done by hand, with no AI assistance.</div>
+      </div>
+
+      <div class="alert alert-success">
+        <span class="alert-icon">🎯</span>
+        <div><strong>Tip:</strong> turn on <strong>Practice mode</strong> (top bar) to hide the answers, think and say yours out loud, then click to reveal.</div>
       </div>
     </div>
 
@@ -262,19 +366,19 @@
       <div class="intro-box">
         <div class="version-label">BRIEF VERSION</div>
         <div class="time">⏱ 15–20 seconds · Junior to Mid-level</div>
-        <div class="script">"I'm a Java Backend Developer with X years of experience. I work with Java 11/17, develop REST APIs using Spring Boot, handle persistence with JPA/Hibernate and SQL databases. I have experience deploying with Docker and Kubernetes, testing with JUnit/Mockito, and implementing CI/CD practices. I focus on performance, code quality, and continuous delivery."</div>
+        <div class="script answer">"I'm a Java Backend Developer with X years of experience. I work with Java 11/17, develop REST APIs using Spring Boot, handle persistence with JPA/Hibernate and SQL databases. I have experience deploying with Docker and Kubernetes, testing with JUnit/Mockito, and implementing CI/CD practices. I focus on performance, code quality, and continuous delivery."</div>
       </div>
 
       <div class="intro-box">
         <div class="version-label">STANDARD VERSION</div>
         <div class="time">⏱ 30–45 seconds · Mid-level balanced</div>
-        <div class="script">"I have X years developing Java backends. I use Java 8+ and understand JVM internals relevant to performance. I build microservices with Spring Boot (Spring MVC, Spring Data, Spring Security), handle persistence with JPA/Hibernate on Postgres/MySQL, and implement caching with Redis. I work with messaging systems like Kafka and RabbitMQ, design and consume REST and gRPC APIs, and write tests with JUnit and Mockito. I deploy using Docker and Kubernetes on AWS/GCP, implement CI/CD pipelines, and monitor with Prometheus/Grafana. In projects, I prioritize scalability, observability, and best practices for testing and code review."</div>
+        <div class="script answer">"I have X years developing Java backends. I use Java 8+ and understand JVM internals relevant to performance. I build microservices with Spring Boot (Spring MVC, Spring Data, Spring Security), handle persistence with JPA/Hibernate on Postgres/MySQL, and implement caching with Redis. I work with messaging systems like Kafka and RabbitMQ, design and consume REST and gRPC APIs, and write tests with JUnit and Mockito. I deploy using Docker and Kubernetes on AWS/GCP, implement CI/CD pipelines, and monitor with Prometheus/Grafana. In projects, I prioritize scalability, observability, and best practices for testing and code review."</div>
       </div>
 
       <div class="intro-box">
         <div class="version-label">DETAILED VERSION</div>
         <div class="time">⏱ 60–90 seconds · Senior / Lead-level</div>
-        <div class="script">"I'm a Java Backend Developer with X years building distributed systems and scalable APIs. I'm proficient in Java 8+ and understand the JVM well: GC tuning, profiling, and memory optimization. I design microservices architectures using Spring Boot and Spring Cloud, implement security with Spring Security, and apply design patterns to the domain. I handle persistence with JPA/Hibernate and advanced SQL; I use NoSQL when appropriate (MongoDB, Redis). For messaging I use Kafka for events, design RESTful APIs and gRPC for efficient communication. Testing includes JUnit, Mockito, integration tests, and contract testing. Infrastructure: Docker, Kubernetes, basic IaC, deployments on AWS/GCP, and pipelines with GitHub Actions/Jenkins. Observability with structured logs, metrics, and distributed tracing. I've been responsible for defining SLAs, optimizing latencies, and mentoring teams. I can provide concrete examples of performance and architecture improvements."</div>
+        <div class="script answer">"I'm a Java Backend Developer with X years building distributed systems and scalable APIs. I'm proficient in Java 8+ and understand the JVM well: GC tuning, profiling, and memory optimization. I design microservices architectures using Spring Boot and Spring Cloud, implement security with Spring Security, and apply design patterns to the domain. I handle persistence with JPA/Hibernate and advanced SQL; I use NoSQL when appropriate (MongoDB, Redis). For messaging I use Kafka for events, design RESTful APIs and gRPC for efficient communication. Testing includes JUnit, Mockito, integration tests, and contract testing. Infrastructure: Docker, Kubernetes, basic IaC, deployments on AWS/GCP, and pipelines with GitHub Actions/Jenkins. Observability with structured logs, metrics, and distributed tracing. I've been responsible for defining SLAs, optimizing latencies, and mentoring teams. I can provide concrete examples of performance and architecture improvements."</div>
       </div>
 
       <div class="card">
@@ -305,7 +409,7 @@
           <div class="task-title">💡 Why Java over other languages?</div>
           <span class="badge badge-orange">Common Question</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p><strong>Recommended Answer:</strong></p>
           <p>"I use Java because it's a mature, stable, and highly optimized language for high-performance backend applications. It has a solid ecosystem, especially with Spring, and the JVM provides portability, good memory management, and advanced monitoring and tuning tools. It's ideal for critical systems that require scalability, concurrency, and long-term maintainability."</p>
         </div>
@@ -316,7 +420,7 @@
           <div class="task-title">🚀 Coolest Java Feature</div>
           <span class="badge badge-orange">Show Expertise</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p><strong>Option 1 (Strong choice): Concurrency & Multithreading</strong></p>
           <p>"One of Java's most powerful features is its concurrency model. With tools like CompletableFuture, ExecutorService, and now virtual threads (Project Loom), you can handle thousands of concurrent tasks efficiently. This is crucial in backend for processing multiple requests without blocking the system."</p>
           
@@ -332,6 +436,7 @@
         </div>
         <div class="task-body">
           <p><strong>"Why Java and not Python for backend?"</strong></p>
+          <div class="answer">
           <p>"Python is excellent for scripting, data science, and rapid prototyping, but for high-performance backend systems I prefer Java for several reasons:"</p>
           <ul class="checklist">
             <li><strong>Performance:</strong> Java is typically faster and more CPU-efficient</li>
@@ -341,6 +446,7 @@
             <li><strong>Backend ecosystem:</strong> Spring offers very complete production-ready solutions</li>
           </ul>
           <p style="margin-top:10px;color:var(--muted);">I'd use Python for data analysis or quick scripts, but for robust and scalable microservices, Java is more suitable.</p>
+        </div>
         </div>
       </div>
     </div>
@@ -359,7 +465,7 @@
           <div class="task-title">🔄 JVM Execution Flow</div>
           <span class="badge badge-orange">Core Concept</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"The JVM (Java Virtual Machine) is the component that executes Java bytecode and allows the same program to run on any operating system without changes."</p>
           
           <div class="steps" style="margin-top:16px;">
@@ -401,12 +507,14 @@
         </div>
         <div class="task-body">
           <p><strong>"What is the killer feature of the JVM?"</strong></p>
+          <div class="answer">
           <p>"The killer feature of the JVM is its ability to <strong>combine portability with high performance</strong> through the <strong>Just-In-Time (JIT) compiler</strong>. It allows Java code to be written once, run anywhere, and still achieve near-native performance by optimizing hot code at runtime."</p>
           
           <div class="alert alert-success" style="margin-top:14px;">
             <span class="alert-icon">💡</span>
             <div><strong>Pro tip:</strong> "Unlike traditional compiled languages, the JVM can optimize based on real execution patterns, not assumptions made at compile time." — This shows deep understanding.</div>
           </div>
+        </div>
         </div>
       </div>
     </div>
@@ -425,7 +533,7 @@
           <div class="task-title">📊 Richardson Maturity Model</div>
           <span class="badge badge-blue">4 Levels</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"REST has 4 levels according to Richardson's maturity model, from level 0 to level 3."</p>
         </div>
       </div>
@@ -488,7 +596,7 @@
           <div class="task-title">🤔 Why Microservices? Why not Monolithic?</div>
           <span class="badge badge-orange">Architecture Decision</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p><strong>Brief Summary:</strong></p>
           <p>"Microservices solve organizational scalability, independent deployment, and resilience at the cost of greater operational complexity. A monolith is simpler and often sufficient; choose based on the real problem, not trends."</p>
         </div>
@@ -534,7 +642,7 @@
           <div class="task-title">📋 When to Use Each</div>
           <span class="badge badge-green">Decision Framework</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p><strong>Start with Monolith if:</strong></p>
           <ul class="checklist">
             <li>You're a startup/MVP</li>
@@ -568,7 +676,7 @@
           <div class="task-title">📚 What is DDD?</div>
           <span class="badge badge-orange">Core Concept</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"DDD (Domain-Driven Design) is a software design approach where development centers on the business domain. The idea is to model the system based on how the business actually works, using a common language between developers and domain experts."</p>
           
           <p style="margin-top:12px;"><strong>Main Idea:</strong></p>
@@ -625,6 +733,7 @@
         </div>
         <div class="task-body">
           <p><strong>"What is the complexity to get an element from a linked list?"</strong></p>
+          <div class="answer">
           <p>"The complexity to get an element from a linked list is <strong>O(n)</strong>, because you must traverse the list from the start until you find the element."</p>
           
           <p style="margin-top:12px;"><strong>Why O(n):</strong></p>
@@ -633,6 +742,7 @@
             <li>Each node points to the next one</li>
             <li>To reach position k, you traverse k elements</li>
           </ul>
+        </div>
         </div>
       </div>
 
@@ -676,7 +786,7 @@
           <div class="task-title">🔍 The Problem</div>
           <span class="badge badge-red">Classic Algorithm</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p><strong>Scenario:</strong> "A linked list where a node points to a previous node instead of the next one — for example, node 5 → node 3 instead of 5 → 6. This creates an infinite loop (cycle)."</p>
           
           <p style="margin-top:12px;"><strong>Problem:</strong></p>
@@ -689,7 +799,7 @@
           <div class="task-title">✅ Floyd's Algorithm (Tortoise and Hare)</div>
           <span class="badge badge-green">Optimal Solution</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"To detect this type of cycle, we use <strong>Floyd's algorithm</strong> with two pointers:"</p>
           
           <div class="steps" style="margin-top:14px;">
@@ -733,7 +843,7 @@
           <div class="task-title">🔄 Alternative: HashSet Approach</div>
           <span class="badge badge-yellow">Uses More Memory</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"You can also use a HashSet to store visited nodes. If you see a node again, there's a cycle. But this uses O(n) space."</p>
           
           <div class="code-wrap" style="margin-top:12px;">
@@ -767,7 +877,7 @@
           <div class="task-title">💡 Recommended Answer</div>
           <span class="badge badge-orange">Core Concept</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"We need generics to write <strong>type-safe, reusable</strong> code that works with different data types without duplicating logic and without sacrificing compile-time type checking."</p>
         </div>
       </div>
@@ -808,7 +918,7 @@ list.add(<span class="num">42</span>); <span class="cm">// ❌ COMPILE-TIME erro
           <div class="task-title">🛠️ Generic Methods & Bounded Types</div>
           <span class="badge badge-blue">Show Depth</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <div class="code-wrap">
             <div class="code-label">Java — Generic method with bounded type</div>
 <pre><span class="kw">public static</span> &lt;T <span class="kw">extends</span> <span class="cls">Comparable</span>&lt;T&gt;&gt; T <span class="fn">max</span>(<span class="cls">List</span>&lt;T&gt; list) {
@@ -848,7 +958,7 @@ list.add(<span class="num">42</span>); <span class="cm">// ❌ COMPILE-TIME erro
           <div class="task-title">🔄 What Does the Most Common Deadlock Look Like?</div>
           <span class="badge badge-orange">Classic Pattern</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"The most common deadlock happens when <strong>two threads each hold a lock the other one needs</strong> — Thread A holds Lock 1 and waits for Lock 2, while Thread B holds Lock 2 and waits for Lock 1. Neither can proceed."</p>
           
           <div class="code-wrap" style="margin-top:14px;">
@@ -890,7 +1000,7 @@ list.add(<span class="num">42</span>); <span class="cm">// ❌ COMPILE-TIME erro
           <div class="task-title">📋 The 4 Coffman Conditions</div>
           <span class="badge badge-red">Must Know All 4</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"For a deadlock to occur, <strong>all four conditions</strong> must hold at the same time:"</p>
 
           <div class="steps" style="margin-top:14px;">
@@ -931,7 +1041,7 @@ list.add(<span class="num">42</span>); <span class="cm">// ❌ COMPILE-TIME erro
           <div class="task-title">🛡️ How to Prevent Deadlocks</div>
           <span class="badge badge-green">Follow-up Question</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>Breaking <strong>any one</strong> of the 4 conditions prevents deadlock:</p>
           <ul class="checklist">
             <li><strong>Lock ordering:</strong> always acquire locks in the same global order (breaks circular wait)</li>
@@ -970,7 +1080,7 @@ list.add(<span class="num">42</span>); <span class="cm">// ❌ COMPILE-TIME erro
           <div class="task-title">💡 What Is Clean Architecture?</div>
           <span class="badge badge-orange">Core Concept</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"Clean Architecture is a way of organizing code so that <strong>business logic doesn't depend on frameworks, databases, or UI</strong>. Dependencies point inward — toward the domain — so the core of the application can be tested and changed independently of technical details."</p>
         </div>
       </div>
@@ -980,7 +1090,7 @@ list.add(<span class="num">42</span>); <span class="cm">// ❌ COMPILE-TIME erro
           <div class="task-title">🎯 The Dependency Rule</div>
           <span class="badge badge-blue">Key Principle</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"Source code dependencies can only point <strong>inward</strong>. Nothing in an inner circle can know anything about something in an outer circle."</p>
           <div class="code-wrap" style="margin-top:12px;">
             <div class="code-label">Layers (outer → inner)</div>
@@ -1022,7 +1132,7 @@ Entities                (Enterprise-wide business rules)
           <div class="task-title">☕ Example in Java / Spring Boot</div>
           <span class="badge badge-green">Practical</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <div class="code-wrap">
             <div class="code-label">Domain layer — no framework dependencies</div>
 <pre><span class="cm">// Entity — pure Java, no annotations</span>
@@ -1111,7 +1221,7 @@ Entities                (Enterprise-wide business rules)
           <div class="task-title">💡 Recommended Answer (High Level)</div>
           <span class="badge badge-orange">Start Here</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"Internally, a HashMap is backed by an <strong>array of buckets</strong> (an array of <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;">Node&lt;K,V&gt;</code>). Each key's <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;">hashCode()</code> is used to compute an index into that array. Entries that land in the same bucket (a collision) are chained together — as a linked list, or as a red-black tree once the chain gets long enough."</p>
         </div>
       </div>
@@ -1121,7 +1231,7 @@ Entities                (Enterprise-wide business rules)
           <div class="task-title">🧩 The Node Structure</div>
           <span class="badge badge-blue">Internal Data Structure</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <div class="code-wrap">
             <div class="code-label">Simplified internal structure (java.util.HashMap)</div>
 <pre><span class="kw">static class</span> <span class="cls">Node</span>&lt;K,V&gt; <span class="kw">implements</span> <span class="cls">Map</span>.Entry&lt;K,V&gt; {
@@ -1222,7 +1332,7 @@ Entities                (Enterprise-wide business rules)
           <div class="task-title">🧵 Is HashMap Thread-Safe?</div>
           <span class="badge badge-red">Follow-up Question</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"No. <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;">HashMap</code> is not thread-safe — concurrent modification can corrupt internal structure or even cause an infinite loop during resize (pre-Java 8). For concurrent use, I use <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;">ConcurrentHashMap</code>, which uses lock striping (segment/bucket-level locking) instead of locking the whole map, giving much better throughput under contention."</p>
         </div>
       </div>
@@ -1242,7 +1352,7 @@ Entities                (Enterprise-wide business rules)
           <div class="task-title">💡 Recommended Answer</div>
           <span class="badge badge-orange">Core Concept</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"In Java, everything throwable extends from <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;">Throwable</code>, which splits into two branches: <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;">Error</code> for serious problems you normally shouldn't try to catch, and <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;">Exception</code> for conditions an application might want to handle."</p>
           
           <div class="code-wrap" style="margin-top:14px;">
@@ -1296,7 +1406,7 @@ Entities                (Enterprise-wide business rules)
           <div class="task-title">⚖️ Checked vs Unchecked — Why It Matters</div>
           <span class="badge badge-blue">Common Follow-up</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <div class="compare">
             <div class="compare-box">
               <div class="compare-header right">Checked</div>
@@ -1324,7 +1434,7 @@ Entities                (Enterprise-wide business rules)
           <div class="task-title">🛠️ Custom Exceptions</div>
           <span class="badge badge-green">Design Practice</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <div class="code-wrap">
             <div class="code-label">Creating a domain-specific exception</div>
 <pre><span class="kw">public class</span> <span class="cls">InsufficientFundsException</span> <span class="kw">extends</span> <span class="cls">RuntimeException</span> {
@@ -1362,7 +1472,7 @@ Entities                (Enterprise-wide business rules)
           <div class="task-title">☁️ What is SQS?</div>
           <span class="badge badge-orange">AWS Service</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"SQS (Amazon Simple Queue Service) is a fully managed messaging service from AWS that allows you to decouple system components using queues. Producers send messages to the queue and consumers process them asynchronously."</p>
         </div>
       </div>
@@ -1393,7 +1503,7 @@ Entities                (Enterprise-wide business rules)
           <div class="task-title">⚙️ Key Concepts</div>
           <span class="badge badge-blue">Must Know</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <table>
             <tr><th>Concept</th><th>Description</th></tr>
             <tr><td><strong>Visibility Timeout</strong></td><td>Time a message is hidden while being processed</td></tr>
@@ -1409,7 +1519,7 @@ Entities                (Enterprise-wide business rules)
           <div class="task-title">👥 How Many Consumers Can SQS Have?</div>
           <span class="badge badge-green">Scalability</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p><strong>Answer:</strong> "SQS has no fixed limit on consumers. You can have as many as you need."</p>
           
           <p style="margin-top:12px;"><strong>Standard Queue:</strong></p>
@@ -1435,7 +1545,7 @@ Entities                (Enterprise-wide business rules)
           <div class="task-title">🔄 Main Difference</div>
           <span class="badge badge-orange">Architecture Choice</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"The main difference is that SQS is a managed queue service for simple decoupled messaging, while Kafka is an event streaming platform oriented towards event logs, with high retention and replay capability."</p>
         </div>
       </div>
@@ -1516,7 +1626,7 @@ Entities                (Enterprise-wide business rules)
           <div class="task-title">🎯 The Core Difference</div>
           <span class="badge badge-orange">Critical Distinction</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p><strong>Recommended Answer:</strong></p>
           <p>"<strong>Event Streaming</strong> is the continuous flow of events through a system in real-time, while <strong>Event Sourcing</strong> is a design pattern where the application state is reconstructed from a sequence of stored events."</p>
           
@@ -1594,7 +1704,7 @@ Entities                (Enterprise-wide business rules)
           <div class="task-title">💡 Concrete Examples</div>
           <span class="badge badge-green">Understand the Difference</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p><strong>Event Streaming Example:</strong></p>
           <div class="code-wrap">
             <div class="code-label">Real-time flow</div>
@@ -1632,7 +1742,7 @@ User clicks → <span class="cls">Event</span> sent to Kafka → Multiple servic
           <div class="task-title">🔗 How They Work Together</div>
           <span class="badge badge-blue">Senior Insight</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"Event Sourcing can use Event Streaming as the transport mechanism, but they're not the same thing."</p>
           
           <div class="code-wrap" style="margin-top:12px;">
@@ -1705,7 +1815,7 @@ User clicks → <span class="cls">Event</span> sent to Kafka → Multiple servic
           <div class="task-title">🎯 The Core Strategy</div>
           <span class="badge badge-orange">Must Know</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p><strong>Recommended Answer:</strong></p>
           <p>"Errors in a consumer are handled with retries, visibility timeout control, and fallback mechanisms like dead letter queues, ensuring messages aren't lost and are processed correctly."</p>
         </div>
@@ -1724,7 +1834,7 @@ User clicks → <span class="cls">Event</span> sent to Kafka → Multiple servic
           <div class="task-title">♻️ Retry Strategies</div>
           <span class="badge badge-blue">Implementation</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <div class="code-wrap">
             <div class="code-label">Java — Exponential Backoff Retry</div>
 <pre><span class="kw">public class</span> <span class="cls">MessageConsumer</span> {
@@ -1773,7 +1883,7 @@ User clicks → <span class="cls">Event</span> sent to Kafka → Multiple servic
           <div class="task-title">🔄 Idempotency Pattern</div>
           <span class="badge badge-green">Production Essential</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"Processing the same message multiple times should not break the system or create duplicate effects."</p>
           
           <div class="code-wrap" style="margin-top:12px;">
@@ -1849,7 +1959,7 @@ User clicks → <span class="cls">Event</span> sent to Kafka → Multiple servic
           <div class="task-title">📊 Monitoring & Observability</div>
           <span class="badge badge-yellow">Production Ready</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p><strong>Key Metrics to Track:</strong></p>
           <table style="margin-top:10px;">
             <tr><th>Metric</th><th>What it tells you</th><th>Alert threshold</th></tr>
@@ -1905,7 +2015,7 @@ User clicks → <span class="cls">Event</span> sent to Kafka → Multiple servic
           <div class="task-title">📊 How Did You Do Load Testing?</div>
           <span class="badge badge-orange">Common Question</span>
         </div>
-        <div class="task-body">
+        <div class="task-body answer">
           <p>"In my projects, I perform load testing by simulating real traffic to validate system behavior under different load levels."</p>
           
           <div class="steps" style="margin-top:16px;">
@@ -1952,6 +2062,206 @@ User clicks → <span class="cls">Event</span> sent to Kafka → Multiple servic
       <div class="alert alert-success" style="margin-top:16px;">
         <span class="alert-icon">💡</span>
         <div><strong>To stand out:</strong> "In a project we reduced latency by X% by optimizing queries and adding caching, after identifying the bottleneck through load tests."</div>
+      </div>
+    </div>
+
+
+    <!-- POSTGRESQL LIVE CODING -->
+    <div class="section" id="sql">
+      <div class="section-title"><span class="icon">🐘</span> PostgreSQL Live Coding Test</div>
+
+      <div class="alert alert-warn">
+        <span class="alert-icon">⚠️</span>
+        <div><strong>What to expect:</strong> you get <strong>4 tables</strong> and must write, by hand and without autocomplete, one query that finds the customers who meet a condition ("more than N paid invoices in the last X months"). The syntax is easy; most people fail because they <em>freeze</em> or <em>forget the order</em>. This section fixes both.</div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🧱 Step 1 · Memorize the 5-line skeleton</div>
+          <span class="badge badge-orange">Core</span>
+        </div>
+        <div class="task-body">
+          <p>Write this skeleton on the screen <strong>first</strong>, then fill in the names. Every "customers with more than N…" question uses exactly this shape.</p>
+          <pre><span class="kw">SELECT</span>   s.id, s.full_name, <span class="fn">COUNT</span>(p.id) <span class="kw">AS</span> total      <span class="cm">-- 1. what do I show?</span>
+<span class="kw">FROM</span>     students s                                   <span class="cm">-- 2. start table</span>
+<span class="kw">JOIN</span>     enrollments e <span class="kw">ON</span> e.student_id = s.id         <span class="cm">--    join each table</span>
+<span class="kw">JOIN</span>     payments p    <span class="kw">ON</span> p.enrollment_id = e.id      <span class="cm">--    "child.fk = parent.id"</span>
+<span class="kw">WHERE</span>    p.status = <span class="str">'paid'</span>                            <span class="cm">-- 3. filter ROWS (before grouping)</span>
+<span class="kw">GROUP</span> <span class="kw">BY</span> s.id, s.full_name                            <span class="cm">-- 4. one row per student</span>
+<span class="kw">HAVING</span>   <span class="fn">COUNT</span>(p.id) &gt; <span class="num">2</span>                              <span class="cm">-- 5. filter GROUPS (after grouping)</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> total <span class="kw">DESC</span>;</pre>
+          <p style="margin-top:14px;"><strong>Translate the sentence into clauses:</strong></p>
+          <table class="clause-map">
+            <tr><td>"…the customers…"</td><td><code>SELECT</code> their id, name, email, phone · <code>GROUP BY</code> those same columns</td></tr>
+            <tr><td>"…invoices that are paid…"</td><td><code>WHERE status = 'paid'</code></td></tr>
+            <tr><td>"…in the last 6 months…"</td><td><code>AND date &gt;= CURRENT_DATE - INTERVAL '6 months'</code></td></tr>
+            <tr><td>"…more than three…"</td><td><code>HAVING COUNT(...) &gt; 3</code></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">✍️ Step 2 · Practice exercise</div>
+          <span class="badge badge-yellow">Try it first</span>
+        </div>
+        <div class="task-body">
+          <p><strong>Tables:</strong></p>
+          <pre>students    (id, full_name, email, phone)
+courses     (id, title, is_active)
+enrollments (id, student_id, course_id, enrolled_at)
+payments    (id, enrollment_id, amount, status, paid_at)
+<span class="cm">-- status values: 'paid' | 'pending' | 'refunded'</span></pre>
+          <p style="margin-top:12px;"><strong>Task:</strong> "We want to call the students who made <strong>more than 2 paid payments in the last 4 months</strong>, only for <strong>active courses</strong>. Return id, name, email, phone, number of payments and total paid, most payments first."</p>
+          <div class="alert alert-info" style="margin:12px 0 0;">
+            <span class="alert-icon">⏱️</span>
+            <div>Give yourself <strong>8–10 minutes</strong>, on paper or in a plain text editor. Then open the solution.</div>
+          </div>
+
+          <details class="reveal">
+            <summary>Show solution</summary>
+            <div class="reveal-body">
+              <pre><span class="kw">SELECT</span>   s.id,
+         s.full_name,
+         s.email,
+         s.phone,
+         <span class="fn">COUNT</span>(p.id)  <span class="kw">AS</span> paid_count,
+         <span class="fn">SUM</span>(p.amount) <span class="kw">AS</span> total_paid
+<span class="kw">FROM</span>     students s
+<span class="kw">JOIN</span>     enrollments e <span class="kw">ON</span> e.student_id    = s.id
+<span class="kw">JOIN</span>     courses c     <span class="kw">ON</span> c.id            = e.course_id
+<span class="kw">JOIN</span>     payments p    <span class="kw">ON</span> p.enrollment_id = e.id
+<span class="kw">WHERE</span>    p.status    = <span class="str">'paid'</span>
+  <span class="kw">AND</span>    c.is_active = <span class="kw">TRUE</span>
+  <span class="kw">AND</span>    p.paid_at  &gt;= <span class="fn">CURRENT_DATE</span> - <span class="kw">INTERVAL</span> <span class="str">'4 months'</span>
+<span class="kw">GROUP</span> <span class="kw">BY</span> s.id, s.full_name, s.email, s.phone
+<span class="kw">HAVING</span>   <span class="fn">COUNT</span>(p.id) &gt; <span class="num">2</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> paid_count <span class="kw">DESC</span>;</pre>
+              <ul class="checklist">
+                <li><strong>Joins:</strong> follow the chain student → enrollment → payment; <code>courses</code> hangs off enrollments. Pattern: <em>child.fk = parent.id</em></li>
+                <li><strong>WHERE</strong> filters individual rows: paid, active course, date window</li>
+                <li><strong>GROUP BY</strong> collapses to one row per student; every non-aggregated column in SELECT must appear here</li>
+                <li><strong>HAVING</strong> filters the groups: <code>&gt; 2</code> means "more than 2" (3 or more)</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🚫 Step 3 · The mistakes that fail the test</div>
+          <span class="badge badge-red">Avoid</span>
+        </div>
+        <div class="task-body">
+          <div class="compare">
+            <div class="compare-box">
+              <div class="compare-header wrong">❌ Aggregate in WHERE</div>
+              <pre><span class="kw">SELECT</span> s.full_name, <span class="fn">COUNT</span>(p.id)
+<span class="kw">FROM</span> students s
+<span class="kw">JOIN</span> enrollments e <span class="kw">ON</span> e.student_id = s.id
+<span class="kw">JOIN</span> payments p <span class="kw">ON</span> p.enrollment_id = e.id
+<span class="kw">WHERE</span> <span class="fn">COUNT</span>(p.id) &gt; <span class="num">2</span>   <span class="cm">-- ERROR</span>
+<span class="kw">GROUP</span> <span class="kw">BY</span> s.full_name;</pre>
+            </div>
+            <div class="compare-box">
+              <div class="compare-header right">✅ Aggregate in HAVING</div>
+              <pre><span class="kw">SELECT</span> s.full_name, <span class="fn">COUNT</span>(p.id)
+<span class="kw">FROM</span> students s
+<span class="kw">JOIN</span> enrollments e <span class="kw">ON</span> e.student_id = s.id
+<span class="kw">JOIN</span> payments p <span class="kw">ON</span> p.enrollment_id = e.id
+<span class="kw">GROUP</span> <span class="kw">BY</span> s.full_name
+<span class="kw">HAVING</span> <span class="fn">COUNT</span>(p.id) &gt; <span class="num">2</span>;  <span class="cm">-- OK</span></pre>
+            </div>
+          </div>
+          <div class="compare">
+            <div class="compare-box">
+              <div class="compare-header wrong">❌ Fixed date / no status</div>
+              <pre><span class="cm">-- hardcoded date: breaks tomorrow</span>
+<span class="kw">WHERE</span> p.paid_at &gt; <span class="str">'2026-07-01'</span>
+
+<span class="cm">-- forgot the status filter:</span>
+<span class="cm">-- counts pending/refunded too</span></pre>
+            </div>
+            <div class="compare-box">
+              <div class="compare-header right">✅ Relative date + status</div>
+              <pre><span class="cm">-- always relative to today</span>
+<span class="kw">AND</span> p.paid_at &gt;= <span class="fn">CURRENT_DATE</span>
+                 - <span class="kw">INTERVAL</span> <span class="str">'4 months'</span>
+
+<span class="cm">-- and filter the status</span>
+<span class="kw">WHERE</span> p.status = <span class="str">'paid'</span></pre>
+            </div>
+          </div>
+          <ul class="checklist">
+            <li>"More than 3" is <code>&gt; 3</code>. "At least 3" is <code>&gt;= 3</code>. Read the wording twice.</li>
+            <li>Selecting a column that is not in <code>GROUP BY</code> and not inside an aggregate → error</li>
+            <li>Joining on the wrong key (compare <code>e.id</code> vs <code>e.student_id</code>) → wrong counts, no error</li>
+            <li>If a join can duplicate rows, count with <code>COUNT(DISTINCT p.id)</code></li>
+            <li>Missing semicolons and commas are the #1 typo when typing by hand: re-read line by line at the end</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔀 Step 4 · Variations they might ask</div>
+          <span class="badge badge-blue">Same pattern</span>
+        </div>
+        <div class="task-body">
+          <p>If you understood the skeleton, these are 10-second edits. Open each only after trying it.</p>
+          <details class="reveal">
+            <summary>"At least 3 in the last 30 days"</summary>
+            <div class="reveal-body"><pre><span class="cm">-- "at least 3 paid in the last 30 days"</span>
+<span class="kw">HAVING</span> <span class="fn">COUNT</span>(p.id) &gt;= <span class="num">3</span>
+<span class="cm">-- and in WHERE:</span>
+<span class="kw">AND</span> p.paid_at &gt;= <span class="fn">CURRENT_DATE</span> - <span class="kw">INTERVAL</span> <span class="str">'30 days'</span></pre></div>
+          </details>
+          <details class="reveal">
+            <summary>"Total paid greater than 500"</summary>
+            <div class="reveal-body"><pre><span class="cm">-- "total paid greater than 500"</span>
+<span class="kw">HAVING</span> <span class="fn">SUM</span>(p.amount) &gt; <span class="num">500</span></pre></div>
+          </details>
+          <details class="reveal">
+            <summary>"Students with NO paid payments in the last 4 months"</summary>
+            <div class="reveal-body">
+              <pre><span class="cm">-- "students with NO paid payment in the last 4 months"</span>
+<span class="kw">SELECT</span>   s.id, s.full_name
+<span class="kw">FROM</span>     students s
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> enrollments e <span class="kw">ON</span> e.student_id = s.id
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> payments p    <span class="kw">ON</span> p.enrollment_id = e.id
+                       <span class="kw">AND</span> p.status = <span class="str">'paid'</span>
+                       <span class="kw">AND</span> p.paid_at &gt;= <span class="fn">CURRENT_DATE</span> - <span class="kw">INTERVAL</span> <span class="str">'4 months'</span>
+<span class="kw">WHERE</span>    p.id <span class="kw">IS</span> <span class="kw">NULL</span>;</pre>
+              <p style="color:var(--muted); font-size:.88rem; margin-top:8px;">With <code>LEFT JOIN</code>, put the conditions on the right-hand table in <code>ON</code>, not in <code>WHERE</code>; otherwise the LEFT JOIN silently behaves like an INNER JOIN.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🧰 Postgres date cheat sheet</div>
+          <pre><span class="fn">CURRENT_DATE</span> - <span class="kw">INTERVAL</span> <span class="str">'6 months'</span>
+<span class="fn">NOW</span>() - <span class="kw">INTERVAL</span> <span class="str">'30 days'</span>
+<span class="fn">date_trunc</span>(<span class="str">'month'</span>, <span class="fn">CURRENT_DATE</span>)</pre>
+          <p style="margin-top:8px;">Use <code>&gt;=</code> with the start of the window; no upper bound needed for "until today".</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🎤 How to behave during the test</div>
+          <ul class="checklist">
+            <li>Think out loud: "I need customers, so I start from customers…"</li>
+            <li>Type the skeleton first, fill it in second</li>
+            <li>Build in layers: joins → WHERE → GROUP BY → HAVING</li>
+            <li>Ask for the table columns if they aren't clear</li>
+            <li>Finish by re-reading the statement against your query</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert alert-success" style="margin-top:16px;">
+        <span class="alert-icon">💪</span>
+        <div><strong>Practice plan (30 min total):</strong> type the skeleton from memory 3 times without looking → solve Step 2 → do the 3 variations. Repeat the next day with a different domain (customers/invoices, users/orders, drivers/trips). Typing speed and calm come from repetition, not from reading.</div>
       </div>
     </div>
 
@@ -2017,7 +2327,7 @@ User clicks → <span class="cls">Event</span> sent to Kafka → Multiple servic
   }
 
   // Highlight active section on scroll
-  const sections = ['intro','whyjava','jvm','rest','microservices','ddd','linkedlist','cycles','generics','deadlocks','cleanarch','hashmap','exceptions','sqs','kafka','eventing','errors','loadtest','tips'];
+  const sections = ['intro','format','whyjava','jvm','rest','microservices','ddd','linkedlist','cycles','generics','deadlocks','cleanarch','hashmap','exceptions','sqs','kafka','eventing','errors','loadtest','sql','tips'];
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -2058,6 +2368,61 @@ User clicks → <span class="cls">Event</span> sent to Kafka → Multiple servic
 
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, true);
+  })();
+</script>
+
+<script>
+  /* Practice mode: oculta respuestas (blur), se revelan con clic; barra de progreso */
+  (function () {
+    var KEY = 'entrevista_java_practice';
+    var answers = Array.prototype.slice.call(document.querySelectorAll('.answer'));
+    var toggle = document.getElementById('pbToggle');
+    var state = document.getElementById('pbState');
+    var fill = document.getElementById('pbFill');
+    var count = document.getElementById('pbCount');
+    var reset = document.getElementById('pbReset');
+
+    function update() {
+      var n = answers.filter(function (a) { return a.classList.contains('revealed'); }).length;
+      var total = answers.length || 1;
+      fill.style.width = Math.round(n / total * 100) + '%';
+      count.textContent = n + ' / ' + answers.length + ' revealed';
+    }
+    function setPractice(on) {
+      document.body.classList.toggle('practice', on);
+      toggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+      state.textContent = on ? 'ON' : 'OFF';
+      answers.forEach(function (a) {
+        if (on) { a.setAttribute('tabindex', '0'); a.setAttribute('role', 'button'); }
+        else { a.removeAttribute('tabindex'); a.removeAttribute('role'); }
+      });
+      try { localStorage.setItem(KEY, on ? '1' : '0'); } catch (e) {}
+    }
+    function reveal(a) {
+      if (!document.body.classList.contains('practice') || a.classList.contains('revealed')) return;
+      a.classList.add('revealed'); update();
+    }
+
+    toggle.addEventListener('click', function () {
+      var on = !document.body.classList.contains('practice');
+      if (on) answers.forEach(function (a) { a.classList.remove('revealed'); });
+      setPractice(on); update();
+    });
+    reset.addEventListener('click', function () {
+      answers.forEach(function (a) { a.classList.remove('revealed'); });
+      update();
+    });
+    answers.forEach(function (a) {
+      a.addEventListener('click', function () { reveal(a); });
+      a.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reveal(a); }
+      });
+    });
+
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+    setPractice(saved === '1');
+    update();
   })();
 </script>
 </body>

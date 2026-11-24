@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Lead – Interview Preparation</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1e2533;
+    --border: #30363d;
+    --accent: #a371f7;
+    --accent2: #2dd4bf;
+    --green: #3fb950;
+    --red: #f85149;
+    --yellow: #d29922;
+    --blue: #58a6ff;
+    --orange: #fa7343;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --code-bg: #0d1117;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+
+  /* SIDEBAR */
+  .layout { display:flex; min-height:100vh; }
+  .sidebar {
+    width:260px; background:var(--surface); border-right:1px solid var(--border);
+    position:fixed; top:0; left:0; height:100vh; overflow-y:auto;
+    display:flex; flex-direction:column; z-index:100;
+  }
+  .sidebar-logo {
+    padding:24px 20px 16px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    font-size:1.3rem; font-weight:800; color:#fff; letter-spacing:-0.5px;
+  }
+  .sidebar-logo span { font-weight:300; opacity:.8; font-size:.9rem; display:block; }
+  .nav-section { padding:12px 20px 4px; font-size:.7rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); font-weight:600; }
+  .nav-link {
+    display:flex; align-items:center; gap:10px;
+    padding:9px 20px; color:var(--muted); text-decoration:none;
+    font-size:.88rem; transition:all .2s; border-left:3px solid transparent;
+    cursor:pointer;
+  }
+  .nav-link:hover, .nav-link.active { color:var(--text); background:rgba(163,113,247,.1); border-left-color:var(--accent); }
+  .nav-link .dot { width:7px; height:7px; border-radius:50%; background:var(--muted); flex-shrink:0; }
+  .nav-link.active .dot, .nav-link:hover .dot { background:var(--accent); }
+
+  /* MAIN */
+  .main { margin-left:260px; flex:1; padding:0 40px 60px; max-width:1100px; }
+  
+  /* HERO */
+  .hero {
+    padding:50px 0 30px;
+    border-bottom:1px solid var(--border); margin-bottom:40px;
+  }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(163,113,247,.15); border:1px solid rgba(163,113,247,.3);
+    color:var(--accent); padding:4px 14px; border-radius:20px;
+    font-size:.8rem; font-weight:600; margin-bottom:18px;
+  }
+  .hero h1 { font-size:2.6rem; font-weight:800; letter-spacing:-1px; margin-bottom:12px; }
+  .hero h1 span { background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .hero p { color:var(--muted); font-size:1.05rem; max-width:620px; }
+  .tags { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
+  .tag { background:var(--surface2); border:1px solid var(--border); color:var(--muted); padding:3px 12px; border-radius:20px; font-size:.78rem; }
+
+  /* SECTIONS */
+  .section { margin-bottom:56px; scroll-margin-top:70px; }
+  .section-title {
+    font-size:1.4rem; font-weight:700; margin-bottom:20px;
+    display:flex; align-items:center; gap:10px;
+    padding-bottom:12px; border-bottom:1px solid var(--border);
+  }
+  .section-title .icon { font-size:1.3rem; }
+
+  /* CARDS */
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:16px; }
+  .card-title { font-weight:700; font-size:1rem; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .card p { color:var(--muted); font-size:.92rem; line-height:1.6; }
+  .card ul { margin-top:8px; }
+
+  /* ALERT */
+  .alert { border-radius:10px; padding:16px 20px; margin-bottom:20px; display:flex; gap:12px; font-size:.9rem; }
+  .alert-warn { background:rgba(210,153,34,.1); border:1px solid rgba(210,153,34,.3); color:#e3b341; }
+  .alert-info { background:rgba(88,166,255,.1); border:1px solid rgba(88,166,255,.3); color:var(--blue); }
+  .alert-success { background:rgba(63,185,80,.1); border:1px solid rgba(63,185,80,.3); color:var(--green); }
+  .alert-icon { font-size:1.1rem; flex-shrink:0; margin-top:1px; }
+
+  /* CODE */
+  .code-wrap { position:relative; margin:12px 0; }
+  .code-label { position:absolute; top:10px; right:14px; font-size:.7rem; color:var(--muted); background:var(--surface2); padding:2px 8px; border-radius:4px; z-index:2; }
+  pre {
+    background:var(--code-bg); border:1px solid var(--border); border-radius:10px;
+    padding:20px; overflow-x:auto; font-size:.83rem; line-height:1.6;
+    font-family:'Cascadia Code','Fira Code','Consolas',monospace;
+  }
+  .kw { color:#ff7b72; }
+  .fn { color:#d2a8ff; }
+  .str { color:#a5d6ff; }
+  .num { color:#79c0ff; }
+  .cm { color:#6e7681; font-style:italic; }
+  .cls { color:#ffa657; }
+  .ann { color:#7ee787; }
+
+  /* TASK BOX */
+  .task-box {
+    background:var(--surface2); border:1px solid var(--border); border-radius:12px;
+    overflow:hidden; margin-bottom:20px;
+  }
+  .task-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 20px; background:rgba(163,113,247,.08);
+    border-bottom:1px solid var(--border);
+  }
+  .task-title { font-weight:700; font-size:.95rem; display:flex; align-items:center; gap:8px; }
+  .badge { padding:3px 10px; border-radius:20px; font-size:.72rem; font-weight:700; }
+  .badge-accent { background:rgba(163,113,247,.2); color:#cdb0ff; }
+  .badge-orange { background:rgba(163,113,247,.2); color:#cdb0ff; }
+  .badge-green { background:rgba(63,185,80,.15); color:var(--green); }
+  .badge-yellow { background:rgba(210,153,34,.15); color:var(--yellow); }
+  .badge-blue { background:rgba(88,166,255,.15); color:var(--blue); }
+  .badge-red { background:rgba(248,81,73,.15); color:var(--red); }
+  .task-body { padding:20px; }
+  .task-body p { color:var(--muted); font-size:.9rem; margin-bottom:12px; }
+
+  /* STEPS */
+  .steps { counter-reset:step; display:flex; flex-direction:column; gap:12px; }
+  .step { display:flex; gap:14px; align-items:flex-start; }
+  .step-num {
+    counter-increment:step; content:counter(step);
+    width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent2));
+    display:flex; align-items:center; justify-content:center;
+    font-size:.75rem; font-weight:700; flex-shrink:0; margin-top:2px;
+  }
+  .step-num::before { content:counter(step); }
+  .step-body { font-size:.9rem; }
+  .step-body strong { color:var(--text); }
+  .step-body span { color:var(--muted); }
+
+  /* TABLE */
+  table { width:100%; border-collapse:collapse; font-size:.88rem; margin:12px 0; }
+  th { background:var(--surface2); color:var(--muted); font-weight:600; padding:10px 16px; text-align:left; border-bottom:2px solid var(--border); }
+  td { padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text); }
+  td code { background:var(--surface2); padding:2px 7px; border-radius:4px; font-size:.82rem; color:var(--blue); }
+  tr:hover td { background:rgba(163,113,247,.04); }
+
+  /* GRID 2 */
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+
+  /* CHECKLIST */
+  .checklist { list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+  .checklist li { display:flex; align-items:flex-start; gap:10px; font-size:.9rem; color:var(--muted); }
+  .checklist li::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; margin-top:1px; }
+
+  /* COMPARE */
+  .compare { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0; }
+  .compare-box { border-radius:8px; overflow:hidden; }
+  .compare-header { padding:8px 14px; font-size:.78rem; font-weight:700; letter-spacing:.5px; }
+  .compare-header.wrong { background:rgba(248,81,73,.15); color:var(--red); }
+  .compare-header.right { background:rgba(63,185,80,.15); color:var(--green); }
+  .compare-box pre { border-radius:0; border:none; border-top:1px solid var(--border); font-size:.78rem; }
+
+  /* INTRO VERSIONS */
+  .intro-box { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:20px; margin-bottom:16px; }
+  .intro-box .version-label { display:inline-block; padding:4px 12px; background:rgba(163,113,247,.2); color:var(--accent); border-radius:20px; font-size:.75rem; font-weight:700; margin-bottom:12px; }
+  .intro-box .time { color:var(--muted); font-size:.85rem; margin-bottom:10px; }
+  .intro-box .script > p { margin:0; color:inherit; font-size:inherit; }
+  .intro-box .script { color:var(--text); font-size:.92rem; line-height:1.7; font-style:italic; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width:6px; height:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+  /* RESPONSIVE */
+  @media(max-width:900px) {
+    .sidebar { width:200px; }
+    .main { margin-left:200px; padding:0 20px 60px; }
+    .practice-bar { margin:0 -20px 10px; padding:10px 20px; }
+    .grid2,.compare { grid-template-columns:1fr; }
+    .grid3 { grid-template-columns:1fr 1fr; }
+  }
+  @media(max-width:650px) {
+    .sidebar { display:none; }
+    .main { margin-left:0; }
+    .hero h1 { font-size:1.8rem; }
+    .grid3 { grid-template-columns:1fr; }
+  }
+
+
+  /* PRACTICE MODE */
+  .practice-bar {
+    position:sticky; top:0; z-index:90; margin:0 -40px 10px; padding:10px 40px;
+    background:rgba(13,17,23,.92); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  }
+  .pb-toggle, .pb-reset {
+    font:inherit; font-size:.82rem; font-weight:700; cursor:pointer; color:var(--text);
+    background:var(--surface2); border:1px solid var(--border); border-radius:20px; padding:6px 14px;
+    transition:all .2s;
+  }
+  .pb-toggle:hover, .pb-reset:hover { border-color:var(--accent); }
+  .pb-toggle b { color:var(--muted); }
+  body.practice .pb-toggle { background:rgba(163,113,247,.18); border-color:var(--accent); }
+  body.practice .pb-toggle b { color:var(--accent); }
+  .pb-progress, .pb-reset, .pb-hint { display:none; }
+  body.practice .pb-progress { display:flex; align-items:center; gap:10px; flex:1; min-width:180px; }
+  body.practice .pb-reset { display:inline-block; }
+  .pb-track { flex:1; height:8px; background:var(--surface2); border-radius:6px; overflow:hidden; border:1px solid var(--border); }
+  .pb-fill { height:100%; width:0; background:linear-gradient(90deg,var(--accent),var(--green)); transition:width .3s; }
+  #pbCount { font-size:.78rem; color:var(--muted); white-space:nowrap; }
+
+  body.practice .answer { position:relative; cursor:pointer; min-height:56px; }
+  body.practice .answer:not(.revealed) > * { filter:blur(7px); opacity:.7; user-select:none; pointer-events:none; transition:filter .25s; }
+  body.practice .answer:not(.revealed)::after {
+    content:'👆 Think it, say it out loud, then click to reveal';
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; padding:8px;
+    font-size:.85rem; font-weight:700; color:var(--accent);
+    background:rgba(13,17,23,.35); border-radius:8px;
+  }
+  body.practice .answer.revealed { cursor:default; }
+  body.practice .answer.script:not(.revealed) { padding:8px 0; }
+  .answer.revealed > * { transition:filter .25s; }
+
+  html { scroll-behavior:smooth; }
+
+  code { background:var(--surface2); padding:2px 6px; border-radius:4px; font-size:.82rem; color:var(--blue); font-family:'Cascadia Code','Fira Code','Consolas',monospace; }
+  pre code { background:none; padding:0; }
+  a.topic-card { display:block; text-decoration:none; color:inherit; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px 18px; transition:all .2s; }
+  a.topic-card:hover { border-color:var(--accent); transform:translateY(-2px); background:var(--surface2); }
+  .topic-card .tc-icon { font-size:1.3rem; margin-bottom:4px; }
+  .topic-card h4 { font-size:.95rem; margin-bottom:4px; }
+  .topic-card p { color:var(--muted); font-size:.8rem; line-height:1.5; margin:0; }
+  .qf { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+  .qf-q { font-weight:700; font-size:.9rem; margin-bottom:8px; }
+  .qf .answer p { color:var(--muted); font-size:.88rem; margin:0; }
+  .intro-box .script > p { margin:0; color:inherit; font-size:inherit; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      🎯 Entrevista
+      <span>Test Lead Track</span>
+    </div>
+    <div class="nav-section">Foundation</div>
+    <a class="nav-link active" onclick="scrollTo('intro')"><div class="dot"></div> Introduction</a>
+    <a class="nav-link" onclick="scrollTo('introduce')"><div class="dot"></div> How to Introduce Yourself</a>
+    <a class="nav-link" onclick="scrollTo('evaluated')"><div class="dot"></div> What Is Evaluated</a>
+
+    <div class="nav-section">Testing Fundamentals</div>
+    <a class="nav-link" onclick="scrollTo('techniques')"><div class="dot"></div> Test Design Techniques</a>
+    <a class="nav-link" onclick="scrollTo('types')"><div class="dot"></div> Testing Types</a>
+    <a class="nav-link" onclick="scrollTo('docs')"><div class="dot"></div> Test Documentation</a>
+    <a class="nav-link" onclick="scrollTo('requirements')"><div class="dot"></div> SRS / PRD / BRD</a>
+    <a class="nav-link" onclick="scrollTo('estimation')"><div class="dot"></div> Test Estimation</a>
+    <a class="nav-link" onclick="scrollTo('metrics')"><div class="dot"></div> Testing Metrics</a>
+
+    <div class="nav-section">Technical Skills</div>
+    <a class="nav-link" onclick="scrollTo('api')"><div class="dot"></div> API Testing</a>
+    <a class="nav-link" onclick="scrollTo('web')"><div class="dot"></div> Web: HTML & CSS</a>
+    <a class="nav-link" onclick="scrollTo('mobile')"><div class="dot"></div> Mobile Device Selection</a>
+    <a class="nav-link" onclick="scrollTo('cicd')"><div class="dot"></div> CI/CD: Job vs Pipeline</a>
+    <a class="nav-link" onclick="scrollTo('cli')"><div class="dot"></div> CLI Basics</a>
+
+    <div class="nav-section">Leadership & Review</div>
+    <a class="nav-link" onclick="scrollTo('leadership')"><div class="dot"></div> Leadership Refresher</a>
+    <a class="nav-link" onclick="scrollTo('quickfire')"><div class="dot"></div> Quick-Fire Round</a>
+    <a class="nav-link" onclick="scrollTo('tips')"><div class="dot"></div> Interview Tips</a>
+
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <!-- PRACTICE BAR -->
+    <div class="practice-bar">
+      <button class="pb-toggle" id="pbToggle" type="button" aria-pressed="false">🎯 Practice mode: <b id="pbState">OFF</b></button>
+      <div class="pb-progress"><div class="pb-track"><div class="pb-fill" id="pbFill"></div></div><span id="pbCount">0 / 0 revealed</span></div>
+      <button class="pb-reset" id="pbReset" type="button">↺ Reset</button>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero" id="intro">
+      <div class="hero-badge">🧪 QA Leadership Focus</div>
+      <h1><span>Test Lead</span> Interview Guide</h1>
+      <p>Complete preparation for your Test Lead interview: strong technical fundamentals (test design, API, web, mobile, CI/CD, CLI), documentation, estimation and metrics, plus the leadership answers you already know how to give.</p>
+      <div class="tags">
+        <span class="tag">🧩 Test Design</span>
+        <span class="tag">🔌 API Testing</span>
+        <span class="tag">🌐 Web</span>
+        <span class="tag">📱 Mobile</span>
+        <span class="tag">⚙️ CI/CD</span>
+        <span class="tag">⌨️ CLI</span>
+        <span class="tag">📊 Metrics</span>
+        <span class="tag">📝 Documentation</span>
+      </div>
+    </div>
+
+    <div class="section" id="introduce">
+      <div class="section-title"><span class="icon">👋</span> How to Introduce Yourself</div>
+<div class="alert alert-info"><span class="alert-icon">ℹ️</span><div>Choose the version that matches the interview time and your seniority. Practice out loud until it sounds natural, and replace X / Y / Z with your real numbers.</div></div>
+      <div class="intro-box">
+        <div class="version-label">BRIEF VERSION</div>
+        <div class="time">⏱ 15–20 seconds · Opening line</div>
+        <div class="script answer"><p>"I'm a QA Test Lead with X years of experience in manual and automated testing. I lead a team of N testers, define the test strategy and plans, and report quality metrics to stakeholders. I'm hands-on with API, web and mobile testing, and I use CI/CD pipelines to keep quality gates running on every release."</p></div>
+      </div>
+      <div class="intro-box">
+        <div class="version-label">STANDARD VERSION</div>
+        <div class="time">⏱ 30–45 seconds · Most interviews</div>
+        <div class="script answer"><p>"I have X years in QA, the last Y as Test Lead. I define test strategy and estimates, design test cases with techniques like equivalence partitioning and boundary value analysis, and track metrics such as pass rate, defect leakage and coverage. Technically I test APIs with Postman, web apps with browser DevTools, and mobile apps on a device matrix based on real user analytics. I plug automated suites into CI/CD pipelines and I coach my team through reviews and mentoring."</p></div>
+      </div>
+      <div class="intro-box">
+        <div class="version-label">DETAILED VERSION</div>
+        <div class="time">⏱ 60–90 seconds · Senior / Lead profile</div>
+        <div class="script answer"><p>"I'm a QA Test Lead with X years of experience in [industries]. I currently lead N QA engineers and own test strategy, planning, estimation and quality reporting to product and engineering leadership. On the technical side I'm hands-on with API testing (status codes, schemas, authentication), web testing (HTML/CSS, DevTools, cross-browser) and mobile testing (device selection driven by analytics). I've set up quality gates in CI/CD pipelines with unit, API, smoke and regression jobs, and I reduced defect leakage from X% to Y%. As a leader I focus on risk-based prioritization, mentoring, clear documentation (plans, scenarios, cases, traceability) and shifting testing left together with product and developers."</p></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🎯 What to Mention (Recommended Order)</div>
+        <ul class="checklist"><li><span>Years of experience, domains/industries, team size you lead</span></li><li><span>Your leadership scope: strategy, planning, estimation, reporting, hiring/mentoring</span></li><li><span>Testing levels and types you cover: functional, regression, API, web, mobile, non-functional</span></li><li><span>Test design and documentation: techniques, scenarios vs. cases, traceability</span></li><li><span>Tools: Postman, Jira, TestRail/Xray, Selenium/Cypress/Playwright, Appium, BrowserStack</span></li><li><span>CI/CD and CLI comfort: pipelines, quality gates, Git, terminal</span></li><li><span>One measurable result: defect leakage down, regression time cut, automation coverage up</span></li></ul>
+      </div>
+    </div>
+
+    <div class="section" id="evaluated">
+      <div class="section-title"><span class="icon">🔍</span> What the Interviewer Evaluates</div>
+<div class="alert alert-warn"><span class="alert-icon">⚠️</span><div><strong>Leadership alone is not enough.</strong> A Test Lead is expected to be a strong leader <em>and</em> to know testing fundamentals cold. Candidates often explain leadership very well and then stumble on basic theory (test design techniques, test cases vs. scenarios, status codes, CI/CD terms). Those gaps cost interviews, so this guide drills the technical side first.</div></div><div class="grid3" style="margin-bottom:20px;"><a class="topic-card" href="#techniques"><div class="tc-icon">🧩</div><h4>Test Design Techniques</h4><p>EP, BVA, decision tables, state transition, pairwise</p></a><a class="topic-card" href="#types"><div class="tc-icon">🗂️</div><h4>Testing Types</h4><p>Functional vs. non-functional, smoke, sanity, regression</p></a><a class="topic-card" href="#docs"><div class="tc-icon">📝</div><h4>Test Documentation</h4><p>Test case vs. test scenario, plan vs. strategy</p></a><a class="topic-card" href="#requirements"><div class="tc-icon">📄</div><h4>Requirements Docs</h4><p>SRS vs. PRD vs. BRD</p></a><a class="topic-card" href="#estimation"><div class="tc-icon">⏳</div><h4>Test Estimation</h4><p>WBS, three-point, planning poker, Delphi</p></a><a class="topic-card" href="#metrics"><div class="tc-icon">📊</div><h4>Testing Metrics</h4><p>Pass/fail rate, defect leakage, coverage</p></a><a class="topic-card" href="#api"><div class="tc-icon">🔌</div><h4>API Testing</h4><p>Status codes, base URL vs. resource URL, methods</p></a><a class="topic-card" href="#web"><div class="tc-icon">🌐</div><h4>Web Testing</h4><p>HTML, CSS, DevTools, locators, cross-browser</p></a><a class="topic-card" href="#mobile"><div class="tc-icon">📱</div><h4>Mobile Testing</h4><p>Device selection approach and criteria</p></a><a class="topic-card" href="#cicd"><div class="tc-icon">⚙️</div><h4>CI/CD</h4><p>Job vs. pipeline, stages, quality gates</p></a><a class="topic-card" href="#cli"><div class="tc-icon">⌨️</div><h4>CLI</h4><p>Everyday terminal commands for testers</p></a><a class="topic-card" href="#leadership"><div class="tc-icon">🧭</div><h4>Leadership</h4><p>Strategy, risk-based testing, conflicts, mentoring</p></a></div><div class="alert alert-success"><span class="alert-icon">🎯</span><div><strong>How to use this page:</strong> study a topic, then switch on <strong>Practice mode</strong> (top bar). Answers get blurred: say yours out loud, then click to reveal and compare. The progress bar tracks how many you have checked.</div></div>
+      <div class="card">
+        <div class="card-title">🧠 A formula for any theory question</div>
+        <ul class="checklist">
+          <li><span><strong>Define</strong> it in one sentence</span></li>
+          <li><span><strong>Differentiate</strong> it from the term it's usually confused with</span></li>
+          <li><span><strong>Exemplify</strong> with a short real or realistic example</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section" id="techniques">
+      <div class="section-title"><span class="icon">🧩</span> Test Design Techniques</div>
+<div class="alert alert-warn"><span class="alert-icon">⚠️</span><div>This is the topic that surprises people most: a Test Lead who cannot name and apply basic techniques loses credibility fast. Learn the five black-box techniques and be ready to <strong>solve a small example on the spot</strong>.</div></div>
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">📚 The Big Picture</div>
+          <span class="badge badge-accent">Must know</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What test design techniques do you know and when do you use each?"</strong></p>
+          <div class="answer">
+<p>"Test design techniques are systematic ways to derive test cases so we get good coverage with fewer tests. The main black-box ones are equivalence partitioning, boundary value analysis, decision tables, state transition testing and use case testing, plus pairwise testing for combinations. There are also experience-based techniques like error guessing and exploratory testing, and white-box techniques such as statement and branch coverage."</p><div style="overflow-x:auto;"><table><tr><th>Technique</th><th>Use it when…</th><th>Core idea</th></tr><tr><td>Equivalence Partitioning (EP)</td><td>Inputs have ranges or groups</td><td>Split inputs into groups that behave the same; test one value per group</td></tr><tr><td>Boundary Value Analysis (BVA)</td><td>Inputs have numeric/limit edges</td><td>Test at and around the edges, where defects concentrate</td></tr><tr><td>Decision Table</td><td>Several conditions combine into outcomes</td><td>List every combination of conditions and the expected action</td></tr><tr><td>State Transition</td><td>Behavior depends on current state/history</td><td>Test valid and invalid moves between states</td></tr><tr><td>Pairwise (combinatorial)</td><td>Many parameters × many values</td><td>Cover every pair of values with far fewer tests</td></tr><tr><td>Error Guessing / Exploratory</td><td>Experience, time pressure, gaps in specs</td><td>Use knowledge of typical failures; explore with a charter</td></tr></table></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">↔️ EP + BVA</div>
+          <span class="badge badge-accent">Worked example</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"A field accepts ages from 18 to 65. Which test values do you pick?"</strong></p>
+          <div class="answer">
+<p>"With equivalence partitioning I get three partitions: below 18 is invalid, 18 to 65 is valid, and above 65 is invalid. I test one representative from each. With boundary value analysis I test the edges: 17, 18, 19, 64, 65 and 66. EP reduces the number of tests; BVA targets the edges where off-by-one bugs live."</p><div style="overflow-x:auto;"><table><tr><th>Partition</th><th>Range</th><th>EP value</th><th>BVA values</th></tr><tr><td>Invalid (too low)</td><td>&lt; 18</td><td>10</td><td>17</td></tr><tr><td>Valid</td><td>18 – 65</td><td>35</td><td>18, 19, 64, 65</td></tr><tr><td>Invalid (too high)</td><td>&gt; 65</td><td>80</td><td>66</td></tr><tr><td>Extra negatives</td><td>empty, letters, negative, decimal</td><td>"", "abc", -1, 18.5</td><td>—</td></tr></table></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🧮 Decision Table</div>
+          <span class="badge badge-accent">Worked example</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"Show me how you would test a discount rule with several conditions."</strong></p>
+          <div class="answer">
+<p>"I would build a decision table: each column is one combination of conditions with its expected action, so no combination is forgotten. Every column becomes at least one test case."</p><p style="margin-top:12px;"><strong>Rule: members get 5%. Orders over $100 get 10%. Members with orders over $100 get 15%.</strong></p><div style="overflow-x:auto;"><table><tr><th>Condition / Action</th><th>Rule 1</th><th>Rule 2</th><th>Rule 3</th><th>Rule 4</th></tr><tr><td>Member?</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td></tr><tr><td>Order &gt; $100?</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td></tr><tr><td><strong>Discount</strong></td><td><strong>15%</strong></td><td><strong>5%</strong></td><td><strong>10%</strong></td><td><strong>0%</strong></td></tr></table></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔄 State Transition</div>
+          <span class="badge badge-accent">Worked example</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"How do you test something that behaves differently depending on its status?"</strong></p>
+          <div class="answer">
+<p>"I model the states and the allowed transitions, then test every valid transition and also try the invalid ones to confirm they are rejected. An order is a good example."</p><div style="overflow-x:auto;"><table><tr><th>From state</th><th>Event</th><th>To state</th><th>Valid?</th></tr><tr><td>Created</td><td>Pay</td><td>Paid</td><td>✅</td></tr><tr><td>Paid</td><td>Ship</td><td>Shipped</td><td>✅</td></tr><tr><td>Shipped</td><td>Deliver</td><td>Delivered</td><td>✅</td></tr><tr><td>Created / Paid</td><td>Cancel</td><td>Cancelled</td><td>✅</td></tr><tr><td>Shipped</td><td>Cancel</td><td>—</td><td>❌ must be rejected</td></tr><tr><td>Delivered</td><td>Pay</td><td>—</td><td>❌ must be rejected</td></tr></table></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔗 Pairwise Testing</div>
+          <span class="badge badge-accent">Combinatorial</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"When would you use pairwise testing?"</strong></p>
+          <div class="answer">
+<p>"When there are many parameters with several values each and testing every combination is impractical. Most defects are triggered by one or two parameters interacting, so pairwise covers every pair of values with far fewer tests. For example, 3 browsers × 3 operating systems × 2 languages is 18 combinations, but pairwise covers all pairs in about 9 tests. Tools like PICT or AllPairs generate the sets."</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="types">
+      <div class="section-title"><span class="icon">🗂️</span> Testing Types: Functional vs. Non-Functional</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">⚖️ The Core Difference</div>
+          <span class="badge badge-accent">Must know</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What is the difference between functional and non-functional testing?"</strong></p>
+          <div class="answer">
+<p>"Functional testing checks <strong>what</strong> the system does: features and business rules against the requirements. Non-functional testing checks <strong>how well</strong> it does it: performance, security, usability, reliability, compatibility and so on. A login that accepts valid credentials is functional; a login that responds in under 2 seconds with 1,000 users at once is non-functional."</p><div style="overflow-x:auto;"><table><tr><th></th><th>Functional</th><th>Non-functional</th></tr><tr><td>Question it answers</td><td>Does it do the right thing?</td><td>Does it do it well enough?</td></tr><tr><td>Based on</td><td>Functional requirements, user stories</td><td>Quality attributes, SLAs, NFRs</td></tr><tr><td>Examples</td><td>Unit, integration, system, smoke, sanity, regression, UAT, API</td><td>Performance (load, stress, spike, endurance), security, usability, accessibility, compatibility, reliability, scalability, localization</td></tr><tr><td>Typical tools</td><td>Selenium, Cypress, Postman</td><td>JMeter, k6, OWASP ZAP, Lighthouse</td></tr></table></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🧪 Smoke, Sanity, Regression, Retest</div>
+          <span class="badge badge-blue">Often confused</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What is the difference between smoke, sanity, regression and retesting?"</strong></p>
+          <div class="answer">
+<p>"Smoke testing is a quick, broad check that the build is stable enough to test further. Sanity testing is a narrow check that a specific fix or change works. Regression testing verifies that existing features still work after a change. Retesting, or confirmation testing, re-runs the exact test that failed to confirm the defect is fixed."</p><div style="overflow-x:auto;"><table><tr><th>Type</th><th>Scope</th><th>When</th><th>Goal</th></tr><tr><td>Smoke</td><td>Broad and shallow, critical paths</td><td>New build deployed</td><td>Is the build testable?</td></tr><tr><td>Sanity</td><td>Narrow and deep, one area</td><td>After a small fix/change</td><td>Does this change work?</td></tr><tr><td>Regression</td><td>Wide, existing features</td><td>After any change</td><td>Did we break anything?</td></tr><tr><td>Retest</td><td>The failed test cases only</td><td>After a defect fix</td><td>Is the bug really fixed?</td></tr></table></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">📦 Levels, Box Approaches</div>
+          <span class="badge badge-green">Know the vocabulary</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What are the test levels, and what are black-box, white-box and gray-box testing?"</strong></p>
+          <div class="answer">
+<p>"The four classic test levels are unit, integration, system and acceptance testing. Black-box testing checks behavior without looking at the code, white-box testing uses knowledge of the internal structure to design tests, and gray-box testing mixes both, for example API tests that also check the database."</p><ul class="checklist"><li><span><strong>Unit:</strong> one function/class, written by developers</span></li><li><span><strong>Integration:</strong> modules or services working together (APIs, databases)</span></li><li><span><strong>System:</strong> the whole application end to end against requirements</span></li><li><span><strong>Acceptance (UAT):</strong> business/users confirm it meets their needs</span></li></ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="docs">
+      <div class="section-title"><span class="icon">📝</span> Test Documentation</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🆚 Test Case vs. Test Scenario</div>
+          <span class="badge badge-accent">Classic question</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What is the difference between a test case and a test scenario?"</strong></p>
+          <div class="answer">
+<p>"A test scenario is a high-level statement of <strong>what</strong> to test, for example "verify the login functionality". A test case is a detailed set of steps with data, preconditions and expected results that describes <strong>how</strong> to test it. One scenario normally produces many test cases."</p><div style="overflow-x:auto;"><table><tr><th></th><th>Test scenario</th><th>Test case</th></tr><tr><td>Level of detail</td><td>High level, one line</td><td>Detailed, step by step</td></tr><tr><td>Answers</td><td>What to test?</td><td>How to test it?</td></tr><tr><td>Contains</td><td>Title / objective</td><td>ID, title, preconditions, steps, test data, expected result, status</td></tr><tr><td>Derived from</td><td>Requirements, user stories</td><td>Scenarios</td></tr><tr><td>Quantity</td><td>Few</td><td>Many per scenario</td></tr></table></div><p style="margin-top:12px;"><strong>Example</strong></p><div style="overflow-x:auto;"><table><tr><th>Scenario</th><th>Test cases</th></tr><tr><td>Verify login functionality</td><td>TC1 valid credentials → dashboard opens<br>TC2 wrong password → error message shown<br>TC3 empty fields → validation messages<br>TC4 three failed attempts → account locked</td></tr></table></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">📋 Plan vs. Strategy</div>
+          <span class="badge badge-blue">Documents you own</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"Which test documents does a Test Lead own, and what is the difference between a test strategy and a test plan?"</strong></p>
+          <div class="answer">
+<p>"The test strategy is a high-level, long-lived document that defines the general approach to testing for the organization or product. The test plan is project or release specific: scope, schedule, resources, environments, risks, and entry and exit criteria. Around them sit test cases and suites, the traceability matrix, defect reports and the test summary report."</p><div style="overflow-x:auto;"><table><tr><th>Document</th><th>Purpose</th></tr><tr><td>Test strategy</td><td>Overall approach, levels, types, tools, standards (changes rarely)</td></tr><tr><td>Test plan</td><td>What, when, who and how for one project/release</td></tr><tr><td>Test cases / suites</td><td>Detailed executable checks, grouped for execution</td></tr><tr><td>Traceability matrix (RTM)</td><td>Maps requirements ↔ test cases ↔ defects to prove coverage</td></tr><tr><td>Defect report</td><td>Evidence and details of a failure</td></tr><tr><td>Test summary report</td><td>Results, metrics, open risks, go/no-go input at the end</td></tr></table></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🐞 A Good Defect Report</div>
+          <span class="badge badge-green">Often asked</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What goes in a good defect report, and what is the difference between severity and priority?"</strong></p>
+          <div class="answer">
+<p>"A good report has a clear title, environment and build, steps to reproduce, expected versus actual result, and evidence such as screenshots, logs or video. Severity is the technical impact of the defect; priority is how soon the business wants it fixed. They can differ: a typo in the company logo is low severity but high priority, while a crash in a rarely used admin report is high severity but may be low priority."</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="requirements">
+      <div class="section-title"><span class="icon">📄</span> Requirements Documentation</div>
+<div class="alert alert-info"><span class="alert-icon">ℹ️</span><div>Names and formats vary between companies. Give the textbook definition, then say how it is used in your team.</div></div>
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">📚 SRS vs. PRD vs. BRD</div>
+          <span class="badge badge-accent">Must know</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What are SRS, PRD and BRD, and how do they differ?"</strong></p>
+          <div class="answer">
+<p>"The BRD, Business Requirements Document, explains <strong>why</strong> the project exists: business goals, stakeholders and expected benefits. The PRD, Product Requirements Document, explains <strong>what</strong> the product should do from the user point of view: features, user stories and priorities. The SRS, Software Requirements Specification, is the most technical: it details <strong>exactly how the system must behave</strong>, with functional and non-functional requirements, interfaces and constraints."</p><div style="overflow-x:auto;"><table><tr><th>Document</th><th>Answers</th><th>Typically owned by</th><th>Contains</th><th>Detail</th></tr><tr><td><strong>BRD</strong></td><td>Why?</td><td>Business analyst / business stakeholders</td><td>Objectives, scope, stakeholders, benefits, success criteria</td><td>High level</td></tr><tr><td><strong>PRD</strong></td><td>What?</td><td>Product manager / owner</td><td>Features, user stories, user flows, priorities, acceptance criteria</td><td>Medium</td></tr><tr><td><strong>SRS</strong></td><td>How must it behave?</td><td>Business/system analyst, architects</td><td>Functional and non-functional requirements, interfaces, constraints, data</td><td>Very detailed</td></tr></table></div><p style="margin-top:8px;">Typical flow: <strong>BRD → PRD → SRS</strong>, from business need to precise system behavior.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🧰 Using Them as a Test Lead</div>
+          <span class="badge badge-green">Practical value</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"How do you use requirement documents in testing?"</strong></p>
+          <div class="answer">
+<p>"I review them for testability before development starts: looking for ambiguity, gaps and contradictions. Then I derive test scenarios and cases from them and link each one to a requirement in a traceability matrix, so I can prove coverage and see the impact of changes. In agile teams the same role is played by user stories with acceptance criteria."</p><ul class="checklist"><li><span><strong>Functional requirements</strong> → functional test cases</span></li><li><span><strong>Non-functional requirements</strong> (performance, security…) → non-functional tests</span></li><li><span>Ask: is it clear, measurable, testable, complete, consistent?</span></li></ul><div class="code-wrap"><div class="code-label">Acceptance criteria (Gherkin)</div><pre><span class="kw">Feature</span>: Password reset
+  <span class="kw">Scenario</span>: Reset link expires
+    <span class="kw">Given</span> a user requested a password reset
+    <span class="kw">When</span> the user opens the link after 24 hours
+    <span class="kw">Then</span> the system shows <span class="str">"Link expired"</span>
+    <span class="kw">And</span> offers to send a new link</pre></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="estimation">
+      <div class="section-title"><span class="icon">⏳</span> Test Estimation</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">📐 Common Techniques</div>
+          <span class="badge badge-accent">Must know</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What test estimation techniques do you know?"</strong></p>
+          <div class="answer">
+<p>"The ones I use most are work breakdown structure, three-point estimation, and in agile teams planning poker with story points. I also use historical data from similar projects, expert judgment, and Wideband Delphi when I want independent estimates from several people."</p><div style="overflow-x:auto;"><table><tr><th>Technique</th><th>How it works</th><th>Best for</th></tr><tr><td>Work Breakdown Structure (WBS)</td><td>Split the work into small tasks, estimate each, add up</td><td>Well-understood scope</td></tr><tr><td>Three-point (PERT)</td><td>Optimistic, most likely, pessimistic → weighted average</td><td>Uncertain tasks</td></tr><tr><td>Planning poker / story points</td><td>Team votes on relative size using Fibonacci-like cards</td><td>Agile sprints</td></tr><tr><td>Wideband Delphi</td><td>Experts estimate anonymously in rounds until they converge</td><td>Large or risky work</td></tr><tr><td>Historical / analogous</td><td>Reuse actuals from similar past projects</td><td>Repeating projects</td></tr><tr><td>Percentage of dev effort</td><td>Testing ≈ a ratio of development effort (rule of thumb)</td><td>Early, rough estimates</td></tr><tr><td>Test/Function Point Analysis</td><td>Size the application, convert to effort</td><td>Formal contracts</td></tr></table></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔢 Three-Point Estimate</div>
+          <span class="badge badge-accent">Worked example</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"How do you calculate a three-point estimate?"</strong></p>
+          <div class="answer">
+<p>"Estimate = (Optimistic + 4 × Most likely + Pessimistic) / 6. If regression testing is 4 days at best, 6 days most likely and 14 days at worst, the estimate is (4 + 24 + 14) / 6 = 7 days. The spread, (P − O) / 6, which is about 1.7 days, tells me how uncertain it is."</p><div class="code-wrap"><div class="code-label">PERT formula</div><pre>E  = (O + 4M + P) / 6      = (4 + 4*6 + 14) / 6 = 7 days
+SD = (P - O) / 6           = (14 - 4) / 6       ~ 1.7 days</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🧭 Estimating with Incomplete Info</div>
+          <span class="badge badge-blue">Lead-level</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"How do you estimate testing when requirements are incomplete?"</strong></p>
+          <div class="answer">
+<p>"I break the work down as far as the information allows, use historical data from similar features, and write down explicit assumptions and risks. I give a range instead of a single number, add a buffer for defects, retesting and environment issues, and commit to re-estimating when requirements are clarified. I also ask questions early, because every unknown is a risk to the estimate."</p><ul class="checklist"><li><span>Factors: scope, complexity, risk, team skills, environments, test data, automation, regression size</span></li><li><span>Include test design, execution, retesting, reporting, meetings and environment setup</span></li><li><span>Communicate assumptions and update the estimate as facts change</span></li></ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="metrics">
+      <div class="section-title"><span class="icon">📊</span> Testing Metrics</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">✅ Pass / Fail Rate</div>
+          <span class="badge badge-accent">Must know</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What is the pass rate and how do you calculate it?"</strong></p>
+          <div class="answer">
+<p>"Pass rate is the percentage of executed test cases that passed: passed divided by executed, times 100. Fail rate is the same with failed tests. I always state the denominator, because some teams divide by total planned tests."</p><p style="margin-top:12px;"><strong>Example: 250 planned · 170 passed · 20 failed · 10 blocked · 50 not run</strong></p><div style="overflow-x:auto;"><table><tr><th>Metric</th><th>Formula</th><th>Result</th></tr><tr><td>Executed</td><td>Passed + Failed</td><td>190</td></tr><tr><td>Pass rate</td><td>170 / 190 × 100</td><td><strong>89.5%</strong></td></tr><tr><td>Fail rate</td><td>20 / 190 × 100</td><td><strong>10.5%</strong></td></tr><tr><td>Execution progress</td><td>190 / 250 × 100</td><td><strong>76%</strong></td></tr><tr><td>Blocked</td><td>10 / 250 × 100</td><td>4%</td></tr></table></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">📈 Other Key Metrics</div>
+          <span class="badge badge-blue">Know 4–5</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"Which other QA metrics do you use?"</strong></p>
+          <div class="answer">
+<p>"Beyond pass rate, I look at defect density, defect leakage, test coverage, automation coverage and defect age. They answer different questions: how buggy is it, how many escaped to production, and how much did we actually test."</p><div style="overflow-x:auto;"><table><tr><th>Metric</th><th>Formula / meaning</th><th>Example</th></tr><tr><td>Defect density</td><td>Defects ÷ size (KLOC, module or story points)</td><td>30 defects in 15 KLOC = 2 per KLOC</td></tr><tr><td>Defect leakage</td><td>Production defects ÷ (testing + production defects) × 100</td><td>5 ÷ (45 + 5) = 10%</td></tr><tr><td>Defect removal efficiency</td><td>Defects found before release ÷ total defects × 100</td><td>45 ÷ 50 = 90%</td></tr><tr><td>Requirement coverage</td><td>Requirements with tests ÷ total requirements × 100</td><td>90 / 100 = 90%</td></tr><tr><td>Automation coverage</td><td>Automated cases ÷ total cases × 100</td><td>300 / 600 = 50%</td></tr><tr><td>Defect age / reopen rate</td><td>How long defects stay open / how many come back</td><td>Quality of fixes and triage</td></tr></table></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🎤 Reporting to Stakeholders</div>
+          <span class="badge badge-green">Lead-level</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"Which metrics do you report to stakeholders, and what are the pitfalls?"</strong></p>
+          <div class="answer">
+<p>"I report a small set: execution progress, pass rate, open defects by severity, defect leakage and coverage of high-risk areas, always with a trend and a recommendation. The pitfall is relying on one number: a 98% pass rate means little if the failing 2% is the checkout. And I never use bug counts to rank testers, because metrics drive behavior."</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="api">
+      <div class="section-title"><span class="icon">🔌</span> API Testing</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔢 Status Code Groups</div>
+          <span class="badge badge-accent">Must know</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What are the HTTP status code groups, and which common codes should a tester know?"</strong></p>
+          <div class="answer">
+<p>"There are five groups: 1xx informational, 2xx success, 3xx redirection, 4xx client errors and 5xx server errors. In practice I check 200 for a successful read, 201 for a created resource, 204 for success without a body, 400 for invalid input, 401 when the user is not authenticated, 403 when they are authenticated but not allowed, 404 for a missing resource, 409 for a conflict, 429 for rate limiting, and 500 or 503 for server problems."</p><div style="overflow-x:auto;"><table><tr><th>Group</th><th>Meaning</th><th>Common codes</th></tr><tr><td><code>1xx</code></td><td>Informational</td><td>100 Continue, 101 Switching Protocols</td></tr><tr><td><code>2xx</code></td><td>Success</td><td>200 OK · 201 Created · 202 Accepted · 204 No Content</td></tr><tr><td><code>3xx</code></td><td>Redirection</td><td>301 Moved Permanently · 302 Found · 304 Not Modified</td></tr><tr><td><code>4xx</code></td><td>Client error (the request is wrong)</td><td>400 Bad Request · 401 Unauthorized · 403 Forbidden · 404 Not Found · 405 Method Not Allowed · 409 Conflict · 415 Unsupported Media Type · 422 Unprocessable Entity · 429 Too Many Requests</td></tr><tr><td><code>5xx</code></td><td>Server error (the server failed)</td><td>500 Internal Server Error · 502 Bad Gateway · 503 Service Unavailable · 504 Gateway Timeout</td></tr></table></div><div class="alert alert-info" style="margin-top:8px;"><span class="alert-icon">💡</span><div><strong>401 vs 403:</strong> 401 = "I don't know who you are" (missing/invalid credentials). 403 = "I know who you are, but you are not allowed."</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔗 Base URL vs. Resource URL</div>
+          <span class="badge badge-accent">Must know</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What is the difference between a base URL and a resource URL?"</strong></p>
+          <div class="answer">
+<p>"The base URL is the common root of the API: protocol, host and usually the version, like https://api.shopdemo.com/v2. A resource URL, or endpoint, is the base URL plus the path that identifies a specific resource, like /orders/1024. Query parameters after the question mark filter or shape the response and are not part of the resource identity."</p><div class="code-wrap"><div class="code-label">Anatomy of a request URL</div><pre>https://api.shopdemo.com/v2/orders/1024/items?status=shipped&amp;limit=10
+\________ base URL _______/\ resource path _/\____ query params ____/</pre></div><ul class="checklist"><li><span><strong>Collection:</strong> <code>/orders</code> · <strong>Single resource:</strong> <code>/orders/1024</code> · <strong>Sub-resource:</strong> <code>/orders/1024/items</code></span></li><li><span><strong>Path parameter</strong> identifies the resource (<code>1024</code>); <strong>query parameter</strong> filters/sorts/paginates (<code>?limit=10</code>)</span></li><li><span>Changing the base URL switches environments (dev / staging / prod) without touching the resource paths</span></li></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔧 HTTP Methods</div>
+          <span class="badge badge-accent">Must know</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What are the main HTTP methods and which ones are idempotent?"</strong></p>
+          <div class="answer">
+<p>"GET reads, POST creates, PUT replaces a resource, PATCH updates part of it, and DELETE removes it. GET, PUT and DELETE are idempotent, meaning repeating the same request leaves the server in the same state. POST is not, because sending it twice can create two resources."</p><div style="overflow-x:auto;"><table><tr><th>Method</th><th>Purpose</th><th>Safe</th><th>Idempotent</th><th>Typical success</th></tr><tr><td>GET</td><td>Read</td><td>✅</td><td>✅</td><td>200</td></tr><tr><td>POST</td><td>Create</td><td>❌</td><td>❌</td><td>201</td></tr><tr><td>PUT</td><td>Replace whole resource</td><td>❌</td><td>✅</td><td>200 / 204</td></tr><tr><td>PATCH</td><td>Partial update</td><td>❌</td><td>Not guaranteed</td><td>200 / 204</td></tr><tr><td>DELETE</td><td>Remove</td><td>❌</td><td>✅</td><td>204</td></tr></table></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">✅ What to Validate</div>
+          <span class="badge badge-green">Checklist</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What do you validate when testing an API?"</strong></p>
+          <div class="answer">
+<p>"I validate the status code, the response body (fields, data types and schema), the headers such as Content-Type, and the response time. Then I test negative cases like invalid input, missing fields and wrong authentication, and authorization rules such as 401 versus 403. Finally I confirm data actually persisted, for example with a GET after a POST, and I check pagination, filtering and rate limits."</p><ul class="checklist"><li><span>Authentication types: API key, Basic, Bearer token (JWT), OAuth 2.0</span></li><li><span>Request parts: method, URL, headers, query/path params, body (JSON)</span></li><li><span>Tools: Postman/Newman, REST Assured, curl</span></li></ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="web">
+      <div class="section-title"><span class="icon">🌐</span> Web Testing: HTML & CSS</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🏗️ HTML vs. CSS vs. JavaScript</div>
+          <span class="badge badge-accent">Must know</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What are HTML and CSS, and how do they relate to JavaScript?"</strong></p>
+          <div class="answer">
+<p>"HTML defines the structure and content of a page with elements and attributes, CSS controls the presentation (layout, colors, spacing, responsiveness), and JavaScript adds behavior and interactivity. The browser combines them into the DOM and renders the page."</p><div style="overflow-x:auto;"><table><tr><th>Technology</th><th>Role</th><th>Example</th></tr><tr><td>HTML</td><td>Structure / content</td><td><code>&lt;form&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;button&gt;</code></td></tr><tr><td>CSS</td><td>Style / layout</td><td>Colors, fonts, flexbox/grid, media queries</td></tr><tr><td>JavaScript</td><td>Behavior</td><td>Validation, API calls, dynamic updates</td></tr></table></div><div class="code-wrap"><div class="code-label">HTML</div><pre><span class="kw">&lt;form</span> <span class="fn">id</span>=<span class="str">"login"</span>&gt;
+  <span class="kw">&lt;label</span> <span class="fn">for</span>=<span class="str">"email"</span>&gt;Email<span class="kw">&lt;/label</span>&gt;
+  <span class="kw">&lt;input</span> <span class="fn">id</span>=<span class="str">"email"</span> <span class="fn">type</span>=<span class="str">"email"</span> required&gt;
+  <span class="kw">&lt;button</span> <span class="fn">class</span>=<span class="str">"btn-primary"</span> <span class="fn">data-testid</span>=<span class="str">"submit"</span>&gt;Sign in<span class="kw">&lt;/button</span>&gt;
+<span class="kw">&lt;/form</span>&gt;</pre></div><div class="code-wrap"><div class="code-label">CSS</div><pre><span class="cls">.btn-primary </span>{
+  <span class="fn">background</span>: #1f6feb;
+  <span class="fn">padding</span>: 10px 16px;
+}
+<span class="cls">@media (max-width: 600px) </span>{
+  form { <span class="fn">width</span>: 100%; }
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🎯 Why Testers Need It</div>
+          <span class="badge badge-blue">Practical</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"Why does a tester need to understand HTML and CSS?"</strong></p>
+          <div class="answer">
+<p>"To write stable locators for automation, to inspect and debug with browser DevTools, to verify attributes such as required, type and maxlength, to check accessibility basics such as alt text and labels, and to test responsive layouts. I prefer stable attributes like id or data-testid over fragile absolute XPaths."</p><div class="code-wrap"><div class="code-label">Locator examples</div><pre>#email                          # by id
+.btn-primary                    # by class
+input[type="email"]             # by attribute
+form#login button               # descendant
+//button[text()='Sign in']      # XPath by visible text</pre></div><ul class="checklist"><li><span><strong>Box model:</strong> content → padding → border → margin</span></li><li><span><strong>DevTools:</strong> Elements (DOM/CSS), Console (errors), Network (requests), Application (cookies, storage)</span></li></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🧭 What Happens When You Type a URL?</div>
+          <span class="badge badge-green">Web basics</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What happens when you type a URL in the browser?"</strong></p>
+          <div class="answer">
+<p>"The browser resolves the domain name to an IP address through DNS, opens a connection (with TLS for HTTPS), sends an HTTP request, and receives a response. It then parses the HTML into the DOM, applies the CSS, runs the JavaScript, loads extra resources like images and API calls, and renders the page."</p><div style="overflow-x:auto;"><table><tr><th>Concept</th><th>Quick definition</th></tr><tr><td>Cookie</td><td>Small data sent with every request to that site; used for sessions, expires</td></tr><tr><td>Local storage</td><td>Browser key-value storage that persists until cleared</td></tr><tr><td>Session storage</td><td>Same, but cleared when the tab closes</td></tr><tr><td>Responsive design</td><td>Layout adapts to viewport size (media queries)</td></tr><tr><td>Cross-browser</td><td>Test on Chromium (Chrome/Edge), WebKit (Safari) and Gecko (Firefox)</td></tr></table></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="mobile">
+      <div class="section-title"><span class="icon">📱</span> Mobile Testing: Device Selection</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🎯 Selection Criteria</div>
+          <span class="badge badge-accent">Must know</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"How do you choose which devices to test on?"</strong></p>
+          <div class="answer">
+<p>"I start with data, not guesses: analytics from the real app (or market data for a new app) show which devices and OS versions our users actually have. Then I choose a set that covers the main OS versions, a range of screen sizes and form factors, different manufacturers (especially on Android, because of fragmentation), and low-end, mid-range and flagship performance tiers. I add devices for required hardware such as biometrics, camera, NFC or GPS, and I adjust for business priorities and past defects."</p><ul class="checklist"><li><span><strong>Usage:</strong> top devices and OS versions in analytics (Firebase/GA), target market and region</span></li><li><span><strong>OS coverage:</strong> latest, previous versions, and the minimum supported</span></li><li><span><strong>Screen:</strong> size, resolution, notch/foldable, tablet vs. phone</span></li><li><span><strong>Manufacturer/skin:</strong> Samsung, Xiaomi, Google Pixel, Apple…</span></li><li><span><strong>Hardware tier:</strong> RAM/CPU (low-end devices expose performance issues)</span></li><li><span><strong>Features:</strong> biometrics, camera, NFC, sensors, connectivity</span></li><li><span><strong>Risk:</strong> devices with past defects, key customers, contract requirements</span></li></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🗃️ Device Matrix</div>
+          <span class="badge badge-blue">Practical</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What does a device matrix look like?"</strong></p>
+          <div class="answer">
+<p>"I group devices into tiers. Tier 1 is must-test on every release, Tier 2 on major releases or regression cycles, and Tier 3 is covered by cloud devices or smoke checks."</p><div style="overflow-x:auto;"><table><tr><th>Tier</th><th>Example coverage</th><th>Run</th></tr><tr><td>1</td><td>Latest iPhone on latest iOS · Popular Samsung flagship on latest Android</td><td>Every release</td></tr><tr><td>2</td><td>Older/small iPhone on minimum iOS · Mid-range Android from another manufacturer · One tablet</td><td>Major releases</td></tr><tr><td>3</td><td>Low-end Android (2–3 GB RAM) · Foldable · Older Android versions</td><td>Smoke / cloud farm</td></tr></table></div><p style="margin-top:8px;">Refresh the matrix every quarter using updated analytics.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">📲 Real Devices vs. Emulators</div>
+          <span class="badge badge-green">Know the trade-offs</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"When do you use real devices, emulators/simulators, or a cloud device farm?"</strong></p>
+          <div class="answer">
+<p>"Emulators and simulators are fast and cheap for early development and quick checks. Real devices are needed for performance, battery, sensors, push notifications and final validation. Cloud device farms like BrowserStack, Sauce Labs, AWS Device Farm or Firebase Test Lab give broad coverage without owning every device."</p><ul class="checklist"><li><span><strong>Mobile-specific checks:</strong> interruptions (calls, notifications), network changes and offline mode, permissions, orientation, gestures, install/update/uninstall, battery and memory</span></li></ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="cicd">
+      <div class="section-title"><span class="icon">⚙️</span> CI/CD: Jobs and Pipelines</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🆚 Job vs. Pipeline</div>
+          <span class="badge badge-accent">Must know</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What is the difference between a job and a pipeline?"</strong></p>
+          <div class="answer">
+<p>"A pipeline is the complete automated workflow that runs when something triggers it, like a push, a pull request or a schedule. A job is a single unit of work inside that pipeline, such as running unit tests, linting or building the app. Jobs are grouped into stages: stages run in order, and jobs inside the same stage can run in parallel. Think of the pipeline as the assembly line and each job as one station."</p><div style="overflow-x:auto;"><table><tr><th></th><th>Pipeline</th><th>Job</th></tr><tr><td>What it is</td><td>The whole automated workflow</td><td>One task inside it</td></tr><tr><td>Contains</td><td>Stages and jobs</td><td>Commands/steps run on a runner</td></tr><tr><td>Triggered by</td><td>Push, PR, schedule, manual</td><td>The pipeline (stage order)</td></tr><tr><td>Example</td><td>build → test → deploy</td><td>unit-tests, api-tests, lint</td></tr><tr><td>Result</td><td>Passed/failed overall</td><td>Passed/failed individually</td></tr></table></div><div class="code-wrap"><div class="code-label">Pipeline with 3 stages and 3 jobs (GitLab-style)</div><pre><span class="cls">stages</span>:
+  - build
+  - test
+  - deploy
+
+<span class="cls">unit-tests</span>:
+<span class="cls">  stage</span>: test
+<span class="cls">  script</span>:
+    - npm ci
+    - npm run test:unit
+
+<span class="cls">api-tests</span>:
+<span class="cls">  stage</span>: test
+<span class="cls">  script</span>:
+    - npm run test:api
+
+<span class="cls">deploy-staging</span>:
+<span class="cls">  stage</span>: deploy
+<span class="cls">  script</span>:
+    - ./deploy.sh staging</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🔁 CI vs. CD</div>
+          <span class="badge badge-blue">Know the terms</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"What are continuous integration, continuous delivery and continuous deployment?"</strong></p>
+          <div class="answer">
+<p>"Continuous integration means merging code frequently and automatically building and testing every change. Continuous delivery means every change that passes is ready to be released, but a person approves the release. Continuous deployment goes one step further and releases automatically to production with no manual approval."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🧪 QA in the Pipeline</div>
+          <span class="badge badge-green">Lead-level</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"Where does QA fit in a CI/CD pipeline?"</strong></p>
+          <div class="answer">
+<p>"I use the pipeline as a safety net: quick checks first, slower ones later, and a failed stage stops the release. Typical order is static analysis and linting, unit tests, build, integration and API tests, deploy to staging, smoke and end-to-end tests, then performance and security scans, with quality gates between stages."</p><ul class="checklist"><li><span><strong>Quality gate:</strong> rule that blocks promotion (e.g. no critical defects, coverage ≥ X%)</span></li><li><span><strong>Fail fast:</strong> cheap tests run first; run independent jobs in parallel</span></li><li><span><strong>Artifacts and reports:</strong> test results, screenshots and logs saved for every run</span></li><li><span><strong>Flaky tests:</strong> quarantine and fix them, otherwise trust in the pipeline disappears</span></li></ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="cli">
+      <div class="section-title"><span class="icon">⌨️</span> CLI: Terminal Basics</div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">📚 Must-Know Commands</div>
+          <span class="badge badge-accent">Must know</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"Which basic terminal commands do you use as a tester?"</strong></p>
+          <div class="answer">
+<p>"For navigation I use pwd, ls and cd; for files mkdir, cp, mv, rm and cat. To work with logs I use tail, head and grep. I use curl to call APIs, ping for connectivity, ps and kill for processes, and chmod to make scripts executable. And Git commands for version control."</p><div style="overflow-x:auto;"><table><tr><th>Command</th><th>What it does</th><th>Tester use case</th></tr><tr><td><code>pwd</code></td><td>Print current folder</td><td>Where am I?</td></tr><tr><td><code>ls</code> (<code>dir</code> on Windows)</td><td>List files</td><td>Check generated reports</td></tr><tr><td><code>cd &lt;folder&gt;</code></td><td>Change folder</td><td>Move to the test project</td></tr><tr><td><code>mkdir</code> / <code>cp</code> / <code>mv</code> / <code>rm</code></td><td>Create / copy / move-rename / delete</td><td>Organize test data</td></tr><tr><td><code>cat</code> / <code>head</code> / <code>tail</code></td><td>Show file / first lines / last lines</td><td>Read logs; <code>tail -f</code> follows live</td></tr><tr><td><code>grep</code></td><td>Search text</td><td>Find errors in logs</td></tr><tr><td><code>find</code></td><td>Find files by name</td><td>Locate config or reports</td></tr><tr><td><code>curl</code></td><td>Send HTTP requests</td><td>Quick API check</td></tr><tr><td><code>chmod +x</code></td><td>Make a script executable</td><td>Run test scripts</td></tr><tr><td><code>ps</code> / <code>kill</code></td><td>List / stop processes</td><td>Stop a hung test run</td></tr><tr><td><code>export VAR=value</code></td><td>Set environment variable</td><td>Point tests to staging</td></tr></table></div><p style="margin-top:12px;"><strong>Git essentials</strong></p><div style="overflow-x:auto;"><table><tr><th>Command</th><th>Purpose</th></tr><tr><td><code>git status</code></td><td>See changed files</td></tr><tr><td><code>git clone &lt;url&gt;</code></td><td>Download a repository</td></tr><tr><td><code>git pull</code></td><td>Get the latest changes</td></tr><tr><td><code>git checkout -b feature/x</code></td><td>Create and switch to a branch</td></tr><tr><td><code>git add . · git commit -m "msg" · git push</code></td><td>Save and share changes</td></tr></table></div><p style="margin-top:8px;">On Windows: <code>dir</code>, <code>type</code>, <code>findstr</code> are the equivalents of ls, cat, grep (or use Git Bash/WSL).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🛠️ Practical Scenarios</div>
+          <span class="badge badge-green">Show you use it</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"Give me a real example of how you use the terminal in testing."</strong></p>
+          <div class="answer">
+<p>"When a test fails in CI I read the logs from the terminal, filter them with grep, reproduce an API call with curl, and re-run only the failing test from the command line. I also use pipes and redirection to save results, and I check exit codes, because that is how CI decides if a step passed."</p><div class="code-wrap"><div class="code-label">Everyday examples</div><pre><span class="fn">cd</span> ~/projects/shop-tests                    <span class="cm"># go to the project folder</span>
+<span class="fn">ls</span> <span class="cls">-la</span>                                      <span class="cm"># list files, including hidden ones</span>
+<span class="fn">tail</span> <span class="cls">-f</span> logs/app.log | <span class="fn">grep</span> ERROR           <span class="cm"># follow the log live, show only errors</span>
+<span class="fn">grep</span> <span class="cls">-rn</span> <span class="str">"NullPointerException"</span> logs/       <span class="cm"># search text recursively, with line numbers</span>
+<span class="fn">curl</span> <span class="cls">-i</span> https://api.example.com/v1/health   <span class="cm"># call an API, print status and headers</span>
+<span class="fn">npm</span> test                                    <span class="cm"># run the test suite (or: mvn test / pytest)</span>
+<span class="fn">npm</span> test &gt; results.txt                      <span class="cm"># save the output to a file</span>
+<span class="fn">echo</span> $?                                     <span class="cm"># exit code of last command: 0 = success</span></pre></div><ul class="checklist"><li><span><code>|</code> pipe: send one command output to another · <code>&gt;</code> overwrite file · <code>&gt;&gt;</code> append to file</span></li><li><span>Exit code <code>0</code> = success, non-zero = failure; CI jobs fail on non-zero</span></li><li><span>Mobile: <code>adb devices</code> lists Android devices, <code>adb logcat</code> shows device logs</span></li><li><span>Containers: <code>docker ps</code> lists running containers, <code>docker logs &lt;name&gt;</code> shows their logs</span></li></ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="leadership">
+      <div class="section-title"><span class="icon">🧭</span> Leadership Refresher</div>
+<div class="alert alert-success"><span class="alert-icon">💪</span><div>Leadership is usually your strength, so keep these answers sharp, concrete and measurable. Use STAR (Situation, Task, Action, Result) with real numbers.</div></div>
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🗺️ Test Strategy</div>
+          <span class="badge badge-accent">Lead-level</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"How do you build a test strategy for a new product?"</strong></p>
+          <div class="answer">
+<p>"I start from the business goals and the main risks. Then I define the scope, test levels and types, what to automate versus run manually, environments and test data, tools, entry and exit criteria, metrics, and roles. I review it with product and engineering and revisit it as the product evolves."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">⚖️ Prioritizing Under Pressure</div>
+          <span class="badge badge-blue">Lead-level</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"The release is in two days and you cannot test everything. What do you do?"</strong></p>
+          <div class="answer">
+<p>"I apply risk-based testing: rank features by business impact and likelihood of failure, test the critical paths and recently changed areas first, run the automated regression, and be transparent about what is not covered. I report the residual risk so stakeholders make an informed go/no-go decision."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🤝 Conflicts</div>
+          <span class="badge badge-green">Lead-level</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"Developers disagree with you about a defect's severity. How do you handle it?"</strong></p>
+          <div class="answer">
+<p>"I bring evidence: reproduction steps, impact on users and business, and frequency. I align on shared severity definitions, and if we still disagree, I escalate to the product owner, who decides based on business priority. The goal is the product's quality, not winning the argument."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-box">
+        <div class="task-header">
+          <div class="task-title">🌱 Mentoring</div>
+          <span class="badge badge-yellow">Lead-level</span>
+        </div>
+        <div class="task-body">
+          <p><strong>"How do you develop your team and measure their performance?"</strong></p>
+          <div class="answer">
+<p>"I set clear goals per person, give regular feedback and one-to-ones, pair juniors with seniors, run test-case reviews and knowledge sessions, and encourage certifications. I measure outcomes like quality of defects found, coverage, automation contributions and ownership, never raw bug counts."</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="quickfire">
+      <div class="section-title"><span class="icon">⚡</span> Quick-Fire Round</div>
+<div class="alert alert-info"><span class="alert-icon">ℹ️</span><div>Short answers you should be able to give in under 15 seconds. Use Practice mode and answer out loud.</div></div><div class="grid2"><div class="qf"><div class="qf-q">What do 4xx and 5xx mean?</div><div class="answer"><p>4xx: the client sent a bad request. 5xx: the server failed.</p></div></div><div class="qf"><div class="qf-q">401 vs 403?</div><div class="answer"><p>401: not authenticated. 403: authenticated but not allowed.</p></div></div><div class="qf"><div class="qf-q">Base URL vs. resource URL?</div><div class="answer"><p>Base URL is the API root (host + version); resource URL adds the path to a specific resource, like /orders/1024.</p></div></div><div class="qf"><div class="qf-q">Job vs. pipeline?</div><div class="answer"><p>A pipeline is the whole automated workflow; a job is one task inside it (inside a stage).</p></div></div><div class="qf"><div class="qf-q">Test case vs. test scenario?</div><div class="answer"><p>Scenario = what to test (high level). Test case = how to test it (steps, data, expected result).</p></div></div><div class="qf"><div class="qf-q">BVA values for a field accepting 18–65?</div><div class="answer"><p>17, 18, 19, 64, 65, 66.</p></div></div><div class="qf"><div class="qf-q">Pass rate formula?</div><div class="answer"><p>Passed ÷ executed × 100 (state your denominator).</p></div></div><div class="qf"><div class="qf-q">Smoke vs. sanity?</div><div class="answer"><p>Smoke: broad, shallow, is the build stable? Sanity: narrow, does this specific fix/change work?</p></div></div><div class="qf"><div class="qf-q">SRS, PRD, BRD in one line each?</div><div class="answer"><p>BRD: why (business goals). PRD: what (product features). SRS: exactly how the system must behave.</p></div></div><div class="qf"><div class="qf-q">Three-point estimate formula?</div><div class="answer"><p>(Optimistic + 4 × Most likely + Pessimistic) ÷ 6.</p></div></div><div class="qf"><div class="qf-q">Functional vs. non-functional?</div><div class="answer"><p>Functional: what the system does. Non-functional: how well it does it (performance, security, usability…).</p></div></div><div class="qf"><div class="qf-q">Command to follow a log live?</div><div class="answer"><p>tail -f app.log (add | grep ERROR to filter).</p></div></div><div class="qf"><div class="qf-q">How do you pick mobile devices?</div><div class="answer"><p>Start from real-user analytics, then cover OS versions, screen sizes, manufacturers, hardware tiers, features and risk.</p></div></div><div class="qf"><div class="qf-q">Defect leakage formula?</div><div class="answer"><p>Production defects ÷ (testing + production defects) × 100.</p></div></div></div>
+    </div>
+
+    <div class="section" id="tips">
+      <div class="section-title"><span class="icon">💡</span> Interview Tips & Best Practices</div>
+<div class="grid2">
+        <div class="card">
+          <div class="card-title">✅ Do's</div><ul class="checklist"><li><span>Answer theory with Define → Differentiate → Example</span></li><li><span>Back leadership stories with numbers: leakage, coverage, cycle time</span></li><li><span>If you don't know, say what you do know and how you would find out; never stay silent</span></li><li><span>Use the exact terms: scenario vs. case, job vs. pipeline, 401 vs. 403</span></li><li><span>Ask clarifying questions before solving a technique exercise</span></li><li><span>Show you are still hands-on: tools, commands, real examples</span></li></ul></div>
+        <div class="card">
+          <div class="card-title">❌ Don'ts</div><ul class="checklist"><li><span>Don't answer a technical question with a leadership story</span></li><li><span>Don't assume that being a lead excuses weak fundamentals</span></li><li><span>Don't say "we" for everything; clarify what you personally did</span></li><li><span>Don't invent knowledge; say you would verify it</span></li><li><span>Don't blame previous teams or developers</span></li><li><span>Don't quote metrics without knowing the formula</span></li></ul></div>
+      </div>
+
+      <div class="task-box" style="margin-top:16px;">
+        <div class="task-header">
+          <div class="task-title">🎯 Strong Closing Statements</div>
+          <span class="badge badge-green">Make an Impact</span>
+        </div>
+        <div class="task-body">
+          <p>Use these to wrap up an answer or the interview:</p><ul class="checklist"><li><span>"In my last team we reduced defect leakage from X% to Y% by introducing risk-based regression and quality gates in the pipeline."</span></li><li><span>"I like to keep my fundamentals sharp: test design techniques, estimation and metrics are what make a lead credible with the team."</span></li><li><span>"I can walk you through how I would set up the test strategy and device matrix for your product."</span></li><li><span>"I focus on delivering quality that the business can measure, while growing the people on my team."</span></li></ul></div>
+      </div>
+
+      <div class="alert alert-warn" style="margin-top:16px;"><span class="alert-icon">⚠️</span><div><strong>Remember:</strong> tailor your examples to the company's domain and tech stack, and review the job description before the interview.</div></div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  /* Navegación del aside + resaltado de la sección activa */
+  (function () {
+    function targetOf(link) {
+      var m = (link.getAttribute('onclick') || '').match(/'([^']+)'/);
+      return m ? m[1] : null;
+    }
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest ? e.target.closest('.nav-link') : null;
+      if (!link) return;
+      var id = targetOf(link);
+      if (!id) return;
+      e.preventDefault();
+      var el = document.getElementById(id);
+      if (!el) return;
+      document.querySelectorAll('.nav-link').forEach(function (l) { l.classList.remove('active'); });
+      link.classList.add('active');
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, true);
+
+    var sections = ['intro', 'introduce', 'evaluated', 'techniques', 'types', 'docs', 'requirements', 'estimation', 'metrics', 'api', 'web', 'mobile', 'cicd', 'cli', 'leadership', 'quickfire', 'tips'];
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          var id = en.target.id;
+          document.querySelectorAll('.nav-link').forEach(function (l) {
+            l.classList.toggle('active', targetOf(l) === id);
+          });
+        }
+      });
+    }, { threshold: 0.25 });
+    sections.forEach(function (id) { var el = document.getElementById(id); if (el) observer.observe(el); });
+  })();
+</script>
+
+<script>
+  /* Practice mode: oculta respuestas (blur), se revelan con clic; barra de progreso */
+  (function () {
+    var KEY = 'entrevista_testlead_practice';
+    var answers = Array.prototype.slice.call(document.querySelectorAll('.answer'));
+    var toggle = document.getElementById('pbToggle');
+    var state = document.getElementById('pbState');
+    var fill = document.getElementById('pbFill');
+    var count = document.getElementById('pbCount');
+    var reset = document.getElementById('pbReset');
+
+    function update() {
+      var n = answers.filter(function (a) { return a.classList.contains('revealed'); }).length;
+      var total = answers.length || 1;
+      fill.style.width = Math.round(n / total * 100) + '%';
+      count.textContent = n + ' / ' + answers.length + ' revealed';
+    }
+    function setPractice(on) {
+      document.body.classList.toggle('practice', on);
+      toggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+      state.textContent = on ? 'ON' : 'OFF';
+      answers.forEach(function (a) {
+        if (on) { a.setAttribute('tabindex', '0'); a.setAttribute('role', 'button'); }
+        else { a.removeAttribute('tabindex'); a.removeAttribute('role'); }
+      });
+      try { localStorage.setItem(KEY, on ? '1' : '0'); } catch (e) {}
+    }
+    function reveal(a) {
+      if (!document.body.classList.contains('practice') || a.classList.contains('revealed')) return;
+      a.classList.add('revealed'); update();
+    }
+    toggle.addEventListener('click', function () {
+      var on = !document.body.classList.contains('practice');
+      if (on) answers.forEach(function (a) { a.classList.remove('revealed'); });
+      setPractice(on); update();
+    });
+    reset.addEventListener('click', function () {
+      answers.forEach(function (a) { a.classList.remove('revealed'); });
+      update();
+    });
+    answers.forEach(function (a) {
+      a.addEventListener('click', function () { reveal(a); });
+      a.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reveal(a); }
+      });
+    });
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+    setPractice(saved === '1');
+    update();
+  })();
+</script>
+</body>
+</html>
